@@ -1,74 +1,191 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Animated } from 'react-native';
+import { IconSymbol } from '@/components/ui/IconSymbol';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+export default function LoginScreen() {
+  const [visible, setVisible] = useState(true);
+  const [activeTab, setActiveTab] = useState('login'); // Alterna entre login/cadastro
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const slideAnim = useRef(new Animated.Value(300)).current; // Inicia fora da tela
 
-export default function HomeScreen() {
+  // Animação ao abrir o modal
+  useEffect(() => {
+    if (visible) {
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [visible]);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.container}>
+      <Modal animationType="fade" transparent visible={visible}>
+        <View style={styles.overlay} />
+        <View style={styles.centeredView}>
+          <Animated.View style={[styles.modalView, { transform: [{ translateY: slideAnim }] }]}>
+            <View style={styles.recycleContainer}>
+              <IconSymbol 
+                name="recycle"
+                size={30}  // Tamanho do ícone
+                color="white"  // Cor do ícone
+                style={{ marginBottom: 10 }}  // Estilo adicional, se necessário
+              />
+          </View>
+            {/* Botões Login / Cadastro */}
+            <View style={styles.tabContainer}>
+              <TouchableOpacity
+                style={[styles.tabButton, activeTab === 'login' && styles.activeTab]}
+                onPress={() => setActiveTab('login')}
+              >
+                <Text style={[styles.tabText, activeTab === 'login' && styles.activeText]}>Login</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.tabButton, activeTab === 'cadastro' && styles.activeTab]}
+                onPress={() => setActiveTab('cadastro')}
+              >
+                <Text style={[styles.tabText, activeTab === 'cadastro' && styles.activeText]}>Cadastro</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Campos de Entrada */}
+            <TextInput
+              style={styles.input}
+              placeholder="Digite seu e-mail"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={email}
+              onChangeText={setEmail}
+            />
+
+            <TextInput
+              style={styles.input}
+              placeholder="Digite sua senha"
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+            />
+
+            {activeTab === 'cadastro' && (
+              <TextInput
+                style={styles.input}
+                placeholder="Confirme sua senha"
+                secureTextEntry
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+              />
+            )}
+
+            {/* Botão de ação */}
+            <TouchableOpacity style={styles.actionButton}>
+              <Text style={styles.buttonText}>{activeTab === 'login' ? 'Entrar' : 'Cadastrar'}</Text>
+            </TouchableOpacity>
+
+            {/* Fechar Modal */}
+            <TouchableOpacity onPress={() => setVisible(false)}>
+              <Text style={styles.closeText}>Esqueci minha senha</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      </Modal>
+    </View>
   );
 }
 
+// Estilos
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f5',
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  overlay: {
     position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    width: 320,
+    backgroundColor: 'white',
+    borderRadius: 15,
+    padding: 20,
+    alignItems: 'center',
+    elevation: 5, // Sombra para Android
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#63783D',
+    borderRadius: 30,
+    padding: 5,
+    marginBottom: 20,
+  },
+  recycleContainer: {
+    width: 50,
+    height: 50,
+    backgroundColor: '#4CAF50', // Verde
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10, // Espaço entre o ícone e os botões
+  },
+  tabButton: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: 'center',
+    borderRadius: 8,
+  },
+  activeTab: {
+    borderRadius: 30,
+    backgroundColor: '#7FA653',
+  },
+  tabText: {
+    fontSize: 16,
+    color: '#fff',
+  },
+  activeText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  input: {
+    width: '100%',
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#4B8707',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  actionButton: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#7FA653',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  closeText: {
+    marginTop: 10,
+    fontSize: 14,
+    color: '#4B8707',
   },
 });
