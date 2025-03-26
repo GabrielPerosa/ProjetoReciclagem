@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Animated } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Animated, Alert } from 'react-native';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 
 export default function LoginScreen() {
   const [visible, setVisible] = useState(true);
-  const [activeTab, setActiveTab] = useState('login'); // Alterna entre login/cadastro
+  const [activeTab, setActiveTab] = useState('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const slideAnim = useRef(new Animated.Value(300)).current; // Inicia fora da tela
+  const [name, setName] = useState('');
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [nameError, setNameError] = useState('');
+  const slideAnim = useRef(new Animated.Value(300)).current;
 
-  // Animação ao abrir o modal
   useEffect(() => {
     if (visible) {
       Animated.timing(slideAnim, {
@@ -21,6 +24,91 @@ export default function LoginScreen() {
     }
   }, [visible]);
 
+  // Validação do nome (não aceita números)
+  const handleNameChange = (text: string) => {
+    const lettersOnly = text.replace(/[^a-zA-ZÀ-ÿ\s]/g, '');
+    setName(lettersOnly);
+    
+    if (/\d/.test(text)) {
+      setNameError('Nome não pode conter números');
+    } else {
+      setNameError('');
+    }
+  };
+
+  // Validação do e-mail
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (text && !emailRegex.test(text)) {
+      setEmailError('Por favor, insira um e-mail válido');
+    } else {
+      setEmailError('');
+    }
+  };
+
+  const handleRegister = () => {
+    // Validações adicionais antes de cadastrar
+    if (!name) {
+      setNameError('Por favor, insira seu nome completo');
+      return;
+    }
+    
+    if (!email) {
+      setEmailError('Por favor, insira seu e-mail');
+      return;
+    }
+    
+    if (!password || !confirmPassword) {
+      Alert.alert('Atenção', 'Por favor, preencha todos os campos obrigatórios');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Atenção', 'As senhas não coincidem');
+      return;
+    }
+
+    if (!acceptTerms) {
+      Alert.alert('Atenção', 'Você deve aceitar os termos de uso');
+      return;
+    }
+
+    if (emailError || nameError) {
+      return; // Não prossegue se houver erros de validação
+    }
+
+    Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
+    setName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setAcceptTerms(false);
+    setActiveTab('login');
+  };
+
+  const handleLogin = () => {
+    if (!email || !password) {
+      Alert.alert('Atenção', 'Por favor, preencha todos os campos');
+      return;
+    }
+    
+    if (emailError) {
+      return;
+    }
+    
+    Alert.alert('Login', 'Login realizado com sucesso!');
+  };
+
+  const handleAction = () => {
+    if (activeTab === 'login') {
+      handleLogin();
+    } else {
+      handleRegister();
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Modal animationType="fade" transparent visible={visible}>
@@ -30,12 +118,12 @@ export default function LoginScreen() {
             <View style={styles.recycleContainer}>
               <IconSymbol 
                 name="recycle"
-                size={30}  // Tamanho do ícone
-                color="white"  // Cor do ícone
-                style={{ marginBottom: 10 }}  // Estilo adicional, se necessário
+                size={30}
+                color="white"
+                style={{ marginBottom: 10 }}
               />
-          </View>
-            {/* Botões Login / Cadastro */}
+            </View>
+            
             <View style={styles.tabContainer}>
               <TouchableOpacity
                 style={[styles.tabButton, activeTab === 'login' && styles.activeTab]}
@@ -52,15 +140,27 @@ export default function LoginScreen() {
               </TouchableOpacity>
             </View>
 
-            {/* Campos de Entrada */}
+            {activeTab === 'cadastro' && (
+              <>
+                <TextInput
+                  style={[styles.input, nameError ? styles.inputError : null]}
+                  placeholder="Nome completo"
+                  value={name}
+                  onChangeText={handleNameChange}
+                />
+                {nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
+              </>
+            )}
+
             <TextInput
-              style={styles.input}
+              style={[styles.input, emailError ? styles.inputError : null]}
               placeholder="Digite seu e-mail"
               keyboardType="email-address"
               autoCapitalize="none"
               value={email}
-              onChangeText={setEmail}
+              onChangeText={handleEmailChange}
             />
+            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
             <TextInput
               style={styles.input}
@@ -71,21 +171,36 @@ export default function LoginScreen() {
             />
 
             {activeTab === 'cadastro' && (
-              <TextInput
-                style={styles.input}
-                placeholder="Confirme sua senha"
-                secureTextEntry
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-              />
+              <>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Confirme sua senha"
+                  secureTextEntry
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                />
+                
+                <View style={styles.termsContainer}>
+                  <TouchableOpacity
+                    style={[styles.checkbox, acceptTerms && styles.checkboxChecked]}
+                    onPress={() => setAcceptTerms(!acceptTerms)}
+                  >
+                    {acceptTerms && <Text style={styles.checkIcon}>✓</Text>}
+                  </TouchableOpacity>
+                  <Text style={styles.termsText}>
+                    Concordo com os termos de uso
+                  </Text>
+                </View>
+              </>
             )}
 
-            {/* Botão de ação */}
-            <TouchableOpacity style={styles.actionButton}>
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={handleAction}
+            >
               <Text style={styles.buttonText}>{activeTab === 'login' ? 'Entrar' : 'Cadastrar'}</Text>
             </TouchableOpacity>
 
-            {/* Fechar Modal */}
             <TouchableOpacity onPress={() => setVisible(false)}>
               <Text style={styles.closeText}>Esqueci minha senha</Text>
             </TouchableOpacity>
@@ -96,7 +211,7 @@ export default function LoginScreen() {
   );
 }
 
-// Estilos
+// Estilos (adicionando os novos estilos necessários)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -121,7 +236,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 20,
     alignItems: 'center',
-    elevation: 5, // Sombra para Android
+    elevation: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -137,11 +252,11 @@ const styles = StyleSheet.create({
   recycleContainer: {
     width: 50,
     height: 50,
-    backgroundColor: '#4CAF50', // Verde
+    backgroundColor: '#4CAF50',
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10, // Espaço entre o ícone e os botões
+    marginBottom: 10,
   },
   tabButton: {
     flex: 1,
@@ -170,6 +285,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 10,
   },
+  inputError: {
+    borderColor: '#FF0000',
+  },
+  errorText: {
+    color: '#FF0000',
+    fontSize: 12,
+    alignSelf: 'flex-start',
+    marginBottom: 5,
+  },
   actionButton: {
     width: '100%',
     height: 50,
@@ -187,5 +311,32 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 14,
     color: '#4B8707',
+  },
+  termsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+    alignSelf: 'flex-start',
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 1,
+    borderColor: '#4B8707',
+    borderRadius: 4,
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkboxChecked: {
+    backgroundColor: '#4B8707',
+  },
+  checkIcon: {
+    color: 'white',
+    fontSize: 12,
+  },
+  termsText: {
+    fontSize: 14,
+    color: '#555',
   },
 });
