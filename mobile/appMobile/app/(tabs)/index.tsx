@@ -12,7 +12,6 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
-  const [acceptTerms, setAcceptTerms] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [nameError, setNameError] = useState('');
   
@@ -53,11 +52,49 @@ export default function LoginScreen() {
   };
 
   const handleRegister = () => {
-    // ... (mantenha a mesma implementação anterior)
+    if (!name) {
+      setNameError('Por favor, insira seu nome completo');
+      return;
+    }
+    
+    if (!email) {
+      setEmailError('Por favor, insira seu e-mail');
+      return;
+    }
+    
+    if (!password || !confirmPassword) {
+      Alert.alert('Atenção', 'Por favor, preencha todos os campos obrigatórios');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Atenção', 'As senhas não coincidem');
+      return;
+    }
+
+    if (emailError || nameError) {
+      return;
+    }
+
+    Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
+    setName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setActiveTab('login');
   };
 
   const handleLogin = () => {
-    // ... (mantenha a mesma implementação anterior)
+    if (!email || !password) {
+      Alert.alert('Atenção', 'Por favor, preencha todos os campos');
+      return;
+    }
+    
+    if (emailError) {
+      return;
+    }
+    
+    Alert.alert('Login', 'Login realizado com sucesso!');
   };
 
   const handleAction = () => {
