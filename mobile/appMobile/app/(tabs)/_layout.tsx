@@ -45,6 +45,15 @@ export default function TabLayout() {
           ),
         }} 
       />
+      <Tabs.Screen
+        name='chatbot'
+        options={{
+          title: 'Chatbot',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="robot-happy-outline" size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
