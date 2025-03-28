@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated, Alert } 
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useNavigation } from '@react-navigation/native';
 
-export function ForgotPasswordScreen() {
+export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const slideAnim = useRef(new Animated.Value(300)).current;

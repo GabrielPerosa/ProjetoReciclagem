@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated, Alert } from 'react-native';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { useRouter } from 'expo-router';
 
 export default function LoginScreen() {
   // Estados para controlar qual tela mostrar
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   
+  const router = useRouter();
   // Estados do formulário de login
   const [activeTab, setActiveTab] = useState('login');
   const [email, setEmail] = useState('');
@@ -94,11 +96,14 @@ export default function LoginScreen() {
       return;
     }
     
-    Alert.alert('Login', 'Login realizado com sucesso!');
+    Alert.alert('Login', 'Login realizado com sucesso!')
   };
 
   const handleAction = () => {
-    if (activeTab === 'login') handleLogin();
+    if (activeTab === 'login') {
+      handleLogin();
+      router.push('/dashboard');
+    }
     else handleRegister();
   };
 
