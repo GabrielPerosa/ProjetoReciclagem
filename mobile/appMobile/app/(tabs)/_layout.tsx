@@ -32,7 +32,7 @@ export default function TabLayout() {
         options={{
           title: 'Dashboard',
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="dashboard" color={color} size={size} />
+            <MaterialCommunityIcons name="monitor-dashboard" size={size} color={color} />
           ),
         }} 
       />
