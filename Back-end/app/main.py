@@ -1,11 +1,10 @@
 from fastapi import FastAPI
-from app.routes import dispositivo, usuario
+from controllers import user_controller
 
-app = FastAPI(title="Minha API", description="Uma API de teste", version="1.0")
+app = FastAPI()
 
-app.include_router(dispositivo.router)
-app.include_router(usuario.router)
+app.include_router(user_controller.router)
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+@app.get("/")
+def root():
+    return {"message": "Bem-vindo à API!"}
