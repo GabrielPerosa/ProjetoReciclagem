@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
-class Peca(BaseModel):
+class Part(BaseModel):
     tipo: str
     id: int
