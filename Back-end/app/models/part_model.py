@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
 class Part(BaseModel):
-    tipo: str
+    type: str
     id: int

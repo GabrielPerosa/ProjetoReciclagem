@@ -3,6 +3,6 @@ from datetime import datetime
 
 class Ciclo(BaseModel):
     id: int
-    tempo_inicial: datetime
-    tempo_final: datetime
-    peca_id: int
+    initial_time: datetime
+    end_time: datetime
+    part_id: int

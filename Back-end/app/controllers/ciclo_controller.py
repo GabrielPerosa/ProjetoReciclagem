@@ -8,7 +8,7 @@ ciclos_db = []
 def list_ciclos():
     return ciclos_db
 
-@router.put("/update/{ciclo_id}")
+@router.post("/update/{ciclo_id}")
 def update_ciclo(ciclo_id: int, data: Ciclo):
     for i, ciclo in enumerate(ciclos_db):
         if ciclo.id == ciclo_id:

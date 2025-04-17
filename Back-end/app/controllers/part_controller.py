@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from models._modelpart import Part
+from models.part_model import Part
 
 router = APIRouter(prefix="/parts")
 parts_db = []
@@ -8,7 +8,7 @@ parts_db = []
 def list_parts():
     return parts_db
 
-@router.put("/update/{part_id}")
+@router.post("/update/{part_id}")
 def update_peca(part_id: int, data: Part):
     for i, part in enumerate(parts_db):
         if part.id == part_id:
