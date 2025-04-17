@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 
-class Ciclo(BaseModel):
+class Cycle(BaseModel):
     id: int
     initial_time: datetime
     end_time: datetime
