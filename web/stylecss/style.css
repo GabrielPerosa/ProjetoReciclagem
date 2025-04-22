@@ -1,0 +1,65 @@
+:root {
+    --verde-escuro: #1b5e20;
+    --verde-medio: #2e7d32;
+    --verde-claro: #4caf50;
+    --verde-muito-claro: #81c784;
+    --verde-background: #e8f5e9;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--verde-background);
+}
+
+.navbar {
+    background-color: var(--verde-escuro);
+}
+
+.hero-section {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 0;
+    margin-bottom: 30px;
+}
+
+.card {
+    transition: transform 0.3s;
+    margin-bottom: 20px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card-header {
+    background-color: var(--verde-medio);
+    color: white;
+}
+
+.btn-verde {
+    background-color: var(--verde-claro);
+    color: white;
+    border: none;
+}
+
+.btn-verde:hover {
+    background-color: var(--verde-medio);
+    color: white;
+}
+
+footer {
+    background-color: var(--verde-escuro);
+    color: white;
+    padding: 30px 0;
+}
+
+.form-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
