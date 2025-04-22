@@ -3,6 +3,6 @@ from datetime import datetime
 
 class WorkstationState(BaseModel):
     id: int
-    state: bool
+    state: str
     timestamp: datetime
     workstation_id: int
