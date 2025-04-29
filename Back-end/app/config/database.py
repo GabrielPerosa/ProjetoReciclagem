@@ -1,6 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+from dotenv import load_dotenv
 import os # Importando o dotenv para carregar variáveis de ambiente
+
+load_dotenv()
 
 # Configurações do banco de dados
 DB_USER = os.getenv("DB_USER")
