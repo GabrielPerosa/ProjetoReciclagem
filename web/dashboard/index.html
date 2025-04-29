@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="user">
+      <div class="circle">
+        <i class='bx bxs-user'></i>
+      </div>
+    </div>
+
+    <div class="titulo">
+      <p>Bem-vindo, usuário.</p>
+    </div>
+
+    <button class="menu-btn"><i class="fas fa-chart-bar"></i> Dashboard</button>
+    <button class="menu-btn"><i class="fas fa-file-alt"></i> Monitoram.</button>
+
+    <div class="logout">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="top-cards">
+      <div class="card card-dados">
+        <div class="card-header">
+          <div class="icon blue"><i class="fas fa-calendar-day"></i></div>
+          <span class="card-title">Dados de Hoje</span>
+        </div>
+        <div class="dados">
+          <div class="dados-item"><span class="no-bar">06</span><span>Rampa 01</span></div>
+          <div class="dados-item"><span class="no-bar">04</span><span>Rampa 02</span></div>
+          <div class="dados-item"><span class="no-bar">0</span><span>Refugo</span></div>
+          <div class="dados-item"><span class="no-bar">12</span><span>Peças</span></div>
+        </div>
+      </div>
+
+      <div class="card card-dados">
+        <div class="card-header">
+          <div class="icon yellow"><i class="fas fa-calendar-day"></i></div>
+          <span class="card-title">Dados por Mês</span>
+        </div>
+        <div class="dados">
+          <div class="dados-item"><span class="no-bar">100</span><span>Rampa 01</span></div>
+          <div class="dados-item"><span class="no-bar">200</span><span>Rampa 02</span></div>
+          <div class="dados-item"><span class="no-bar">20</span><span>Refugo</span></div>
+          <div class="dados-item"><span class="no-bar">320</span><span>Peças</span></div>
+        </div>
+      </div>
+
+      <!-- Card de Aproveitamento 1 -->
+      <div class="card gauge-card">
+        <div class="card-header">
+          <div class="icon green"><i class="fas fa-percent"></i></div>
+          <span class="card-title">Aproveitamento</span>
+        </div>
+        <div class="gauge-wrapper">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 90%;"></div>
+          </div>
+          <div class="gauge-label">90%</div>
+        </div>
+      </div>
+
+      <!-- Card de Aproveitamento 2 -->
+      <div class="card gauge-card">
+        <div class="card-header">
+          <div class="icon green"><i class="fas fa-percent"></i></div>
+          <span class="card-title">Aproveitamento Mensal</span>
+        </div>
+        <div class="gauge-wrapper">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 85%;"></div>
+          </div>
+          <div class="gauge-label">85%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-charts">
+      <div class="card">
+        <div class="card-header">
+          <div class="icon gray"><i class="fas fa-chart-line"></i></div>
+          <span>Contador de peças nas rampas</span>
+        </div>
+        <canvas id="rampasChart"></canvas>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="icon gray"><i class="fas fa-chart-line"></i></div>
+          <span>Contador de peças</span>
+        </div>
+        <canvas id="pecasChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-icon">
+    <button>
+      <i class="fas fa-headset"></i>
+    </button>
+  </div>
+
+  <script>
+    //Contador de peças nas rampas
+    const ctx1 = document.getElementById('rampasChart').getContext('2d');
+    new Chart(ctx1, {
+      type: 'line',
+      data: {
+        labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+        datasets: [
+          { label: 'Rampa 01', data: [5, 4, 7, 6, 5, 9], borderColor: '#6A5ACD', borderWidth: 2, pointBackgroundColor: '#6A5ACD', pointStyle: 'circle', pointRadius: 4, fill: false },
+          { label: 'Rampa 02', data: [6, 5, 7, 5, 6, 5], borderColor: '#FF8C00', borderWidth: 2, pointBackgroundColor: '#FF8C00', pointStyle: 'circle', pointRadius: 4, fill: false },
+          { label: 'Rejeitadas', data: [4, 6, 7, 5, 7, 6], borderColor: '#DC143C', borderWidth: 2, pointBackgroundColor: '#DC143C', pointStyle: 'circle', pointRadius: 4, fill: false }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              font: {
+                size: 10
+              },
+              usePointStyle: true,
+              pointStyle: 'circle'
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 10,
+            ticks: {
+              font: {
+                size: 10
+              }
+            },
+            grid: {
+              display: true
+            }
+          },
+          x: {
+            ticks: {
+              font: {
+                size: 10
+              }
+            },
+            grid: {
+              display: false
+            }
+          }
+        }
+      }
+    });
+
+    //Contador de peças
+    const ctx2 = document.getElementById('pecasChart').getContext('2d');
+    new Chart(ctx2, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abril', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        datasets: [
+          { label: 'Metal', data: [5, 4, 5, 6, 7, 6, 5, 6, 5, 6, 7, 9], borderColor: '#4169E1', borderWidth: 2, pointBackgroundColor: '#4169E1', pointStyle: 'circle', pointRadius: 4, fill: false },
+          { label: 'Plástico', data: [6, 5, 6, 7, 6, 7, 8, 6, 5, 6, 6, 7], borderColor: '#32CD32', borderWidth: 2, pointBackgroundColor: '#32CD32', pointStyle: 'circle', pointRadius: 4, fill: false },
+          { label: 'Rejeitadas', data: [5, 6, 6, 5, 6, 5, 6, 5, 6, 5, 6, 7], borderColor: '#B22222', borderWidth: 2, pointBackgroundColor: '#B22222', pointStyle: 'circle', pointRadius: 4, fill: false }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              font: {
+                size: 10
+              },
+              usePointStyle: true,
+              pointStyle: 'circle'
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 10,
+            ticks: {
+              font: {
+                size: 10
+              }
+            },
+            grid: {
+              display: true
+            }
+          },
+          x: {
+            ticks: {
+              font: {
+                size: 10
+              }
+            },
+            grid: {
+              display: false
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
