@@ -2,6 +2,7 @@ from sqlalchemy import create_engine, inspect
 from app.config.database import Base
 from app.models.sensor import SensorDB
 from app.models.cycle import CycleDB
+from app.models.part import PartDB
 
 DATABASE_URL = "postgresql://postgres:minha_senha@localhost:5433/meu_banco"
 engine = create_engine(DATABASE_URL)

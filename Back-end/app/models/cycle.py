@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, DateTime
+from sqlalchemy import Column, Integer, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 from app.config.database import Base
 
 class CycleDB(Base):
@@ -7,4 +8,6 @@ class CycleDB(Base):
     id = Column(Integer, primary_key=True, index=True)
     initial_time = Column(DateTime)
     end_time = Column(DateTime)
-    part_id = Column(Integer)
+    part_id = Column(Integer, ForeignKey("sensors.id"), nullable=False)
+
+    part = relationship("PartDB", back_populates="states")
