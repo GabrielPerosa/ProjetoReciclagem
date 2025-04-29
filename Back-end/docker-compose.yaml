@@ -1,9 +1,9 @@
 services:
-  postgres:
-    image: postgres:latest
+  postgresTESTE:
+    image: postgres:16
     container_name: postgres_db
     ports:
-      - "5433:5432"
+      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: minha_senha
