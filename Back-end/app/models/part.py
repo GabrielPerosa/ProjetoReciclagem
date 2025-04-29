@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 from app.config.database import Base
 
 class PartDB(Base):
@@ -6,3 +7,5 @@ class PartDB(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     type = Column(String, nullable=False)
+
+    states = relationship("CycleDB", back_populates="part")

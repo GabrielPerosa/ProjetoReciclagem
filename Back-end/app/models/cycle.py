@@ -8,6 +8,6 @@ class CycleDB(Base):
     id = Column(Integer, primary_key=True, index=True)
     initial_time = Column(DateTime)
     end_time = Column(DateTime)
-    part_id = Column(Integer, ForeignKey("sensors.id"), nullable=False)
+    part_id = Column(Integer, ForeignKey("parts.id"), nullable=False)
 
     part = relationship("PartDB", back_populates="states")
