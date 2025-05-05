@@ -10,4 +10,4 @@ class CycleDB(Base):
     end_time = Column(DateTime)
     part_id = Column(Integer, ForeignKey("parts.id"), nullable=False)
 
-    part = relationship("PartDB", back_populates="states")
+    part = relationship("PartDB", back_populates="cycles")

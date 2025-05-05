@@ -1,18 +1,16 @@
 from sqlalchemy.orm import Session
 from app.models.cycle import CycleDB
-from app.schemas.cycle import Cycle
-from typing import List
+from app.schemas.cycle import CycleCreate
 
-def create_cycle(db: Session, cycle: Cycle) -> CycleDB:
-    db_cycle = CycleDB(
-        initial_time=cycle.initial_time,
-        end_time=cycle.end_time,
-        part_id=cycle.part_id
-    )
+def create_cycle(db: Session, cycle: CycleCreate):
+    db_cycle = CycleDB(**cycle.dict())
     db.add(db_cycle)
     db.commit()
     db.refresh(db_cycle)
     return db_cycle
 
-def get_cycles(db: Session) -> List[CycleDB]:
+def get_cycle(db: Session, cycle_id: int):
+    return db.query(CycleDB).filter(CycleDB.id == cycle_id).first()
+
+def get_all_cycles(db: Session):
     return db.query(CycleDB).all()

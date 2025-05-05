@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 from app.config.database import Base
 
 class SensorDB(Base):
@@ -6,3 +7,6 @@ class SensorDB(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     description = Column(String)
+
+    # Relacionamento com SensorStateDB
+    states = relationship("SensorStateDB", back_populates="sensor")

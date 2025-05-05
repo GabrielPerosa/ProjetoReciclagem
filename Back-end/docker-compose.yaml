@@ -1,12 +1,46 @@
+version: '3.8'
+
 services:
-  postgresTESTE:
+  postgres_db:
     image: postgres:16
     container_name: postgres_db
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: minha_senha
+      POSTGRES_USER: adm
+      POSTGRES_PASSWORD: 123
       POSTGRES_DB: meu_banco
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  fastapi_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres_db
+    networks:
+      - backend
+    command: /bin/bash -c "uvicorn app.main:app --host 0.0.0.0 --port 8000"  # Sem o 'routes', referenciando diretamente o 'app.main'
+
+  create_tables:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: create_tables
+    depends_on:
+      - postgres_db
+    networks:
+      - backend
+    entrypoint: ["sh", "-c", "sleep 10 && python app/test/create_tables.py"]  # Aguarda o banco de dados subir antes de rodar o script
+
+networks:
+  backend:
+    driver: bridge

@@ -8,4 +8,4 @@ class PartDB(Base):
     id = Column(Integer, primary_key=True, index=True)
     type = Column(String, nullable=False)
 
-    states = relationship("CycleDB", back_populates="part")
+    cycles = relationship("CycleDB", back_populates="part")
