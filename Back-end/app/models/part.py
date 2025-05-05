@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from app.config.database import Base
 
@@ -7,5 +7,6 @@ class PartDB(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     type = Column(String, nullable=False)
+    cycle_id = Column(Integer, ForeignKey("cycles.id"), nullable=False)
 
-    cycles = relationship("CycleDB", back_populates="part")
+    cycle = relationship("CycleDB", back_populates="parts")

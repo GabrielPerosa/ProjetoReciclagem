@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String
 from app.config.database import Base
 
-class User(Base):
+class UserDB(Base):
     __tablename__ = "users"
 
     id = Column(String, primary_key=True, index=True)

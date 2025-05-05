@@ -1,13 +1,13 @@
-from sqlalchemy import Column, Integer, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, DateTime
 from sqlalchemy.orm import relationship
 from app.config.database import Base
+from datetime import datetime
 
 class CycleDB(Base):
     __tablename__ = "cycles"
 
     id = Column(Integer, primary_key=True, index=True)
-    initial_time = Column(DateTime)
-    end_time = Column(DateTime)
-    part_id = Column(Integer, ForeignKey("parts.id"), nullable=False)
+    initial_time = Column(DateTime(default=datetime.utcnow))
+    end_time = Column(DateTime(default=datetime.utcnow))
 
-    part = relationship("PartDB", back_populates="cycles")
+    parts = relationship("PartDB", back_populates="cycle")

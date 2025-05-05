@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
-class Sensor(BaseModel):
+class SensorDTO(BaseModel):
+    id: str
     description: str
     
     class Config:
