@@ -1,12 +1,12 @@
 import uuid
 from sqlalchemy.orm import Session
 from app.models.user import User as UserModel
-from app.schemas.user import UserCreate
+from app.schemas.dto.user import UserDTO
 
 def get_users(db: Session):
     return db.query(UserModel).all()
 
-def create_user(db: Session, user: UserCreate):
+def create_user(db: Session, user: UserDTO):
     db_user = UserModel(
         id=str(uuid.uuid4()),
         name=user.name,
