@@ -1,15 +1,14 @@
 from sqlalchemy.orm import Session
-from app.models.workstation import Workstation as WorkstationModel
+from app.models.workstation import WorkstationDB
+from app.schemas.dto.workstation import WorkstationDTO
 from app.schemas.workstation import Workstation
 
-def create_workstation(db: Session, workstation: Workstation):
-    db_workstation = WorkstationModel(
-        description=workstation.description
-    )
-    db.add(db_workstation)
+def create_workstation(db: Session, workstation_dto: WorkstationDTO) -> Workstation:
+    workstation = WorkstationDB(description=workstation_dto.description)
+    db.add(workstation)
     db.commit()
-    db.refresh(db_workstation)
-    return db_workstation
+    db.refresh(workstation)
+    return workstation
 
-def get_workstations(db: Session):
-    return db.query(WorkstationModel).all()
+def get_all_workstations(db: Session) -> list[Workstation]:
+    return db.query(WorkstationDB).all()

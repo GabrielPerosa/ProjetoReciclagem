@@ -1,13 +1,14 @@
 from sqlalchemy.orm import Session
 from app.models.sensor import SensorDB
+from app.schemas.dto.sensor import SensorDTO
 from app.schemas.sensor import Sensor
 
-def create_sensor(db: Session, sensor: Sensor):
-    db_sensor = SensorDB(description=sensor.description)
-    db.add(db_sensor)
+def create_sensor(db: Session, sensor_dto: SensorDTO) -> Sensor:
+    sensor = SensorDB(description=sensor_dto.description)
+    db.add(sensor)
     db.commit()
-    db.refresh(db_sensor)
-    return db_sensor
+    db.refresh(sensor)
+    return sensor
 
-def get_sensors(db: Session):
+def get_all_sensors(db: Session) -> list[Sensor]:
     return db.query(SensorDB).all()

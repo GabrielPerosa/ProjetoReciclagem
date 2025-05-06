@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.schemas.sensor import Sensor 
-from app.repository.sensor import create_sensor, get_sensors  
+from app.schemas.sensor import Sensor
+from app.schemas.dto.sensor import SensorDTO
+from app.repository import sensor as sensor_repository
 from app.config.database import get_db
-from typing import List
 
-router = APIRouter(prefix="/sensors")
-
-@router.get("/", response_model=List[Sensor])
-def list_sensors(db: Session = Depends(get_db)):
-    return get_sensors(db)
+router = APIRouter(prefix="/sensors", tags=["Sensors"])
 
 @router.post("/", response_model=Sensor)
-def create_sensor_endpoint(sensor: Sensor, db: Session = Depends(get_db)):
-    return create_sensor(db, sensor)
+def create(sensor_dto: SensorDTO, db: Session = Depends(get_db)):
+    return sensor_repository.create_sensor(db, sensor_dto)
+
+@router.get("/", response_model=list[Sensor])
+def list_all(db: Session = Depends(get_db)):
+    return sensor_repository.get_all_sensors(db)

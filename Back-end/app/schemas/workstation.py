@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class WorkstationDTO(BaseModel):
+class Workstation(BaseModel):
     id: str
     description: str
     

@@ -1,23 +1,26 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from app.schemas.user import User, UserCreate
-from app.repository.user import create_user, get_users, update_user_password
+from app.schemas.user import User
+from app.schemas.dto.user import UserDTO
+from app.repository import user as user_repository
 from app.config.database import get_db
-from typing import List
 
-router = APIRouter(prefix="/users")
-
-@router.get("/", response_model=List[User])
-def list_users(db: Session = Depends(get_db)):
-    return get_users(db)
+router = APIRouter(prefix="/users", tags=["Users"])
 
 @router.post("/", response_model=User)
-def create_user_endpoint(user: UserCreate, db: Session = Depends(get_db)):
-    return create_user(db, user)
+def create(user_dto: UserDTO, db: Session = Depends(get_db)):
+    existing = user_repository.get_user_by_email(db, user_dto.email)
+    if existing:
+        raise HTTPException(status_code=400, detail="E-mail already registered")
+    return user_repository.create_user(db, user_dto)
 
-@router.put("/update-password/{user_id}")
+@router.get("/", response_model=list[User])
+def list_all(db: Session = Depends(get_db)):
+    return user_repository.get_all_users(db)
+
+@router.put("/password/{user_id}", response_model=User)
 def update_password(user_id: str, new_password: str, db: Session = Depends(get_db)):
-    updated = update_user_password(db, user_id, new_password)
-    if not updated:
-        raise HTTPException(status_code=404, detail="Usuário não encontrado")
-    return {"message": "Senha atualizada com sucesso!"}
+    user = user_repository.update_user_password(db, user_id, new_password)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user

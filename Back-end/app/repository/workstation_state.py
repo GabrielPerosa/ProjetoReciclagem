@@ -1,17 +1,18 @@
 from sqlalchemy.orm import Session
-from app.models.workstation_state import WorkstationState as WorkstationStateModel
-from app.schemas.workstation_state import WorkstationState 
+from app.models.workstation_state import WorkstationStateDB
+from app.schemas.dto.workstation_state import WorkstationStateDTO
+from app.schemas.workstation_state import WorkstationState
 
-def create_workstation_state(db: Session, state: WorkstationState):
-    db_state = WorkstationStateModel(
-        state=state.state,
-        timestamp=state.timestamp,
-        workstation_id=state.workstation_id
+def create_workstation_state(db: Session, state_dto: WorkstationStateDTO) -> WorkstationState:
+    state = WorkstationStateDB(
+        status=state_dto.state,
+        timestamp=state_dto.timestamp,
+        workstation_id=state_dto.workstation_id
     )
-    db.add(db_state)
+    db.add(state)
     db.commit()
-    db.refresh(db_state)
-    return db_state
+    db.refresh(state)
+    return state
 
-def get_workstation_states(db: Session):
-    return db.query(WorkstationStateModel).all()
+def get_all_workstation_states(db: Session) -> list[WorkstationState]:
+    return db.query(WorkstationStateDB).all()

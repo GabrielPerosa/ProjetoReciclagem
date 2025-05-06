@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.schemas.workstation_state import WorkstationState
+from app.schemas.dto.workstation_state import WorkstationStateDTO
+from app.repository import workstation_state as ws_state_repository
 from app.config.database import get_db
-from app.repository.workstation_state import create_workstation_state, get_workstation_states
-from typing import List
 
-router = APIRouter(prefix="/workstation_states")
+router = APIRouter(prefix="/workstation_states", tags=["Workstation States"])
 
 @router.post("/", response_model=WorkstationState)
-def create_workstation_state_endpoint(state: WorkstationState, db: Session = Depends(get_db)):
-    return create_workstation_state(db, state)
+def create(state_dto: WorkstationStateDTO, db: Session = Depends(get_db)):
+    return ws_state_repository.create_workstation_state(db, state_dto)
 
-@router.get("/", response_model=List[WorkstationState])
-def list_workstation_states(db: Session = Depends(get_db)):
-    return get_workstation_states(db)
+@router.get("/", response_model=list[WorkstationState])
+def list_all(db: Session = Depends(get_db)):
+    return ws_state_repository.get_all_workstation_states(db)

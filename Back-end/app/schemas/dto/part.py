@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
-class Part(BaseModel):
+class PartDTO(BaseModel):
     type: str
     cycle_id: int

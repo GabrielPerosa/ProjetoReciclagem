@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 
-class SensorStateDTO(BaseModel):
+class SensorState(BaseModel):
     id: str
     state: str
     timestamp: datetime
