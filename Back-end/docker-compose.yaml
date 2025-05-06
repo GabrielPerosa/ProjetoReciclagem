@@ -4,14 +4,16 @@ services:
   postgres_db:
     image: postgres:16
     container_name: postgres_db
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: adm
-      POSTGRES_PASSWORD: 123
-      POSTGRES_DB: meu_banco
+    env_file:
+      - .env
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
     networks:
       - backend
 
@@ -35,6 +37,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: create_tables
+    env_file:
+      - .env
     depends_on:
       - postgres_db
     networks:
@@ -44,3 +48,6 @@ services:
 networks:
   backend:
     driver: bridge
+
+volumes:
+  pgdata:
