@@ -1,3 +1,4 @@
+import uuid
 from sqlalchemy.orm import Session
 from app.models.cycle import CycleDB
 from app.schemas.dto.cycle import CycleDTO
@@ -5,6 +6,7 @@ from app.schemas.cycle import Cycle
 
 def create_cycle(db: Session, cycle_dto: CycleDTO) -> Cycle:
     cycle = CycleDB(
+        id=str(uuid.uuid4()),
         initial_time=cycle_dto.initial_time,
         end_time=cycle_dto.end_time
     )

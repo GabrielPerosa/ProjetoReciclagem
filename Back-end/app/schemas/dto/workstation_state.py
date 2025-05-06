@@ -4,4 +4,4 @@ from datetime import datetime
 class WorkstationStateDTO(BaseModel):
     state: str
     timestamp: datetime
-    workstation_id: int
+    workstation_id: str

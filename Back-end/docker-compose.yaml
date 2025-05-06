@@ -30,20 +30,7 @@ services:
       - postgres_db
     networks:
       - backend
-    command: /bin/bash -c "uvicorn app.main:app --host 0.0.0.0 --port 8000"  # Sem o 'routes', referenciando diretamente o 'app.main'
-
-  create_tables:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: create_tables
-    env_file:
-      - .env
-    depends_on:
-      - postgres_db
-    networks:
-      - backend
-    entrypoint: ["sh", "-c", "sleep 10 && python app/test/create_tables.py"]  # Aguarda o banco de dados subir antes de rodar o script
+    command: /bin/bash -c "sleep 10 && python app/test/create_tables.py && uvicorn app.main:app --host 0.0.0.0 --port 8000"  # Sem o 'routes', referenciando diretamente o 'app.main'
 
 networks:
   backend:

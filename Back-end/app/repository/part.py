@@ -1,3 +1,4 @@
+import uuid
 from sqlalchemy.orm import Session
 from app.models.part import PartDB
 from app.schemas.dto.part import PartDTO
@@ -5,6 +6,7 @@ from app.schemas.part import Part
 
 def create_part(db: Session, part_dto: PartDTO) -> Part:
     part = PartDB(
+        id=str(uuid.uuid4()),
         type=part_dto.type,
         cycle_id=part_dto.cycle_id
     )

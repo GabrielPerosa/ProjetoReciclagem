@@ -5,7 +5,7 @@ class WorkstationState(BaseModel):
     id: str
     state: str
     timestamp: datetime
-    workstation_id: int
+    workstation_id: str
 
     class Config:
         from_attributes = True

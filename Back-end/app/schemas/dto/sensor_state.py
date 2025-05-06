@@ -4,4 +4,4 @@ from datetime import datetime
 class SensorStateDTO(BaseModel):
     state: str
     timestamp: datetime
-    sensor_id: int
+    sensor_id: str

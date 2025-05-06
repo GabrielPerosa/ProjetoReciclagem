@@ -1,3 +1,4 @@
+import uuid
 from sqlalchemy.orm import Session
 from app.models.workstation_state import WorkstationStateDB
 from app.schemas.dto.workstation_state import WorkstationStateDTO
@@ -5,7 +6,8 @@ from app.schemas.workstation_state import WorkstationState
 
 def create_workstation_state(db: Session, state_dto: WorkstationStateDTO) -> WorkstationState:
     state = WorkstationStateDB(
-        status=state_dto.state,
+        id=str(uuid.uuid4()),
+        state=state_dto.state,
         timestamp=state_dto.timestamp,
         workstation_id=state_dto.workstation_id
     )

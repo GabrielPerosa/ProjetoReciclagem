@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 
 class Part(BaseModel):
-    id: int
+    id: str
     type: str
-    cycle_id: int
+    cycle_id: str
 
     class Config:
         orm_mode = True
