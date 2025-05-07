@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routes import cycle, part, sensor, sensor_state, user, workstation, workstation_state
+from app.routes import auth, cycle, part, sensor, sensor_state, user, workstation, workstation_state
 
 app = FastAPI()
 
@@ -10,6 +10,7 @@ app.include_router(workstation.router)
 app.include_router(workstation_state.router)
 app.include_router(sensor.router)
 app.include_router(sensor_state.router)
+app.include_router(auth.router)
 
 
 @app.get("/")

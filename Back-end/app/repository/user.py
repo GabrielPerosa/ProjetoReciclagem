@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from app.models.user import UserDB
 from app.schemas.dto.user import UserDTO
 from app.schemas.user import User
+from app.auth.security import hash_password
 import uuid
 
 def create_user(db: Session, user_dto: UserDTO) -> User:
@@ -9,7 +10,7 @@ def create_user(db: Session, user_dto: UserDTO) -> User:
         id=str(uuid.uuid4()),
         name=user_dto.name,
         email=user_dto.email,
-        password=user_dto.password 
+        password=hash_password(user_dto.password)
     )
     db.add(user_db)
     db.commit()
@@ -25,7 +26,7 @@ def get_all_users(db: Session) -> list[User]:
 def update_user_password(db: Session, user_id: str, new_password: str) -> User | None:
     user = db.query(UserDB).filter(UserDB.id == user_id).first()
     if user:
-        user.password = new_password
+        user.password = hash_password(new_password)
         db.commit()
         db.refresh(user)
     return user
