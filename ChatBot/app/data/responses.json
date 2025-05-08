@@ -1,0 +1,23 @@
+{
+    "consultar_quantidade": [
+        "Processamos {quantidade} peças por hora, incluindo {material}. Deseja detalhes sobre a taxa de acerto?"
+    ],
+    "consultar_etapas": [
+        "O processo de classificação inclui: 1) Entrada da peça, 2) Identificação, 3) Separação final. Quer mais detalhes?"
+    ],
+    "consultar_identificacao": [
+        "O sistema usa {metodo_identificacao} para diferenciar materiais como {material}. Posso explicar algum método?"
+    ],
+    "consultar_controle_qualidade": [
+        "Sim, há verificação humana para evitar erros após a classificação automática. Quer saber mais sobre o processo?"
+    ],
+    "consultar_taxa_refugo": [
+        "A taxa de refugo é calculada com base em peças que não atendem os critérios. Deseja dados específicos?"
+    ],
+    "verificar_status": [
+        "Verificando o status. Você quer informações sobre {taxa} ou {quantidade}?"
+    ],
+    "default": [
+        "Desculpe, não entendi. Pode reformular a pergunta?"
+    ]
+}

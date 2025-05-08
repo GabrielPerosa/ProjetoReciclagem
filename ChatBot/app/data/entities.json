@@ -1,0 +1,21 @@
+{
+  "codigo": {
+    "patterns": ["\\b(peça|pedido|ordem)\\s*(\\d+)"],
+    "grupo": 2
+  },
+  "quantidade": {
+    "patterns": [
+      "\\bquantidade\\s*(\\d+)",
+      "\\b(\\d+)\\s*(unidades|peças|itens)?"
+    ],
+    "grupo": 1
+  },
+  "material": {
+    "patterns": ["\\b(metálicas|plásticas|refugos)\\b"],
+    "grupo": null
+  },
+  "taxa": {
+    "patterns": ["\\btaxa média de acerto\\b", "\\btaxa de refugo\\b"],
+    "grupo": null
+  }
+}

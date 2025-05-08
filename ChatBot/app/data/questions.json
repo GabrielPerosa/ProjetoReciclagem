@@ -1,0 +1,7 @@
+[
+    "Quantas peças de cada tipo (metálicas, plásticas, refugos) são processadas por hora e qual é a taxa média de acerto da classificação?",
+    "Quais são as etapas envolvidas no processo de classificação, desde a entrada da peça até sua separação final?",
+    "Como o sistema identifica e diferencia materiais metálicos, plásticos e refugos? (Ex: sensores, visão computacional, inteligência artificial?)",
+    "Existe algum controle de qualidade ou verificação humana posterior à classificação automática para evitar erros?",
+    "Qual é a taxa de refugo do sistema — ou seja, quantas peças são classificadas como refugo por engano ou por não atenderem aos critérios definidos?"
+]
