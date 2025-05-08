@@ -7,10 +7,18 @@ from app.config.database import get_db
 
 router = APIRouter(prefix="/parts", tags=["Parts"])
 
-@router.post("/", response_model=Part)
-def create(part_dto: PartDTO, db: Session = Depends(get_db)):
-    return part_repository.create_part(db, part_dto)
-
 @router.get("/", response_model=list[Part])
 def list_all(db: Session = Depends(get_db)):
     return part_repository.get_all_parts(db)
+
+@router.get("/quantity", response_model=int)
+def get_quantity(db: Session = Depends(get_db)):
+    return part_repository.get_quantity_parts(db)
+
+@router.get("/type/{type}", response_model=Part)
+def get_part_by_type(type: str, db: Session = Depends(get_db)):
+    return part_repository.get_parts_by_type(db, type)
+
+@router.get("/quantity/{type}", response_model=int)
+def get_quantity_by_type(type: str, db: Session = Depends(get_db)):
+    return part_repository.get_quantity_parts_by_type(db, type)

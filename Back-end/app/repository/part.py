@@ -17,3 +17,12 @@ def create_part(db: Session, part_dto: PartDTO) -> Part:
 
 def get_all_parts(db: Session) -> list[Part]:
     return db.query(PartDB).all()
+
+def get_quantity_parts(db: Session) -> int:
+    return db.query(PartDB).count()
+
+def get_parts_by_type(db: Session, type: str) -> Part | None:
+    return db.query(PartDB).filter(PartDB.type == type).all()
+
+def get_quantity_parts_by_type(db: Session, type: str) -> int:
+    return db.query(PartDB).filter(PartDB.type == type).count()
