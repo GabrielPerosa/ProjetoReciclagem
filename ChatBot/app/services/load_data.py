@@ -1,9 +1,15 @@
 import requests
 import json
 
-def LoadData(path):
+mock = {
+  "quantidade": {"metálicas": 500, "plásticas": 300},
+  "taxa": {"acerto": "95%", "refugo": "5%"},
+  "material": ["metálicas", "plásticas"]
+}
+def LoadData(path: str):
 
     if path.startswith("http://") or path.startswith("https://"):
+        return mock
         response = requests.get(path)
         if response.status_code == 200:
             print(response.json())

@@ -12,6 +12,8 @@ class NLPProcessor:
         self.entities = LoadData('app/data/entities.json')
         self.responses = LoadData('app/data/responses.json')
         self.production_data = LoadData('http://localhost:8000/parts/')
+        self.last_responses = {}
+        self.context = {}
 
     def _detect_intent(self, message: str) -> str:
             """Detecta a intenção com base em palavras-chave definidas."""
@@ -56,30 +58,56 @@ class NLPProcessor:
             return entities
     def _format_response(self, intent: str, entities: Dict[str, List[str]]) -> str:
         """Formata a resposta com base na intenção e entidades."""
-        response = random.choice(self.responses.get(intent, self.responses["default"]))
-        
-        if entities["quantidade"]:
-            response = response.replace("{quantidade}", entities["quantidade"][0])
-        else:
-            response = response.replace("{quantidade}", "várias")
-        
-        if entities["material"]:
-            response = response.replace("{material}", ", ".join(entities["material"]))
-        else:
-            response = response.replace("{material}", "diferentes materiais")
-        
-        if entities["taxa"]:
-            response = response.replace("{taxa}", entities["taxa"][0])
-        else:
-            response = response.replace("{taxa}", "alguma taxa")
-        
+        responses = self.responses.get(intent, self.responses["default"])
+        available = [r for r in responses if r != self.last_responses.get(intent)]
+        response = random.choice(available or responses)
+        self.last_responses[intent] = response
+
+        print(entities)
+
+        if "{material}" in response:
+            if entities["material"]:
+                material_str = ", ".join(entities["material"])
+            else:
+                material_str = ", ".join(self.production_data["material"])
+            response = response.replace("{material}", material_str)
+
+        # Substituir {quantidade} se presente na resposta
+        if "{quantidade}" in response:
+            if entities["material"]:
+                material = entities["material"][0]
+                if material in self.production_data["quantidade"]:
+                    qty = self.production_data["quantidade"][material]
+                else:
+                    qty = "desconhecida"  # Valor padrão para material não encontrado
+            else:
+                qty = sum(self.production_data["quantidade"].values())
+            response = response.replace("{quantidade}", str(qty))
+
+        # Substituir {taxa} se presente na resposta
+        if "{taxa}" in response:
+            if entities["taxa"]:
+                taxa_tipo = " ".join(entities["taxa"]).lower()
+                if "acerto" in taxa_tipo:
+                    taxa_valor = self.production_data["taxa"]["acerto"]
+                elif "refugo" in taxa_tipo:
+                    taxa_valor = self.production_data["taxa"]["refugo"]
+                else:
+                    taxa_valor = "desconhecida"
+            else:
+                taxa_valor = self.production_data["taxa"]["acerto"]  # Padrão
+            response = response.replace("{taxa}", taxa_valor)
+
         return response
     def process_message(self, message: str) -> Dict[str, any]:
         intent = self._detect_intent(message)
         entities = self._extract_entities(message)
-        response = random.choice(self.responses.get(intent, self.responses["default"]))
         response = self._format_response(intent, entities)
-        print(self.production_data)
+
+        self.context['last_intent'] = intent
+        self.context['last_entities'] = entities
+        self.context['last_response'] = response
+
         return {
             "intent": intent,
             "entities": entities,

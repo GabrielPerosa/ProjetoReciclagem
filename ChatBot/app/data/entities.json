@@ -11,7 +11,7 @@
     "grupo": 1
   },
   "material": {
-    "patterns": ["\\b(metálicas|plásticas|refugos)\\b"],
+    "patterns": ["\\b(metalicas|plásticas|refugos)\\b"],
     "grupo": null
   },
   "taxa": {
