@@ -1,21 +1,31 @@
 {
   "codigo": {
-    "patterns": ["\\b(peça|pedido|ordem)\\s*(\\d+)"],
+    "patterns": [
+      "\\b(código|numero|identificador|peça|pedido|ordem)\\s*[:#-]?\\s*([A-Za-z0-9]+)\\b",
+      "\\b([A-Za-z0-9]+)\\s*(?:da|do|de)\\s*(peça|pedido|ordem)\\b"
+    ],
     "grupo": 2
   },
   "quantidade": {
     "patterns": [
-      "\\bquantidade\\s*(\\d+)",
-      "\\b(\\d+)\\s*(unidades|peças|itens)?"
+      "\\bquantidade\\s*(?:de)?\\s*(\\d+)",
+      "\\b(\\d+)\\s*(unidades|peças)?\\b",
+      "\\b(um|dois|três|quatro|cinco|seis|sete|oito|nove|dez)\\s*(unidades|peças)?\\b"
     ],
     "grupo": 1
   },
   "material": {
-    "patterns": ["\\b(metalicas|plásticas|refugos)\\b"],
+    "patterns": [
+      "\\b(metálicas?|plásticas?)\\b"
+    ],
     "grupo": null
   },
   "taxa": {
-    "patterns": ["\\btaxa média de acerto\\b", "\\btaxa de refugo\\b"],
+    "patterns": [
+      "\\btaxa\\s*(?:média)?\\s*de\\s*(acerto|refugo)\\b",
+      "\\b(taxa\\s*média|taxa\\s*de\\s*acerto|taxa\\s*de\\s*refugo)\\b",
+      "\\b(refugo|acerto)\\b"
+    ],
     "grupo": null
   }
 }

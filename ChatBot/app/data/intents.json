@@ -1,8 +1,76 @@
-{  
-    "consultar_quantidade": ["quantas", "quantidade", "peças", "processadas", "hora"],
-    "consultar_etapas": ["etapas", "processo", "classificação", "entrada", "separação"],
-    "consultar_controle_qualidade": ["controle de qualidade", "verificação humana", "erros", "posterior"],
-    "consultar_taxa_refugo": ["taxa de refugo", "refugo", "engano", "critérios"],
-    "verificar_status": ["status", "situação", "taxa", "acerto", "andamento", "qual é", "como está"]
+{
+    "saudacao": [
+        "oi",
+        "olá",
+        "como vai",
+        "me ajudar",
+        "preciso de ajuda",
+        "ajuda"
+    ],
+    "consultar_quantidade": [
+        "quantas",
+        "quantidade",
+        "peças",
+        "processadas",
+        "hora",
+        "hoje",
+        "número de",
+        "total",
+        "produção",
+        "produzidas",
+        "unidades"
+    ],
+    "consultar_etapas": [
+        "etapas",
+        "processo",
+        "classificação",
+        "entrada",
+        "separação",
+        "fases",
+        "procedimento",
+        "fluxo",
+        "como funciona",
+        "sistema"
+    ],
+    "consultar_controle_qualidade": [
+        "controle de qualidade",
+        "verificação humana",
+        "erros",
+        "posterior",
+        "inspeção",
+        "revisão",
+        "avaliação",
+        "qualidade",
+        "defeitos",
+        "falhas",
+        "checagem",
+        "garantia"
+    ],
+    "consultar_taxa_refugo": [
+        "quantidade de refugo",
+        "taxa de refugo",
+        "refugo",
+        "critérios",
+        "rejeição",
+        "descarte",
+        "perda",
+        "percentual de refugo",
+        "peças rejeitadas",
+        "não conformes",
+        "taxa de rejeição",
+        "refugadas"
+    ],
+    "verificar_status": [
+        "status",
+        "situação",
+        "andamento",
+        "qual é",
+        "como está",
+        "atualização",
+        "funcionamento",
+        "progresso",
+        "operação",
+        "condição",
+        "resumo"
+    ]
 }
-  

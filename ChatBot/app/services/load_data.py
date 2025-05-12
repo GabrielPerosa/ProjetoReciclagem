@@ -3,7 +3,7 @@ import json
 
 mock = {
   "quantidade": {"metálicas": 500, "plásticas": 300},
-  "taxa": {"acerto": "95%", "refugo": "5%"},
+  "taxa": {"acerto": "95", "refugo": "5"},
   "material": ["metálicas", "plásticas"]
 }
 def LoadData(path: str):
