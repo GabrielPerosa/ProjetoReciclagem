@@ -1,11 +1,4 @@
 {
-  "codigo": {
-    "patterns": [
-      "\\b(código|numero|identificador|peça|pedido|ordem)\\s*[:#-]?\\s*([A-Za-z0-9]+)\\b",
-      "\\b([A-Za-z0-9]+)\\s*(?:da|do|de)\\s*(peça|pedido|ordem)\\b"
-    ],
-    "grupo": 2
-  },
   "quantidade": {
     "patterns": [
       "\\bquantidade\\s*(?:de)?\\s*(\\d+)",
@@ -13,6 +6,19 @@
       "\\b(um|dois|três|quatro|cinco|seis|sete|oito|nove|dez)\\s*(unidades|peças)?\\b"
     ],
     "grupo": 1
+  },
+  "data": {
+    "patterns": [
+      "\\b(\\d{2}/\\d{2}/\\d{4})\\b"
+    ],
+    "grupo": 1
+  },
+  "hora": {
+    "patterns": [
+      "\\b(\\d{2}:\\d{2})\\b"
+    ],
+    "grupo": 1
+
   },
   "material": {
     "patterns": [
