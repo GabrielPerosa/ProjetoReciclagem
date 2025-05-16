@@ -1,4 +1,4 @@
 from pydantic import BaseModel
 
-class WorkstationDTO(BaseModel):
+class DeviceDTO(BaseModel):
     description: str

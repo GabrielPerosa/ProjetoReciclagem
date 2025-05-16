@@ -5,7 +5,7 @@ from datetime import datetime
 class Part(BaseModel):
     id: str
     type: str
-    cycle_id: str
+    productions: List[int] = []
 
     class Config:
         orm_mode = True
