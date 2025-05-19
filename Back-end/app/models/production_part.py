@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 from app.config.database import Base
 
-class ProductionPartyDB(Base):
+class ProductionPartDB(Base):
     __tablename__ = "production_parts"
     
     id = Column(String, primary_key=True, index=True)

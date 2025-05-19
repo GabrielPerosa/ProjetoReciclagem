@@ -1,12 +1,11 @@
-from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey
+from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from app.config.database import Base
 
-class DeviceStateDB(Base):
-    __tablename__ = "device_states"
-    id = Column(String, primary_key=True, index=True)
-    device_id = Column(String, ForeignKey("devices.id"), nullable=False)
-    state = Column(Boolean, nullable=False)
-    timestamp = Column(DateTime, nullable=False)
+class DeviceDB(Base):
+    __tablename__ = "devices"
 
-    device = relationship("DeviceDB", back_populates="states")
+    id = Column(String, primary_key=True, index=True)
+    description = Column(String, nullable=False)
+
+    states = relationship("DeviceStateDB", back_populates="device", cascade="all, delete-orphan")
