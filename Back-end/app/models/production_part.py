@@ -9,4 +9,4 @@ class ProductionPartDB(Base):
     stored_part_id = Column(String, ForeignKey("parts.id"), nullable=False)
     cycle_id = Column(String, nullable=False)
 
-    part = relationship("PartyDB", back_populates="productions")
+    part = relationship("PartDB", back_populates="productions")
