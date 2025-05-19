@@ -13,7 +13,7 @@
     ],
     "consultar_quantidade_material": [
         "Por hora, estamos processando {quantidade} peças {material}. Quer saber mais sobre a taxa de acerto?",
-        "Atualmente, a produção está em {quantidade} peças por hora para {material}. Algo mais que você gostaria de saber?"
+        "Atualmente, a produção está em {quantidade} peças {material} por hora. Algo mais que você gostaria de saber?"
     ],
     "consultar_etapas": [
         "O processo de classificação inclui: 1) Entrada da peça, 2) Identificação, 3) Separação final.",

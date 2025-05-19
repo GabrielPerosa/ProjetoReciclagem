@@ -1,10 +1,16 @@
+from datetime import datetime
 from app.services.load_data import load_data
+
 # os
 
 class DataProcessor:
     def __init__(self):
         self.data = load_data("app/data/mock.json")
         #self.data = load_data(os.getenv("API_URL"))
+
+    #def update_data(self):
+    #    self.data = load_data(os.getenv("API_URL"))
+
     def get_material_per_hour(self, material: str, date: str, hour: str):
         total = 0
         for h in self.data[material][date]:
@@ -49,3 +55,24 @@ class DataProcessor:
         good_percent = total_good * 100 / total_processed
         
         return good_percent, scrap_percent, total_processed 
+
+    def get_last_date(self):
+        last_date = None
+        for material in self.data["material"]:
+            for string_date in self.data[material]:
+                date = datetime.strptime(string_date, "%d/%m/%Y")
+                if last_date is None or date > last_date:
+                    last_date = date
+        
+        return last_date.strftime("%d/%m/%Y")
+    
+    def get_last_hour(self):
+        last_hour = None
+        for material in self.data["material"]:
+            for date in self.data[material]:
+                for string_hour in self.data[material][date]:
+                    hour = datetime.strptime(string_hour, "%H:%M")
+                    if last_hour is None or hour > last_hour:
+                        last_hour = hour
+        
+        return last_hour.strftime("%H:%M")

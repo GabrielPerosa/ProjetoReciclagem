@@ -19,18 +19,26 @@ class SyntaticAnalyzer:
             """Detecta a intenção com base em palavras-chave definidas."""
             message_normalized = self.parse_message(message)
             message_clean = re.sub(r'[^\w\s]', '', message_normalized)
-            
+            tokens = set(message_clean.split())
+
+            scores = {}
+
             for intent, keywords in self.intents.items():
-                for keyword in keywords:
-                    keyword_normalized = self.parse_message(keyword)
-                    if keyword_normalized in message_clean:
-                        print(f"Intenção detectada: {intent} com a palavra-chave: {keyword}")
-                        return intent
+                keywords_matched = sum(1 for kw in keywords if self.parse_message(kw) in tokens)
+                if keywords_matched:
+                    scores[intent] = keywords_matched
+
+            if scores:
+                # Retorna a intent com mais correspondências
+                best_intent = max(scores, key=scores.get)
+                print(f"Intenção detectada: {best_intent} com {scores[best_intent]} palavras-chave")
+                return best_intent
+
             return "default"
 
     def _extract_entities(self, message: str) -> Dict[str, List[str]]:
-            """Extrai entidades usando regex e spaCy."""
-            entities = {"codigo": [], "quantidade": [], "material": [], "taxa": []}
+            """Extrai entidades usando regex."""
+            entities = {"date": [], "hour": [], "material": []}
             message_normalized = self.parse_message(message)           
            
             # Extração com regex
@@ -38,6 +46,7 @@ class SyntaticAnalyzer:
                 for pattern in config["patterns"]:
                     matches = re.finditer(pattern, message_normalized, re.IGNORECASE)
                     for match in matches:
+                        print(f"Entidade {entity_name} encontrada: {match.group(0)}")
                         if config["grupo"] is not None:
                             value = match.group(config["grupo"])
                         else:

@@ -1,36 +1,20 @@
 {
-  "quantidade": {
-    "patterns": [
-      "\\bquantidade\\s*(?:de)?\\s*(\\d+)",
-      "\\b(\\d+)\\s*(unidades|peças)?\\b",
-      "\\b(um|dois|três|quatro|cinco|seis|sete|oito|nove|dez)\\s*(unidades|peças)?\\b"
-    ],
-    "grupo": 1
-  },
-  "data": {
+  "date": {
     "patterns": [
       "\\b(\\d{2}/\\d{2}/\\d{4})\\b"
     ],
-    "grupo": 1
+    "grupo": null
   },
-  "hora": {
+  "hour": {
     "patterns": [
       "\\b(\\d{2}:\\d{2})\\b"
     ],
-    "grupo": 1
+    "grupo": null
 
   },
   "material": {
     "patterns": [
-      "\\b(metálicas?|plásticas?)\\b"
-    ],
-    "grupo": null
-  },
-  "taxa": {
-    "patterns": [
-      "\\btaxa\\s*(?:média)?\\s*de\\s*(acerto|refugo)\\b",
-      "\\b(taxa\\s*média|taxa\\s*de\\s*acerto|taxa\\s*de\\s*refugo)\\b",
-      "\\b(refugo|acerto)\\b"
+      "\\b(metalicas|plasticas|refugos)\\b"
     ],
     "grupo": null
   }
