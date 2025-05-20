@@ -1,5 +1,6 @@
 import uuid
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from app.models.part import PartDB
 from app.schemas.dto.part import PartDTO
 
@@ -13,16 +14,12 @@ def create_part(db: Session, part_dto: PartDTO) -> PartDB:
     db.refresh(part)
     return part
 
-def get_all_parts(db: Session) -> list[PartDB]:
-    return db.query(PartDB).all()
+def list_all(db: Session) -> list[tuple[PartDB, int]]:
+    return (
+        db.query(PartDB, func.count(PartDB.id).label("quantity"))
+          .group_by(PartDB.type)
+          .all()
+    )
 
-"""
- def get_quantity_parts(db: Session) -> int:
-    return db.query(PartDB).count()
-
-def get_parts_by_type(db: Session, type: str) -> Part | None:
-    return db.query(PartDB).filter(PartDB.type == type).all()
-
-def get_quantity_parts_by_type(db: Session, type: str) -> int:
-    return db.query(PartDB).filter(PartDB.type == type).count()
-"""
+def get_quantity(db: Session, type: str) -> int:
+    return db.query(func.count(PartDB.id)).filter(PartDB.type == type).scalar()
