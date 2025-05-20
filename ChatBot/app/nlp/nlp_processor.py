@@ -31,27 +31,40 @@ class NLPProcessor:
                 response = response.replace("{material}", "")
         # Substituir {quantidade}
         if "{quantidade}" in response:
-            if entities["material"]:
+            if entities["material"] and entities["hour"]:
                 material = entities["material"][0]
-                qty = self.data_proc.get_all_material(material)
+                hour = entities["hour"][0]
+                qty = self.data_proc.get_material_per_hour(material, self.last_date, hour)
+                response = response.replace("{quantidade}", str(qty))
+            if entities["material"] and entities["date"]:
+                material = entities["material"][0]
+                date = entities["date"][0]
+                qty = self.data_proc.get_material_per_date(material, date)
+                response = response.replace("{quantidade}", str(qty))
             else:
-                qty = self.data_proc.get_total_each_material_per_hour(self.last_date, self.last_hour)
-            response = response.replace("{quantidade}", str(qty))
+                goods, scrap = self.data_proc.get_total_each_material_per_hour(self.last_date, self.last_hour)
+                response = response.replace("{quantidade}", str(goods+scrap))
 
         # Substituir {taxa}
-        if "{taxa}" in response:
-            if entities["taxa"]:
-                taxa_tipo = " ".join(entities["material"])
-                if "metalicas" in taxa_tipo or "plasticas" in taxa_tipo:
-                    taxa_valor = self.data_proc.calc_percent_per_hour()
-                elif "refugo" in taxa_tipo:
-                    taxa_valor = self.data_proc["taxa"]["refugo"]
-                else:
-                    taxa_valor = "desconhecida"
+        if "{total}" in response:
+            print(self.last_date, self.last_hour)
+            good_percent, scrap_percent, total = self.data_proc.calc_percent_per_hour(self.last_date, self.last_hour)
+            response = response.replace("{taxa_boa}", f"{good_percent:.2f}% peças boas") 
+            response = response.replace("{taxa_ruim}", f"{scrap_percent:.2f}% refugos")
+            if "{total}" in response:
+                response = response.replace("{total}", str(total))
+        
+        if "{hour}" in response: 
+            if entities["hour"]:
+                response = response.replace("{hour}", entities["hour"][0])
             else:
-                taxa_valor = self.data_proc["taxa"]["acerto"]  # Padrão
-            response = response.replace("{taxa}", taxa_valor)
+                response = response.replace("{hour}", self.last_hour)
 
+        if "{date}" in response:
+            if entities["date"]:
+                response = response.replace("{date}", entities["date"][0])
+            else:
+                response = response.replace("{date}", self.last_date)
         return response
 
     def update_datetime(self):

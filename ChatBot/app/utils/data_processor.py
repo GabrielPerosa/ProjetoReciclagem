@@ -49,7 +49,7 @@ class DataProcessor:
         # Obtendo soma de peças por hora 
         total_good, total_scrap = self.get_total_each_material_per_hour(date, hour)
         total_processed = total_good + total_scrap
-    
+        print(self.data)
         # Calculando percentuais
         scrap_percent = total_scrap * 100 / total_processed
         good_percent = total_good * 100 / total_processed
@@ -57,9 +57,10 @@ class DataProcessor:
         return good_percent, scrap_percent, total_processed 
 
     def get_last_date(self):
+        
         last_date = None
-        for material in self.data["material"]:
-            for string_date in self.data[material]:
+        for m in self.data["material"]:
+            for string_date in self.data[m]:
                 date = datetime.strptime(string_date, "%d/%m/%Y")
                 if last_date is None or date > last_date:
                     last_date = date
@@ -69,10 +70,10 @@ class DataProcessor:
     def get_last_hour(self):
         last_hour = None
         for material in self.data["material"]:
-            for date in self.data[material]:
-                for string_hour in self.data[material][date]:
-                    hour = datetime.strptime(string_hour, "%H:%M")
-                    if last_hour is None or hour > last_hour:
-                        last_hour = hour
+            for string_hour in self.data[material][self.get_last_date()]:
+                hour = datetime.strptime(string_hour, "%H:%M")
+                if last_hour is None or hour > last_hour:
+                    last_hour = hour
         
         return last_hour.strftime("%H:%M")
+    

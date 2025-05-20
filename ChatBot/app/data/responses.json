@@ -8,8 +8,8 @@
         "Olá! Vamos conversar sobre a classificação de peças? O que você quer saber?"
     ],
     "consultar_quantidade": [
-        "Processamos {quantidade} peças por hora. Quer saber mais sobre algum material?",
-        "Estamos processando {quantidade} peças por hora. Quer saber mais algo mais sobre o processo?"
+        "Processamos {quantidade} peças {material}- {hour}. Quer saber mais sobre algum material?",
+        "Estamos processando {quantidade} peças {material} - {hour}. Quer saber mais algo mais sobre o processo?"
     ],
     "consultar_quantidade_material": [
         "Por hora, estamos processando {quantidade} peças {material}. Quer saber mais sobre a taxa de acerto?",
@@ -27,9 +27,8 @@
     
     ],
     "consultar_taxa_refugo": [
-        "Taxa de refugos hoje: {taxa}%",
-        "Calculamos a taxa de refugo dividindo o número de peças rejeitadas pelo total processado. Atualmente, ela está em {taxa}%"
-
+        "Taxa de refugos hoje: {taxa_boa}, {taxa_ruim} em um total de {total} peças produzidas",
+        "Taxa de refugo mais recente: {taxa_ruim} em um total de {total} peças processadas"
     ],
     "verificar_status": [
         "Estou checando o status para você. Enquanto isso, posso te contar que processamos {quantidade} peças hoje. Quer saber mais sobre a taxa de acerto?",
