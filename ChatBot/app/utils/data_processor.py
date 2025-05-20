@@ -1,5 +1,5 @@
 from datetime import datetime
-from app.services.load_data import load_data
+from app.utils.load_data import load_data
 
 # os
 
@@ -12,6 +12,9 @@ class DataProcessor:
     #    self.data = load_data(os.getenv("API_URL"))
 
     def get_material_per_hour(self, material: str, date: str, hour: str):
+        """
+        Retorna o total de um material em uma data e hora específica.
+        """
         total = 0
         for h in self.data[material][date]:
             if h.startswith(hour):
@@ -19,18 +22,27 @@ class DataProcessor:
         return total
     
     def get_material_per_date(self, material: str, date: str):
+        """
+        Retorna o total de um material em uma data específica.
+        """
         total = 0
         for h in self.data[material][date]:
             total += self.get_material_per_hour(material, date, h)
         return total
     
     def get_all_material(self, material: str):
+        """
+        Retorna o total acumulado de um material em todas as datas.
+        """
         total = 0
         for date in self.data[material]:
             total += self.get_material_per_date(material, date)
         return total
     
     def get_total_each_material_per_hour(self, date: str, hour: str):
+        """
+        Retorna o total de peças boas e refugadas em uma data e hora específicas.
+        """
         total_good = 0 
         total_scrap = 0
     
@@ -45,7 +57,9 @@ class DataProcessor:
         return round(total_good, 2), round(total_scrap, 2)
         
     def calc_percent_per_hour(self, date: str, hour: str):
-    
+        """
+        Calcula o percentual de boas e refugos em uma data e hora específicas.
+        """
         # Obtendo soma de peças por hora 
         total_good, total_scrap = self.get_total_each_material_per_hour(date, hour)
         total_processed = total_good + total_scrap
@@ -57,7 +71,9 @@ class DataProcessor:
         return good_percent, scrap_percent, total_processed 
 
     def get_last_date(self):
-        
+        """
+        Retorna a última data disponível nos dados.
+        """   
         last_date = None
         for m in self.data["material"]:
             for string_date in self.data[m]:
@@ -68,6 +84,9 @@ class DataProcessor:
         return last_date.strftime("%d/%m/%Y")
     
     def get_last_hour(self):
+        """
+        Retorna a última hora disponível na última data.
+        """
         last_hour = None
         for material in self.data["material"]:
             for string_hour in self.data[material][self.get_last_date()]:

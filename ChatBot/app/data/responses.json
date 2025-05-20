@@ -8,12 +8,10 @@
         "Olá! Vamos conversar sobre a classificação de peças? O que você quer saber?"
     ],
     "consultar_quantidade": [
-        "Processamos {quantidade} peças {material}- {hour}. Quer saber mais sobre algum material?",
-        "Estamos processando {quantidade} peças {material} - {hour}. Quer saber mais algo mais sobre o processo?"
-    ],
-    "consultar_quantidade_material": [
-        "Por hora, estamos processando {quantidade} peças {material}. Quer saber mais sobre a taxa de acerto?",
-        "Atualmente, a produção está em {quantidade} peças {material} por hora. Algo mais que você gostaria de saber?"
+        "Processamos {quantidade} {material} {hora} {data}. Quer saber mais sobre algum material?",
+        "Processamos {quantidade} {material} {hora} {data}. Quer saber mais algo mais sobre o processo?",
+        "Segundo o nosso sistema, processamos {quantidade} {material} {hora} {data}. Quer saber mais sobre a taxa de acerto?",
+        "Atualmente, a produção está em {quantidade} {material} {hora} {data}. Algo mais que você gostaria de saber?"
     ],
     "consultar_etapas": [
         "O processo de classificação inclui: 1) Entrada da peça, 2) Identificação, 3) Separação final.",

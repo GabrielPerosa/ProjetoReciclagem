@@ -7,14 +7,14 @@
   },
   "hour": {
     "patterns": [
-      "\\b(\\d{2}:\\d{2})\\b"
+      "\\b(\\d{2}:\\d{2})|(\\s+\\d{2}\\s*)\\b"
     ],
     "grupo": null
 
   },
   "material": {
     "patterns": [
-      "\\b(metalicas|plasticas|refugos)\\b"
+      "\\b(metalicas|plasticas|refugos|refugo|metal|plastico)\\b"
     ],
     "grupo": null
   }

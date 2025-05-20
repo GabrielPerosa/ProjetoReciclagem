@@ -1,7 +1,7 @@
 import re
 from typing import Dict, List
 import unicodedata
-from app.services.load_data import load_data
+from app.utils.load_data import load_data
 
 class SyntaticAnalyzer:
     def __init__(self):
@@ -46,12 +46,15 @@ class SyntaticAnalyzer:
                 for pattern in config["patterns"]:
                     matches = re.finditer(pattern, message_normalized, re.IGNORECASE)
                     for match in matches:
-                        print(f"Entidade {entity_name} encontrada: {match.group(0)}")
-                        if config["grupo"] is not None:
-                            value = match.group(config["grupo"])
-                        else:
-                            value = match.group(0)
-                        entities[entity_name].append(value)
+                        value = match.group(0)
+                        if value.startswith("met"):
+                            value = "metalicas"
+                        if value.startswith("ref"):
+                            value = "refugos"
+                        if value.startswith("pla"):
+                            value = "plasticas"
+                        entities[entity_name].append(value.strip())
+                        print(f"Entidade {entity_name} encontrada: {value}")
             
             # Remover duplicatas
             for key in entities:
