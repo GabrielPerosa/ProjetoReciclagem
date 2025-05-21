@@ -4,7 +4,6 @@ import json
 def load_data(path: str):
 
     if path.startswith("http://") or path.startswith("https://"):
-        return None
         response = requests.get(path)
         if response.status_code == 200:
             print(response.json())
