@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
-class ProductionPartDTO(BaseModel): 
-    stored_part_id: str 
-    cycle_id: str
+class ProductionPartDTO(BaseModel):
+    part_id: str
+    part_type: str 
+    stored_quantity: int

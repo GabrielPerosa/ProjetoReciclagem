@@ -1,8 +1,9 @@
 from pydantic import BaseModel
 
-class ProductionPart(BaseModel): 
+class ProductionPart(BaseModel):
     id: str
-    stored_part_id: str 
+    part_id: str
+    stored_quantity: int 
     cycle_id: str
     
     class Config:
