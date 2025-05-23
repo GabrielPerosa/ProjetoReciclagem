@@ -13,8 +13,8 @@ def create_part(part: PartDTO, db: Session = Depends(get_db)):
     return part_repository.create_part(db, part)
 
 @router.get("/", response_model=List[Part])
-def list_all(db: Session = Depends(get_db)):
-    parts = part_repository.list_all(db)
+def list_parts_with_quantity(db: Session = Depends(get_db)):
+    parts = part_repository.list_parts_with_quantity(db)
     return [{"id": p.id, "type": p.type, "quantity": q} for p, q in parts]
 
 @router.get("/quantity/{type}", response_model=int)

@@ -1,4 +1,6 @@
+from typing import Optional
 from pydantic import BaseModel
+from datetime import datetime
 
 class ProductionPart(BaseModel):
     id: str
@@ -8,3 +10,10 @@ class ProductionPart(BaseModel):
     
     class Config:
         orm_mode = True
+        
+class ProductionPartWithTimestamp(ProductionPart):
+    part_type: str
+    timestamp: Optional[datetime]
+
+    class Config(ProductionPart.Config):
+        pass

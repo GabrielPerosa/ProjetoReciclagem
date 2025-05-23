@@ -14,12 +14,17 @@ def create_part(db: Session, part_dto: PartDTO) -> PartDB:
     db.refresh(part)
     return part
 
-def list_all(db: Session) -> list[tuple[PartDB, int]]:
+def list_parts_with_quantity(db: Session) -> list[tuple[PartDB, int]]:
     return (
         db.query(PartDB, func.count(PartDB.id).label("quantity"))
-          .group_by(PartDB.type)
+          .group_by(PartDB.id, PartDB.type)
           .all()
     )
 
 def get_quantity(db: Session, type: str) -> int:
-    return db.query(func.count(PartDB.id)).filter(PartDB.type == type).scalar()
+    count = (
+        db.query(func.count(PartDB.id))
+          .filter(PartDB.type == type)
+          .scalar()
+    )
+    return count or 0
