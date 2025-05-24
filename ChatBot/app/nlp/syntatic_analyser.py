@@ -49,12 +49,13 @@ class SyntaticAnalyzer:
                         value = match.group(0)
                         if value.startswith("met"):
                             value = "metalicas"
-                        if value.startswith("ref"):
+                        elif value.startswith("ref"):
                             value = "refugos"
-                        if value.startswith("pla"):
+                        elif value.startswith("pla"):
                             value = "plasticas"
+                        elif entity_name == "hour" and value.endswith("h"):
+                            value = value.replace("h", "") 
                         entities[entity_name].append(value.strip())
-                        print(f"Entidade {entity_name} encontrada: {value}")
             
             # Remover duplicatas
             for key in entities:

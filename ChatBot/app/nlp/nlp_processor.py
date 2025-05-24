@@ -22,56 +22,61 @@ class NLPProcessor:
         response = random.choice(available or responses)
         self.last_responses[intent] = response
 
-        # Substituir {material}
-        if "{material}" in response:
-            if entities["material"]:
-                response = response.replace("{material}", f"peças {entities["material"][0]}")
-            else:
-                response = response.replace("{material}", "")
+        # Coletar entidades com fallback
+        material = (entities.get("material") or [None])[0]
+        date = (entities.get("date") or [None])[0]
+        hour = (entities.get("hour") or [None])[0]
 
-        # Substituir {quantidade}
+        # Formatar quantidade e detalhes com base na combinação de entidades
         if "{quantidade}" in response:
-            if entities["material"]:
-                material = entities["material"][0]
-                if entities["date"] and entities["hour"]:
-                    data = entities["date"][0]
-                    hour = entities["hour"][0]
-                    qty = self.data_proc.get_material_per_hour(material, data, hour)
-                    response = response.replace("{quantidade}", str(qty))
-                    response = response.replace("{data}", f"- {entities["date"][0]}")
-                    response = response.replace("{hora}", f"no período de {entities["hour"][0]} horas")
-                elif entities["hour"]:
-                    hour = entities["hour"][0]
+            if material:
+                if date and hour:
+                    qty = self.data_proc.get_material_per_hour(material, date, hour)
+                    data_info = f"- {date}"
+                    hour_info = f"no período de {hour} horas"
+                elif hour:
                     qty = self.data_proc.get_material_per_hour(material, self.last_date, hour)
-                    response = response.replace("{quantidade}", str(qty))
-                    response = response.replace("{hora}", f"no período de {entities["hour"][0]} horas")
-                    response = response.replace("{data}", f"de {self.last_date} (último registro)")
-                elif entities["date"]:
-                    date = entities["date"][0]
+                    data_info = f"de {self.last_date} (último registro)"
+                    hour_info = f"no período de {hour} horas"
+                elif date:
                     qty = self.data_proc.get_material_per_date(material, date)
-                    response = response.replace("{quantidade}", str(qty))
-                    response = response.replace("{data}", entities["date"][0])
-                    response = response.replace("{hora}", "")
+                    data_info = f"{date}"
+                    hour_info = ""
                 else:
                     qty = self.data_proc.get_material_per_hour(material, self.last_date, self.last_hour)
-                    response = response.replace("{quantidade}", str(qty))
-                    response = response.replace("{data}", f"de {self.last_date} (último registro)")
-                    response = response.replace("{hora}", f"no intervalo de {self.last_hour} horas")
+                    data_info = f"de {self.last_date} (último registro)"
+                    hour_info = f"no intervalo de {self.last_hour} horas"
+            elif date:
+                if hour:
+                    qty = self.data_proc.get_total_each_material_per_hour(date, hour)
+                    data_info = f"- {date}"
+                    hour_info = f"no período de {hour} horas"
+                else:
+                    qty = self.data_proc.get_total_each_material_per_hour(date)
+                    data_info = f"{date}"
+                    hour_info = ""
+            elif hour:
+                qty, _ = self.data_proc.get_total_each_material_per_hour(self.last_date, hour)
+                data_info = f"de {self.last_date} (último registro)"
+                hour_info = f"no período de {hour} horas"
             else:
                 goods, scrap = self.data_proc.get_total_each_material_per_hour(self.last_date, self.last_hour)
-                qty = str(goods+scrap)
-                response = response.replace("{quantidade}", f"{qty} peças processadas")
-                response = response.replace("{data}", f"de {self.last_date} (último registro)")
-                response = response.replace("{hora}", f"no intervalo de {self.last_hour} horas")
+                qty = goods + scrap
+                material = ""  # Não menciona o tipo de material
+                data_info = f"de {self.last_date} (último registro)"
+                hour_info = f"no intervalo de {self.last_hour} horas"
 
-        # Substituir {taxa}
-        if "{total}" in response:
-            print(self.last_date, self.last_hour)
+            response = response.replace("{quantidade}", str(qty))
+            response = response.replace("{material}", f"peças {material}" if material else "")
+            response = response.replace("{data}", data_info)
+            response = response.replace("{hora}", hour_info)
+    
+        # Substituir taxa (taxa_boa, taxa_ruim e total)
+        if any(token in response for token in ["{taxa_boa}", "{taxa_ruim}", "{total}"]):
             good_percent, scrap_percent, total = self.data_proc.calc_percent_per_hour(self.last_date, self.last_hour)
-            response = response.replace("{taxa_boa}", f"{good_percent:.2f}% peças boas") 
+            response = response.replace("{taxa_boa}", f"{good_percent:.2f}% peças boas")
             response = response.replace("{taxa_ruim}", f"{scrap_percent:.2f}% refugos")
-            if "{total}" in response:
-                response = response.replace("{total}", str(total))
+            response = response.replace("{total}", str(total))
 
         return response
     
