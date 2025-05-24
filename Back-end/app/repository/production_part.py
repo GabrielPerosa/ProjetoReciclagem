@@ -6,6 +6,7 @@ from app.models.cycle import CycleDB
 from app.schemas.dto.production_part import ProductionPartDTO
 from app.models.station_state import StationStateDB
 from datetime import datetime
+from sqlalchemy import func
 
 def create_production_part(db: Session, dto: ProductionPartDTO) -> ProductionPartDB:
     part = db.query(PartDB).filter(PartDB.type == dto.part_type).first()
@@ -48,3 +49,20 @@ def get_parts_by_type_with_timestamp(db: Session,part_type: str) -> list[tuple[s
         .filter(PartDB.type == part_type)
         .all()
     )
+    
+def get_utilization(db: Session) -> int:
+    total_non_discard = (
+        db.query(func.coalesce(func.sum(ProductionPartDB.stored_quantity), 0))
+          .join(PartDB, ProductionPartDB.part_id == PartDB.id)
+          .filter(PartDB.type != "descarte")
+          .scalar()
+    ) or 0
+    
+    total_discard = (
+        db.query(func.coalesce(func.sum(ProductionPartDB.stored_quantity), 0))
+          .join(PartDB, ProductionPartDB.part_id == PartDB.id)
+          .filter(PartDB.type == "descarte")
+          .scalar()
+    ) or 0
+
+    return total_non_discard - total_discard    

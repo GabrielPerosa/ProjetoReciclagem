@@ -15,6 +15,7 @@ def create_production_part(production_part: production_part_dto.ProductionPartDT
     "/by-type/{part_type}", 
     response_model=list[production_part_schema.ProductionPartWithTimestamp]
 )
+
 def get_parts_by_type(
     part_type: str, 
     db: Session = Depends(get_db)
@@ -33,3 +34,7 @@ def get_parts_by_type(
         }
         for _id, part_id, cycle_id, stored_qty, p_type, ts in rows
     ]
+
+@router.get("/get_utilization",response_model=int,)
+def get_utilization(db: Session = Depends(get_db)):
+    return get_utilization(db)
