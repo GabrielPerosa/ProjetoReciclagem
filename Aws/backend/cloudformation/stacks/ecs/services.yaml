@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Template para serviços ECS'
+
+Parameters:
+  ECSCluster:
+    Type: String
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet::Id
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet::Id
+  APIServiceName:
+    Type: String  
+  APIContainerPort:
+    Type: Number  
+  APIContainerImage:
+    Type: String
+  ChatbotServiceName:
+    Type: String  
+  ChatbotContainerPort:
+    Type: Number  
+  ChatbotContainerImage:
+    Type: String
+  APITaskDefinition:
+    Type: String
+  ChatbotTaskDefinition:
+    Type: String
+  APISecurityGroup:
+    Type: AWS::EC2::SecurityGroup::Id
+  ChatbotSecurityGroup:
+    Type: AWS::EC2::SecurityGroup::Id
+  DesiredCount:
+    Type: Number
+  APITargetGroup:
+    Type: String
+  ChatbotTargetGroup:
+    Type: String
+
+Resources:
+  APIService:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !Ref ECSCluster
+      TaskDefinition: !Ref APITaskDefinition
+      ServiceName: !Sub ${APIServiceName}-service
+      DesiredCount: !Ref DesiredCount
+      LaunchType: FARGATE
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - !Ref APISecurityGroup
+          Subnets:
+            - !Ref PrivateSubnet1
+            - !Ref PrivateSubnet2
+      LoadBalancers:
+        - TargetGroupArn: !Ref APITargetGroup
+          ContainerName: api-container
+          ContainerPort: !Ref APIContainerPort
+
+  ChatbotService:
+    DependsOn: APIService
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !Ref ECSCluster
+      TaskDefinition: !Ref ChatbotTaskDefinition
+      ServiceName: !Sub ${ChatbotServiceName}-service
+      DesiredCount: !Ref DesiredCount
+      LaunchType: FARGATE
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - !Ref ChatbotSecurityGroup
+          Subnets:
+            - !Ref PrivateSubnet1
+            - !Ref PrivateSubnet2
+      LoadBalancers:
+        - TargetGroupArn: !Ref ChatbotTargetGroup
+          ContainerName: chatbot-container
+          ContainerPort: !Ref ChatbotContainerPort

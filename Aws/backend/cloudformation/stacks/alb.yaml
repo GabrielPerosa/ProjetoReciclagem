@@ -1,0 +1,105 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Stack do Application Load Balancer
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet::Id
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet::Id
+  ChatbotContainerPort:
+    Type: Number
+  APIContainerPort:
+    Type: Number
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup::Id
+
+Resources:
+  ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: recycle-alb
+      Subnets:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+      SecurityGroups:
+        - !Ref ALBSecurityGroup
+      Scheme: internal
+
+  APITargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: api-tg
+      VpcId: !Ref VpcId
+      Port: !Ref APIContainerPort
+      Protocol: HTTP
+      TargetType: ip
+      HealthCheckPath: /
+      HealthCheckPort: traffic-port
+      HealthCheckProtocol: HTTP
+      HealthCheckIntervalSeconds: 45
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+  
+  ChatbotTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: chatbot-tg
+      VpcId: !Ref VpcId
+      Port: !Ref ChatbotContainerPort
+      Protocol: HTTP
+      TargetType: ip
+      HealthCheckPath: /chat/health
+      HealthCheckPort: traffic-port
+      HealthCheckProtocol: HTTP
+      HealthCheckIntervalSeconds: 45
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref ALB
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: fixed-response
+          FixedResponseConfig:
+            StatusCode: "404"
+            ContentType: "text/plain"
+            MessageBody: "Not Found"
+      
+  ChatbotRouteRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref ALBListener
+      Priority: 1
+      Conditions:
+        - Field: path-pattern
+          Values: ["/chat/*"]
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref ChatbotTargetGroup
+  APIRouteRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref ALBListener
+      Priority: 2
+      Conditions:
+        - Field: path-pattern
+          Values: ["/*"]
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref APITargetGroup
+      
+          
+Outputs:
+  LoadBalancerArn:
+    Value: !Ref ALB
+  LoadBalancerDNS:
+    Value: !GetAtt ALB.DNSName
+  APITargetGroup:
+    Value: !Ref APITargetGroup
+  ChatbotTargetGroup:
+    Value: !Ref ChatbotTargetGroup

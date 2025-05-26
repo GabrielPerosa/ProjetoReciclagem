@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Stack de banco de dados RDS PostgreSQL
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet::Id
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet::Id
+  InstanceName:
+    Type: String
+  DBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup::Id
+
+Resources:
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnet group for RDS
+      SubnetIds:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+
+  DBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: !Ref InstanceName
+      Engine: postgres
+      EngineVersion: "16"
+      DBInstanceClass: db.t3.micro
+      StorageType: gp2
+      AllocatedStorage: 20
+      MasterUsername: postgres
+      MasterUserPassword: postgres123
+      VPCSecurityGroups:
+        - !Ref DBSecurityGroup
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      PubliclyAccessible: false
+      MultiAZ: false
+      DeleteAutomatedBackups: true
+      DeletionProtection: false
+      DBName: iot
+
+Outputs:
+  DBHost:
+    Description: Host do banco de dados
+    Value: !GetAtt DBInstance.Endpoint.Address
