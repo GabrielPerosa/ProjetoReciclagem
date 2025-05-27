@@ -25,7 +25,7 @@ def create_production_part(db: Session, dto: ProductionPartDTO) -> ProductionPar
 
     production_part = ProductionPartDB(
         part_id=part.id,
-        stored_quantity=dto.stored_quantity,
+        stored_quantity=1,
         cycle_id=cycle.id,
     )
     db.add(production_part)
@@ -65,4 +65,16 @@ def get_utilization(db: Session) -> int:
           .scalar()
     ) or 0
 
-    return total_non_discard - total_discard    
+    return total_non_discard - total_discard
+
+def get_total_quantity_by_part_type(db: Session, part_type: str) -> dict:
+    total_quantity = (
+        db.query(func.coalesce(func.sum(ProductionPartDB.stored_quantity), 0))
+        .join(PartDB, ProductionPartDB.part_id == PartDB.id)
+        .filter(PartDB.type == part_type)
+        .scalar()
+    )
+    return {
+        "part_type": part_type,
+        "total_quantity": total_quantity
+    }

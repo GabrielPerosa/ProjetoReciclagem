@@ -38,3 +38,13 @@ def get_parts_by_type(
 @router.get("/get_utilization",response_model=int,)
 def get_utilization(db: Session = Depends(get_db)):
     return get_utilization(db)
+
+@router.get("/parts/{part_type}/total")
+def get_total_quantity(
+    part_type: str,
+    db: Session = Depends(get_db)
+):
+    result = production_part_repository.get_total_quantity_by_part_type(db, part_type)
+    if result["total_quantity"] == 0:
+        raise HTTPException(status_code=404, detail="No parts found for this type")
+    return result
