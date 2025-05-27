@@ -35,9 +35,9 @@ def get_parts_by_type(
         for _id, part_id, cycle_id, stored_qty, p_type, ts in rows
     ]
 
-@router.get("/get_utilization",response_model=int,)
-def get_utilization(db: Session = Depends(get_db)):
-    return get_utilization(db)
+@router.get("/get_utilization", response_model=int)
+def get_utilization_part(db: Session = Depends(get_db)):
+    return production_part_repository.get_utilization(db)
 
 @router.get("/parts/{part_type}/total")
 def get_total_quantity(

@@ -9,24 +9,28 @@ from datetime import datetime
 from sqlalchemy import func
 
 def create_production_part(db: Session, dto: ProductionPartDTO) -> ProductionPartDB:
+    # 1) Busca (ou cria) a Part
     part = db.query(PartDB).filter(PartDB.type == dto.part_type).first()
-
     if not part:
-        part = PartDB(
-            id=str(uuid.uuid4()),
-            type=dto.part_type,
-        )
+        part = PartDB(id=str(uuid.uuid4()), type=dto.part_type)
         db.add(part)
         db.flush()
 
-    cycle = CycleDB(id=str(uuid.uuid4()))
-    db.add(cycle)
-    db.flush()
+    # 3) Busca o cycle mais recente *por timestamp* em StationStateDB
+    latest_cycle = (
+        db.query(CycleDB)
+          .join(StationStateDB, StationStateDB.cycle_id == CycleDB.id)
+          .order_by(StationStateDB.timestamp.desc())
+          .first()
+    )
+    if not latest_cycle:
+        raise Exception("Nenhum ciclo com StationState encontrado. Crie ao menos um station_state primeiro.")
 
+    # 4) Cria o production_part usando esse latest_cycle.id
     production_part = ProductionPartDB(
         part_id=part.id,
         stored_quantity=1,
-        cycle_id=cycle.id,
+        cycle_id=latest_cycle.id,
     )
     db.add(production_part)
     db.commit()
