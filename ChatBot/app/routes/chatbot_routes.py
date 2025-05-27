@@ -16,5 +16,4 @@ async def chat(request: MessageRequest):
 #        if r.status_code == 200:
 #            return {"status": "healthy", "api_status": r.status_code}
 #        else:
-#            return {"status": "unhealthy", "api_status": r.status_code}
-    
+#            return {"status": "unhealthy", "api_status": r.status_code}   
