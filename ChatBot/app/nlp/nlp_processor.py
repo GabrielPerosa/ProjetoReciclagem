@@ -12,7 +12,6 @@ class NLPProcessor:
         self.last_responses = {}
         self.last_date = self.data_proc.get_last_date()
         self.last_hour = self.data_proc.get_last_hour()
-        self.context = {}
         
 
     def _format_response(self, intent: str, entities: Dict[str, List[str]]) -> str:
@@ -32,70 +31,86 @@ class NLPProcessor:
             if material:
                 if date and hour:
                     qty = self.data_proc.get_material_per_hour(material, date, hour)
-                    data_info = f"- {date}"
-                    hour_info = f"no período de {hour} horas"
+                    data_info = f" - {date}"
+                    hour_info = f" no horário de {hour} horas"
                 elif hour:
                     qty = self.data_proc.get_material_per_hour(material, self.last_date, hour)
-                    data_info = f"de {self.last_date} (último registro)"
-                    hour_info = f"no período de {hour} horas"
+                    data_info = f" de {self.last_date} (último registro)"
+                    hour_info = f" no período de {hour} horas"
                 elif date:
                     qty = self.data_proc.get_material_per_date(material, date)
-                    data_info = f"{date}"
+                    data_info = f" - {date}"
                     hour_info = ""
                 else:
                     qty = self.data_proc.get_material_per_hour(material, self.last_date, self.last_hour)
-                    data_info = f"de {self.last_date} (último registro)"
-                    hour_info = f"no intervalo de {self.last_hour} horas"
+                    data_info = f" de {self.last_date} (último registro)"
+                    hour_info = f" no intervalo de {self.last_hour} horas"
             elif date:
                 if hour:
-                    qty = self.data_proc.get_total_each_material_per_hour(date, hour)
-                    data_info = f"- {date}"
-                    hour_info = f"no período de {hour} horas"
+                    qty, _ = self.data_proc.get_total_each_material_per_hour(date, hour)
+                    data_info = f" do dia {date}"
+                    hour_info = f" no período de {hour} horas"
                 else:
-                    qty = self.data_proc.get_total_each_material_per_hour(date)
-                    data_info = f"{date}"
+                    materials = self.data_proc.data["material"]
+                    qty = 0
+                    for m in materials:
+                        if m != "refugos":
+                            qty += self.data_proc.get_material_per_date(m, date)
+                   
+                    data_info = f" no dia {date}"
                     hour_info = ""
             elif hour:
                 qty, _ = self.data_proc.get_total_each_material_per_hour(self.last_date, hour)
-                data_info = f"de {self.last_date} (último registro)"
-                hour_info = f"no período de {hour} horas"
+                data_info = f" da data {self.last_date} (último registro)"
+                hour_info = f" no período de {hour} horas"
             else:
                 goods, scrap = self.data_proc.get_total_each_material_per_hour(self.last_date, self.last_hour)
                 qty = goods + scrap
                 material = ""  # Não menciona o tipo de material
-                data_info = f"de {self.last_date} (último registro)"
-                hour_info = f"no intervalo de {self.last_hour} horas"
+                data_info = f" do dia {self.last_date} (último registro)"
+                hour_info = f" no intervalo de {self.last_hour} horas"
 
-            response = response.replace("{quantidade}", str(qty))
-            response = response.replace("{material}", f"peças {material}" if material else "")
+            response = response.replace("{quantidade}", f"{str(qty)} ")
+            response = response.replace("{material}", f"{material}" if material else "")
             response = response.replace("{data}", data_info)
             response = response.replace("{hora}", hour_info)
     
         # Substituir taxa (taxa_boa, taxa_ruim e total)
         if any(token in response for token in ["{taxa_boa}", "{taxa_ruim}", "{total}"]):
-            good_percent, scrap_percent, total = self.data_proc.calc_percent_per_hour(self.last_date, self.last_hour)
-            response = response.replace("{taxa_boa}", f"{good_percent:.2f}% peças boas")
-            response = response.replace("{taxa_ruim}", f"{scrap_percent:.2f}% refugos")
-            response = response.replace("{total}", str(total))
-
+            
+            d = (date or self.last_date)
+            h = (hour or self.last_hour)
+            
+            result = self.data_proc.calc_percent_per_hour(d, h)
+            if result == None:
+                return "Não há registro na base de dados para o período especificado" 
+            else:
+                good_percent = result[0]
+                scrap_percent = result[1]
+                total = result[2]
+                response = response.replace("{taxa_boa}", f"{good_percent:.2f}% peças boas")
+                response = response.replace("{taxa_ruim}", f"{scrap_percent:.2f}% refugos")
+                response = response.replace("{total}", str(total))
         return response
     
+    # Atualiza os ultimos registros de dados da classe NLP
     def update_datetime(self):
         self.last_date = self.data_proc.get_last_date()
         self.last_hour = self.data_proc.get_last_hour()
         
     def process_message(self, message: str) -> Dict[str, any]:
         """Processa a mensagem, mantendo e atualizando o contexto."""
-        self.update_datetime()
-        intent = self.syntatic_analyser._detect_intent(message)
-        entities_detected = self.syntatic_analyser._extract_entities(message)
-        
-        # Se a intenção mudou, limpar as entidades do contexto
-        response = self._format_response(intent, entities_detected)
+        try:
+            self.update_datetime()
+            intent = self.syntatic_analyser._detect_intent(message)
+            entities_detected = self.syntatic_analyser._extract_entities(message)
 
-        # Atualizar o contexto
-        self.context['last_intent'] = intent
-        self.context['last_response'] = response
+            # Se a intenção mudou, limpar as entidades do contexto
+            response = self._format_response(intent, entities_detected)
+        except Exception as e:
+            intent = []
+            entities_detected = []
+            response = "Erro ao processar prompt {}".format(e)
 
         return {
             "intent": intent,

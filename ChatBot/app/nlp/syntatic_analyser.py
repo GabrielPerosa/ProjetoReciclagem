@@ -7,7 +7,6 @@ class SyntaticAnalyzer:
     def __init__(self):
         self.intents = load_data('app/data/intents.json')
         self.entities = load_data('app/data/entities.json')
-        self.continuation_keywords = ["e", "além disso", "outra", "mais", "também"]
 
     def parse_message(self, message: str):
         """Normaliza a mensagem para facilitar a comparação."""
@@ -15,23 +14,27 @@ class SyntaticAnalyzer:
         message = unicodedata.normalize('NFKD', message).encode('ASCII', 'ignore').decode('utf-8')
         return message.strip()
         
+    def pre_proc_message(self, message: str):
+        message_normalized = self.parse_message(message)
+        message_clean = re.sub(r'[^\w\s]', '', message_normalized)
+        return message_clean
+    
     def _detect_intent(self, message: str) -> str:
             """Detecta a intenção com base em palavras-chave definidas."""
-            message_normalized = self.parse_message(message)
-            message_clean = re.sub(r'[^\w\s]', '', message_normalized)
-            tokens = set(message_clean.split())
-
+            message_tokens = self.pre_proc_message(message)
             scores = {}
-
             for intent, keywords in self.intents.items():
-                keywords_matched = sum(1 for kw in keywords if self.parse_message(kw) in tokens)
-                if keywords_matched:
-                    scores[intent] = keywords_matched
-
+                result = 0
+                for kw in keywords:
+                    kw = self.parse_message(kw)
+                    tokens = kw.split()
+                    result += sum(1 for t in tokens if t in message_tokens)
+                    
+                scores[intent] = result
+                
             if scores:
                 # Retorna a intent com mais correspondências
                 best_intent = max(scores, key=scores.get)
-                print(f"Intenção detectada: {best_intent} com {scores[best_intent]} palavras-chave")
                 return best_intent
 
             return "default"
@@ -60,6 +63,5 @@ class SyntaticAnalyzer:
             # Remover duplicatas
             for key in entities:
                 entities[key] = list(set(entities[key]))
-            print(entities)
             return entities
     

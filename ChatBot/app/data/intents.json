@@ -8,45 +8,50 @@
     ],
     "consultar_quantidade": [
         "quantas",
-        "quantidade de peças",
         "peças",
+        "feitas",
+        "quantidade",
         "processadas",
-        "número de",
-        "total",
         "produção",
+        "número de",
         "produzidas",
         "unidades"
     ],
     "consultar_etapas": [
         "etapas",
+        "processos",
         "processo",
         "classificação",
         "entrada",
         "separação",
         "fases",
-        "procedimento",
+        "estágios",
+        "estágio",
+        "procedimentos",
         "fluxo",
-        "como funciona",
-        "sistema"
+        "fluxos"
     ],
     "consultar_controle_qualidade": [
         "controle de qualidade",
         "verificação humana",
-        "erros",
+        "processo qualidade",
         "posterior",
         "inspeção",
         "revisão",
         "avaliação",
         "qualidade",
-        "defeitos",
         "falhas",
         "checagem",
         "garantia"
     ],
     "consultar_taxa_refugo": [
-        "quantidade de refugo",
-        "taxa de refugo",
+        "quantidade",
+        "taxa",
+        "peças",
         "refugo",
+        "refugos",
+        "refugadas",
+        "quantas",
         "critérios",
         "rejeição",
         "descarte",
@@ -55,19 +60,21 @@
         "peças rejeitadas",
         "não conformes",
         "taxa de rejeição",
-        "refugadas"
+        "refugadas",
+        "segregadas",
+        "segregação"
+
     ],
     "verificar_status": [
-        "status",
-        "situação",
-        "andamento",
-        "qual é",
         "como está",
-        "atualização",
-        "funcionamento",
-        "progresso",
-        "operação",
-        "condição",
-        "resumo"
+        "produção",
+        "sistema",
+        "status",
+        "status do sistema",
+        "está funcionando",
+        "está operando",
+        "qual status",
+        "status atual",
+        "funcionando normalmente"
     ]
 }

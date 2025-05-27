@@ -1,6 +1,59 @@
-[
-    "Quantas peças de cada tipo (metálicas, plásticas, refugos) são processadas por hora e qual é a taxa média de acerto da classificação?",
-    "Quais são as etapas envolvidas no processo de classificação, desde a entrada da peça até sua separação final?",
-    "Existe algum controle de qualidade ou verificação humana posterior à classificação automática para evitar erros?",
-    "Qual é a taxa de refugo do sistema — ou seja, quantas peças são classificadas como refugo por engano ou por não atenderem aos critérios definidos?"
-]
+{
+  "exemplos_perguntas": {
+    "geral": [
+      "Quantas peças foram processadas hoje?",
+      "Como funciona o processo de classificação?",
+      "Qual a taxa de refugo?",
+      "Tem controle de qualidade nas peças?",
+      "Como está o status do sistema?"
+    ],
+    "saudacao": [
+      "Oi, tudo bem?",
+      "Olá, você pode me ajudar?",
+      "Boa tarde!",
+      "Tem alguém aí?"
+    ],
+    "consultar_quantidade": [
+      "Quantas peças foram processadas hoje?",
+      "Qual o total de peças de alumínio?",
+      "Quantas unidades foram classificadas agora há pouco?",
+      "Qual é a produção por tipo de material?"
+    ],
+    "consultar_etapas": [
+      "Quais são as etapas do processo?",
+      "Como funciona a classificação das peças?",
+      "O que acontece com as peças quando entram na esteira?",
+      "Como o sistema separa as peças?"
+    ],
+    "consultar_controle_qualidade": [
+      "Existe verificação humana no processo?",
+      "Vocês checam a qualidade das peças depois da separação?",
+      "Tem controle de qualidade no sistema?",
+      "Como evitam erros na classificação?"
+    ],
+    "consultar_taxa_refugo": [
+      "Qual é a taxa de refugo de hoje?",
+      "Quantas peças foram rejeitadas?",
+      "Teve muita perda na produção?",
+      "Quantas peças não passaram na verificação?"
+    ],
+    "verificar_status": [
+      "Como está o sistema agora?",
+      "O sistema está funcionando normalmente?",
+      "Está tudo operando bem?",
+      "Qual o status atual da produção?"
+    ],
+    "pedido_ajuda": [
+      "O que eu posso perguntar aqui?",
+      "Me mostra o que posso consultar.",
+      "Pode me ajudar com os dados de produção?",
+      "Como faço para ver a taxa de refugo?"
+    ],
+    "agradecimento": [
+      "Obrigado!",
+      "Valeu pela ajuda!",
+      "Era isso que eu precisava.",
+      "Show! Até mais."
+    ]
+  }
+}

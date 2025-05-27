@@ -8,10 +8,12 @@
         "Olá! Vamos conversar sobre a classificação de peças? O que você quer saber?"
     ],
     "consultar_quantidade": [
-        "Processamos {quantidade} {material} {hora} {data}. Quer saber mais sobre algum material?",
-        "Processamos {quantidade} {material} {hora} {data}. Quer saber mais algo mais sobre o processo?",
-        "Segundo o nosso sistema, processamos {quantidade} {material} {hora} {data}. Quer saber mais sobre a taxa de acerto?",
-        "Atualmente, a produção está em {quantidade} {material} {hora} {data}. Algo mais que você gostaria de saber?"
+        "Processamos {quantidade}peças {material}{hora}{data}. Quer saber mais sobre algum material?",
+        "Segundo o nosso sistema, processamos {quantidade}peças {material}{hora}{data}. Quer saber mais sobre a taxa de acerto?",
+        "Atualmente, a produção está em {quantidade}peças {material}{hora}{data}. Algo mais que você gostaria de saber?",
+        "Segundo nosso controle, {quantidade}peças {material} passaram pelo sistema{hora}{data}.",
+        "A produção atual registra {quantidade}unidades de peças {material}. Posso te mostrar os dados por hora, se quiser."
+
     ],
     "consultar_etapas": [
         "O processo de classificação inclui: 1) Entrada da peça, 2) Identificação, 3) Separação final.",
@@ -25,19 +27,19 @@
     
     ],
     "consultar_taxa_refugo": [
-        "Taxa de refugos hoje: {taxa_boa}, {taxa_ruim} em um total de {total} peças produzidas",
-        "Taxa de refugo mais recente: {taxa_ruim} em um total de {total} peças processadas"
+        "Taxa de refugo no periodo solicitado: {taxa_boa}, {taxa_ruim} em um total de {total} peças produzidas",
+        "Taxa de rejeição está em {taxa_ruim} num total de {total} peças processadas",
+        "Peças descartadas: {taxa_ruim} - Peças validadas {taxa_boa} - Total processados: {total}"
     ],
     "verificar_status": [
-        "Estou checando o status para você. Enquanto isso, posso te contar que processamos {quantidade} peças hoje. Quer saber mais sobre a taxa de acerto?",
-        "O sistema está operando normalmente. Você gostaria de saber a taxa de refugo ou a quantidade de peças classificadas por material?"
-
+        "O sistema está operando normalmente.", 
+        "Tudo em ordem com o sistema no momento!"
     ],
     "default": [
         "Desculpe, não entendi. Pode reformular a pergunta?",
         "Sinto muito, mas não entendi exatamente o que você quis dizer",
         "Perdão, não entendi. Por favor, tente explicar brevemente para eu conseguir entender",
         "Desculpe, não entendi. Aqui estão alguns exemplos do que posso responder: 'Qual é a taxa de refugo?' ou 'Quantas peças foram processadas hoje?'",
-        "Não consegui entender sua dúvida. Talvez você queira saber sobre as etapas do processo ou o controle de qualidade?"
+        "Não consegui entender sua dúvida."
     ]
 }
