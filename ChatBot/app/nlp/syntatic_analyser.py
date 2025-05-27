@@ -41,7 +41,7 @@ class SyntaticAnalyzer:
 
     def _extract_entities(self, message: str) -> Dict[str, List[str]]:
             """Extrai entidades usando regex."""
-            entities = {"date": [], "hour": [], "material": []}
+            entities = {"date": [], "hour": [], "material": [], "total": []}
             message_normalized = self.parse_message(message)           
            
             # Extração com regex
@@ -52,8 +52,6 @@ class SyntaticAnalyzer:
                         value = match.group(0)
                         if value.startswith("met"):
                             value = "metalicas"
-                        elif value.startswith("ref"):
-                            value = "refugos"
                         elif value.startswith("pla"):
                             value = "plasticas"
                         elif entity_name == "hour" and value.endswith("h"):

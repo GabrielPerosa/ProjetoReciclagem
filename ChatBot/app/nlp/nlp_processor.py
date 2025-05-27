@@ -25,6 +25,7 @@ class NLPProcessor:
         material = (entities.get("material") or [None])[0]
         date = (entities.get("date") or [None])[0]
         hour = (entities.get("hour") or [None])[0]
+        total = (entities.get("total") or [None])[0]
 
         # Formatar quantidade e detalhes com base na combinação de entidades
         if "{quantidade}" in response:
@@ -41,6 +42,10 @@ class NLPProcessor:
                     qty = self.data_proc.get_material_per_date(material, date)
                     data_info = f" - {date}"
                     hour_info = ""
+                elif total:
+                    qty = self.data_proc.get_all_of_material(material)
+                    data_info = ""
+                    hour_info = ""
                 else:
                     qty = self.data_proc.get_material_per_hour(material, self.last_date, self.last_hour)
                     data_info = f" de {self.last_date} (último registro)"
@@ -54,7 +59,7 @@ class NLPProcessor:
                     materials = self.data_proc.data["material"]
                     qty = 0
                     for m in materials:
-                        if m != "refugos":
+                        if m != "descarte":
                             qty += self.data_proc.get_material_per_date(m, date)
                    
                     data_info = f" no dia {date}"

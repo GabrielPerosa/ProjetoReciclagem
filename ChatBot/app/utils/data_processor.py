@@ -35,7 +35,7 @@ class DataProcessor:
             total += self.get_material_per_hour(material, date, h)
         return total
     
-    def get_all_material(self, material: str):
+    def get_all_of_material(self, material: str):
         """
         Retorna o total acumulado de um material em todas as datas.
         """
@@ -53,7 +53,7 @@ class DataProcessor:
     
         # Percorre todos os materiais e soma as quantidades
         for material in self.data["material"]:
-            if material == "refugos":
+            if material == "descarte":
                 total_scrap += self.get_material_per_hour(material, date, hour)
                 continue
             

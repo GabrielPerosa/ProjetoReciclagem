@@ -9,6 +9,8 @@
     "consultar_quantidade": [
         "quantas",
         "peças",
+        "desde o começo",
+        "desde o início",
         "feitas",
         "quantidade",
         "processadas",
@@ -51,7 +53,6 @@
         "refugo",
         "refugos",
         "refugadas",
-        "quantas",
         "critérios",
         "rejeição",
         "descarte",

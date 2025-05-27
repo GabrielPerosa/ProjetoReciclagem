@@ -9,10 +9,10 @@
     ],
     "consultar_quantidade": [
         "Processamos {quantidade}peças {material}{hora}{data}. Quer saber mais sobre algum material?",
-        "Segundo o nosso sistema, processamos {quantidade}peças {material}{hora}{data}. Quer saber mais sobre a taxa de acerto?",
+        "Segundo o nosso sistema, processamos {quantidade}peças {material}{hora}{data}. Quer saber mais alguma coisa?",
         "Atualmente, a produção está em {quantidade}peças {material}{hora}{data}. Algo mais que você gostaria de saber?",
         "Segundo nosso controle, {quantidade}peças {material} passaram pelo sistema{hora}{data}.",
-        "A produção atual registra {quantidade}unidades de peças {material}. Posso te mostrar os dados por hora, se quiser."
+        "A produção atual registra {quantidade}unidades de peças {material}. Deseja mais alguma informação?."
 
     ],
     "consultar_etapas": [
