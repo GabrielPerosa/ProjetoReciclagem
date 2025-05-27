@@ -1,13 +1,13 @@
 from fastapi import APIRouter
-from app.routes import auth, cycle, part, sensor, sensor_state, user, workstation, workstation_state
+from app.routes import auth, device_state, device, part, production_part, station_state, station, user
 
 router = APIRouter()
 
-router.include_router(user.router)
-router.include_router(cycle.router)
-router.include_router(part.router)
-router.include_router(workstation.router)
-router.include_router(workstation_state.router)
-router.include_router(sensor.router)
-router.include_router(sensor_state.router)
 router.include_router(auth.router)
+router.include_router(device_state.router)
+router.include_router(device.router)
+router.include_router(part.router)
+router.include_router(production_part.router)
+router.include_router(station_state.router)
+router.include_router(station.router)
+router.include_router(user.router)

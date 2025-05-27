@@ -1,13 +1,11 @@
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from app.config.database import Base
-from datetime import datetime
 
 class CycleDB(Base):
-    __tablename__ = "cycles"
-
+    __tablename__ = "cycle"
+    
     id = Column(String, primary_key=True, index=True)
-    initial_time = Column(DateTime, default=datetime.utcnow)
-    end_time = Column(DateTime, default=datetime.utcnow)
-
-    parts = relationship("PartDB", back_populates="cycle")
+    
+    station_states = relationship("StationStateDB", back_populates="cycle")
+    production_parts = relationship("ProductionPartDB", back_populates="cycle")

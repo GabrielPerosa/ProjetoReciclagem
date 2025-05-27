@@ -1,11 +1,11 @@
 from pydantic import BaseModel
 from datetime import datetime
 
-class WorkstationState(BaseModel):
+class DeviceState(BaseModel):
     id: str
-    state: str
+    device_id: str
+    state: bool
     timestamp: datetime
-    workstation_id: str
-
+    
     class Config:
-        from_attributes = True
+        orm_mode = True
