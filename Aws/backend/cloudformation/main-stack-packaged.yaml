@@ -1,0 +1,223 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Stack raiz que orquestra o serviço ECS com banco de dados
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet::Id
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet::Id
+  APIServiceName:
+    Type: String
+    Default: core-api
+  APIContainerPort:
+    Type: Number
+    Default: 8000
+  APIContainerImage:
+    Type: String
+  ChatbotServiceName:
+    Type: String
+    Default: chatbot
+  ChatbotContainerPort:
+    Type: Number
+    Default: 8001
+  ChatbotContainerImage:
+    Type: String
+  ContainerCpu:
+    Type: Number
+    Default: 256
+  ContainerMemory:
+    Type: Number
+    Default: 512
+  DesiredCount:
+    Type: Number
+    Default: 2
+  ECSTaskExecutionRole:
+    Type: String
+  ECSTaskRole:
+    Type: String
+Resources:
+  SecurityGroupsStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/91277fc83a88dfb9ad5bbdefc82f6d10.template
+      Parameters:
+        VpcId:
+          Ref: VpcId
+        APIContainerPort:
+          Ref: APIContainerPort
+        ChatbotContainerPort:
+          Ref: ChatbotContainerPort
+  DatabaseStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/d41ce52c3da78cf28fe13bf7078e69a3.template
+      Parameters:
+        VpcId:
+          Ref: VpcId
+        PrivateSubnet1:
+          Ref: PrivateSubnet1
+        PrivateSubnet2:
+          Ref: PrivateSubnet2
+        InstanceName: database-core
+        DBSecurityGroup:
+          Fn::GetAtt:
+          - SecurityGroupsStack
+          - Outputs.DBSecurityGroup
+  ALBStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/1669e172507f06036fe93f26383e01f4.template
+      Parameters:
+        VpcId:
+          Ref: VpcId
+        PrivateSubnet1:
+          Ref: PrivateSubnet1
+        PrivateSubnet2:
+          Ref: PrivateSubnet2
+        APIContainerPort:
+          Ref: APIContainerPort
+        ChatbotContainerPort:
+          Ref: ChatbotContainerPort
+        ALBSecurityGroup:
+          Fn::GetAtt:
+          - SecurityGroupsStack
+          - Outputs.ALBSecurityGroup
+  ECSClusterStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/70db3b247284654104f742f656c3b4f3.template
+  ECSTasksStack:
+    DependsOn:
+    - ECSClusterStack
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/cc77ac16e751361282208d31e55370bd.template
+      Parameters:
+        APIServiceName:
+          Ref: APIServiceName
+        ChatbotServiceName:
+          Ref: ChatbotServiceName
+        APIContainerImage:
+          Ref: APIContainerImage
+        ChatbotContainerImage:
+          Ref: ChatbotContainerImage
+        APIContainerPort:
+          Ref: APIContainerPort
+        ChatbotContainerPort:
+          Ref: ChatbotContainerPort
+        ContainerCpu:
+          Ref: ContainerCpu
+        ContainerMemory:
+          Ref: ContainerMemory
+        ECSTaskRole:
+          Ref: ECSTaskRole
+        ECSTaskExecutionRole:
+          Ref: ECSTaskExecutionRole
+        DBHost:
+          Fn::GetAtt:
+          - DatabaseStack
+          - Outputs.DBHost
+        ApiUrl:
+          Fn::GetAtt:
+          - ALBStack
+          - Outputs.LoadBalancerDNS
+  ECSServicesStack:
+    DependsOn:
+    - ECSTasksStack
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/b03c8b296107d5b656546ed81fde0951.template
+      Parameters:
+        APITaskDefinition:
+          Fn::GetAtt:
+          - ECSTasksStack
+          - Outputs.APITaskDefinitionArn
+        ChatbotTaskDefinition:
+          Fn::GetAtt:
+          - ECSTasksStack
+          - Outputs.ChatbotTaskDefinitionArn
+        PrivateSubnet1:
+          Ref: PrivateSubnet1
+        PrivateSubnet2:
+          Ref: PrivateSubnet2
+        APIServiceName:
+          Ref: APIServiceName
+        ChatbotServiceName:
+          Ref: ChatbotServiceName
+        ECSCluster:
+          Fn::GetAtt:
+          - ECSClusterStack
+          - Outputs.ECSCluster
+        APITargetGroup:
+          Fn::GetAtt:
+          - ALBStack
+          - Outputs.APITargetGroup
+        ChatbotTargetGroup:
+          Fn::GetAtt:
+          - ALBStack
+          - Outputs.ChatbotTargetGroup
+        DesiredCount:
+          Ref: DesiredCount
+        ChatbotContainerPort:
+          Ref: ChatbotContainerPort
+        APIContainerPort:
+          Ref: APIContainerPort
+        APIContainerImage:
+          Ref: APIContainerImage
+        ChatbotContainerImage:
+          Ref: ChatbotContainerImage
+        APISecurityGroup:
+          Fn::GetAtt:
+          - SecurityGroupsStack
+          - Outputs.APISecurityGroup
+        ChatbotSecurityGroup:
+          Fn::GetAtt:
+          - SecurityGroupsStack
+          - Outputs.ChatbotSecurityGroup
+Outputs:
+  LoadBalancerDNS:
+    Value:
+      Fn::GetAtt:
+      - ALBStack
+      - Outputs.LoadBalancerDNS
+  DBHost:
+    Value:
+      Fn::GetAtt:
+      - DatabaseStack
+      - Outputs.DBHost
+  ECSCluster:
+    Value:
+      Fn::GetAtt:
+      - ECSClusterStack
+      - Outputs.ECSCluster
+  APITaskDefinitionArn:
+    Value:
+      Fn::GetAtt:
+      - ECSTasksStack
+      - Outputs.APITaskDefinitionArn
+  ChatbotTaskDefinitionArn:
+    Value:
+      Fn::GetAtt:
+      - ECSTasksStack
+      - Outputs.ChatbotTaskDefinitionArn
+  ChatbotSecurityGroup:
+    Value:
+      Fn::GetAtt:
+      - SecurityGroupsStack
+      - Outputs.ChatbotSecurityGroup
+  APISecurityGroup:
+    Value:
+      Fn::GetAtt:
+      - SecurityGroupsStack
+      - Outputs.APISecurityGroup
+  ChatbotTargetGroup:
+    Value:
+      Fn::GetAtt:
+      - ALBStack
+      - Outputs.ChatbotTargetGroup
+  APITargetGroup:
+    Value:
+      Fn::GetAtt:
+      - ALBStack
+      - Outputs.APITargetGroup

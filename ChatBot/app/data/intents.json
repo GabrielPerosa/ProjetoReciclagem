@@ -1,0 +1,81 @@
+{
+    "saudacao": [
+        "oi",
+        "olá",
+        "como vai",
+        "me ajudar",
+        "preciso de ajuda"
+    ],
+    "consultar_quantidade": [
+        "quantas",
+        "peças",
+        "desde o começo",
+        "desde o início",
+        "feitas",
+        "quantidade",
+        "processadas",
+        "produção",
+        "número de",
+        "produzidas",
+        "unidades"
+    ],
+    "consultar_etapas": [
+        "etapas",
+        "processos",
+        "processo",
+        "classificação",
+        "entrada",
+        "separação",
+        "fases",
+        "estágios",
+        "estágio",
+        "procedimentos",
+        "fluxo",
+        "fluxos"
+    ],
+    "consultar_controle_qualidade": [
+        "controle de qualidade",
+        "verificação humana",
+        "processo qualidade",
+        "posterior",
+        "inspeção",
+        "revisão",
+        "avaliação",
+        "qualidade",
+        "falhas",
+        "checagem",
+        "garantia"
+    ],
+    "consultar_taxa_refugo": [
+        "quantidade",
+        "taxa",
+        "peças",
+        "refugo",
+        "refugos",
+        "refugadas",
+        "critérios",
+        "rejeição",
+        "descarte",
+        "perda",
+        "percentual de refugo",
+        "peças rejeitadas",
+        "não conformes",
+        "taxa de rejeição",
+        "refugadas",
+        "segregadas",
+        "segregação"
+
+    ],
+    "verificar_status": [
+        "como está",
+        "produção",
+        "sistema",
+        "status",
+        "status do sistema",
+        "está funcionando",
+        "está operando",
+        "qual status",
+        "status atual",
+        "funcionando normalmente"
+    ]
+}

@@ -1,0 +1,115 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Stack ECS com Task Definition e Service
+
+Parameters:  
+  # Nomes de serviços
+  APIServiceName:
+    Type: String
+  ChatbotServiceName:
+    Type: String
+  
+  # Portas de serviços
+  APIContainerPort:
+    Type: Number
+  ChatbotContainerPort:
+    Type: Number
+  
+  # Imagens
+  APIContainerImage:
+    Type: String
+  ChatbotContainerImage:
+    Type: String
+
+  ContainerCpu:
+    Type: Number
+  ContainerMemory:
+    Type: Number
+  ECSTaskExecutionRole:
+    Type: String
+  ECSTaskRole:
+    Type: String
+  # URL DB
+  DBHost:
+    Type: String
+  ApiUrl:
+    Type: String
+
+Resources:
+  APILogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /ecs/${APIServiceName}
+      RetentionInDays: 7
+  ChatbotLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /ecs/${ChatbotServiceName}
+      RetentionInDays: 7
+
+  APITaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub ${APIServiceName}-service
+      Cpu: !Ref ContainerCpu
+      Memory: !Ref ContainerMemory
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      ExecutionRoleArn: !Ref ECSTaskExecutionRole
+      TaskRoleArn: !Ref ECSTaskRole
+      ContainerDefinitions:
+        - Name: api-container
+          Image: !Ref APIContainerImage
+          Essential: true
+          PortMappings:
+            - ContainerPort: !Ref APIContainerPort
+          Environment:
+            - Name: DB_USER
+              Value: postgres
+            - Name: DB_HOST
+              Value: !Ref DBHost
+            - Name: DB_PASSWORD
+              Value: postgres123
+            - Name: DB_NAME
+              Value: iot
+            - Name: DB_PORT
+              Value: 5432
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Sub /ecs/${APIServiceName}
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+  
+  ChatbotTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub ${ChatbotServiceName}-service
+      Cpu: !Ref ContainerCpu
+      Memory: !Ref ContainerMemory
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      ExecutionRoleArn: !Ref ECSTaskExecutionRole
+      TaskRoleArn: !Ref ECSTaskRole
+      ContainerDefinitions:
+        - Name: chatbot-container
+          Image: !Ref ChatbotContainerImage
+          Essential: true
+          PortMappings:
+            - ContainerPort: !Ref ChatbotContainerPort
+          Environment:
+            - Name: API_URL
+              Value: !Sub ${ApiUrl}/production-parts/summary
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Sub /ecs/${ChatbotServiceName}
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+
+Outputs:
+  APITaskDefinitionArn:
+    Value: !Ref APITaskDefinition
+  ChatbotTaskDefinitionArn:
+    Value: !Ref ChatbotTaskDefinition
