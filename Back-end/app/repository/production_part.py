@@ -101,7 +101,7 @@ def get_production_summary(db: Session) -> dict:
 
     for part_type, date, time, quantity in results:
         material_types.add(part_type)
-        date_str = str(date)
+        date_str = date.strftime("%d/%m/%Y")
         if part_type not in summary:
             summary[part_type] = {}
         if date_str not in summary[part_type]:
