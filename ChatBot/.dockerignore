@@ -1,0 +1,6 @@
+# Ignore the following files and directories
+README.md
+.git
+.gitignore
+/__pycache__/
+/venv/

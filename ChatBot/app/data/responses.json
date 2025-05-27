@@ -1,0 +1,45 @@
+{
+    "saudacao": [
+        "Olá! Como posso ajudar você hoje?",
+        "Oi! O que você gostaria de saber?",
+        "Olá! Estou aqui para responder suas perguntas sobre a classificação de peças.",
+        "Saudações! O que posso fazer por você",
+        "Olá, Quais suas dúvidas sobre a classificação de peças?",
+        "Olá! Vamos conversar sobre a classificação de peças? O que você quer saber?"
+    ],
+    "consultar_quantidade": [
+        "Processamos {quantidade}peças {material}{hora}{data}. Quer saber mais sobre algum material?",
+        "Segundo o nosso sistema, processamos {quantidade}peças {material}{hora}{data}. Quer saber mais sobre a taxa de acerto?",
+        "Atualmente, a produção está em {quantidade}peças {material}{hora}{data}. Algo mais que você gostaria de saber?",
+        "Segundo nosso controle, {quantidade}peças {material} passaram pelo sistema{hora}{data}.",
+        "A produção atual registra {quantidade}unidades de peças {material}. Posso te mostrar os dados por hora, se quiser."
+
+    ],
+    "consultar_etapas": [
+        "O processo de classificação inclui: 1) Entrada da peça, 2) Identificação, 3) Separação final.",
+        "Nosso fluxo de classificação é: 1) Peça entra na esteira, 2) Sensores identificam material e qualidade, 3) Sistema direciona para o local correto."
+
+    ],
+    "consultar_controle_qualidade": [
+        "Sim, há verificação humana para evitar erros após a classificação automática.",
+        "Sim, temos verificação humana em pontos críticos do processo para assegurar que os erros sejam mínimos. Mais alguma dúvida?",
+        "Além da classificação automática, operadores treinados fazem uma segunda checagem em peças selecionadas."
+    
+    ],
+    "consultar_taxa_refugo": [
+        "Taxa de refugo no periodo solicitado: {taxa_boa}, {taxa_ruim} em um total de {total} peças produzidas",
+        "Taxa de rejeição está em {taxa_ruim} num total de {total} peças processadas",
+        "Peças descartadas: {taxa_ruim} - Peças validadas {taxa_boa} - Total processados: {total}"
+    ],
+    "verificar_status": [
+        "O sistema está operando normalmente.", 
+        "Tudo em ordem com o sistema no momento!"
+    ],
+    "default": [
+        "Desculpe, não entendi. Pode reformular a pergunta?",
+        "Sinto muito, mas não entendi exatamente o que você quis dizer",
+        "Perdão, não entendi. Por favor, tente explicar brevemente para eu conseguir entender",
+        "Desculpe, não entendi. Aqui estão alguns exemplos do que posso responder: 'Qual é a taxa de refugo?' ou 'Quantas peças foram processadas hoje?'",
+        "Não consegui entender sua dúvida."
+    ]
+}
