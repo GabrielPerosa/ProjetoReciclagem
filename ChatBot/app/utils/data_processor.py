@@ -1,15 +1,20 @@
 from datetime import datetime
 from app.utils.load_data import load_data
-
-# os
+import os
 
 class DataProcessor:
-    def __init__(self):
-        self.data = load_data("app/data/mock.json")
-        #self.data = load_data(os.getenv("API_URL"))
+    def __init__(self):    
+        try:
+            self.data = load_data(os.getenv("API_URL"))
+            self.environment = "production"
+        except Exception as e: 
+            self.data = load_data("app/data/mock.json")
+            self.environment = "mock"
 
-    #def update_data(self):
-    #    self.data = load_data(os.getenv("API_URL"))
+    def update_data(self):
+        """Atualiza os dados carregando novamente do arquivo ou API."""
+        if self.environment == "production":
+            self.data = load_data(os.getenv("API_URL"))
 
     def get_material_per_hour(self, material: str, date: str, hour: str):
         """

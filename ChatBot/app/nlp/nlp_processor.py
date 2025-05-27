@@ -102,6 +102,7 @@ class NLPProcessor:
         """Processa a mensagem, mantendo e atualizando o contexto."""
         try:
             self.update_datetime()
+            self.data_proc.update_data()
             intent = self.syntatic_analyser._detect_intent(message)
             entities_detected = self.syntatic_analyser._extract_entities(message)
 
