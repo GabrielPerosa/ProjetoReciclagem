@@ -9,14 +9,12 @@ from datetime import datetime
 from sqlalchemy import func
 
 def create_production_part(db: Session, dto: ProductionPartDTO) -> ProductionPartDB:
-    # 1) Busca (ou cria) a Part
     part = db.query(PartDB).filter(PartDB.type == dto.part_type).first()
     if not part:
         part = PartDB(id=str(uuid.uuid4()), type=dto.part_type)
         db.add(part)
         db.flush()
 
-    # 3) Busca o cycle mais recente *por timestamp* em StationStateDB
     latest_cycle = (
         db.query(CycleDB)
           .join(StationStateDB, StationStateDB.cycle_id == CycleDB.id)
@@ -26,7 +24,6 @@ def create_production_part(db: Session, dto: ProductionPartDTO) -> ProductionPar
     if not latest_cycle:
         raise Exception("Nenhum ciclo com StationState encontrado. Crie ao menos um station_state primeiro.")
 
-    # 4) Cria o production_part usando esse latest_cycle.id
     production_part = ProductionPartDB(
         part_id=part.id,
         stored_quantity=1,
@@ -82,3 +79,35 @@ def get_total_quantity_by_part_type(db: Session, part_type: str) -> dict:
         "part_type": part_type,
         "total_quantity": total_quantity
     }
+
+def get_production_summary(db: Session) -> dict:
+    results = (
+        db.query(
+            PartDB.type,
+            func.date(StationStateDB.timestamp).label("date"),
+            func.to_char(StationStateDB.timestamp, 'HH24:MI').label("time"),
+            func.sum(ProductionPartDB.stored_quantity).label("quantity")
+        )
+        .join(PartDB, ProductionPartDB.part_id == PartDB.id)
+        .join(CycleDB, ProductionPartDB.cycle_id == CycleDB.id)
+        .join(StationStateDB, StationStateDB.cycle_id == CycleDB.id)
+        .group_by(PartDB.type, func.date(StationStateDB.timestamp), func.to_char(StationStateDB.timestamp, 'HH24:MI'))
+        .order_by(func.date(StationStateDB.timestamp), func.to_char(StationStateDB.timestamp, 'HH24:MI'))
+        .all()
+    )
+
+    summary = {}
+    material_types = set()
+
+    for part_type, date, time, quantity in results:
+        material_types.add(part_type)
+        date_str = str(date)
+        if part_type not in summary:
+            summary[part_type] = {}
+        if date_str not in summary[part_type]:
+            summary[part_type][date_str] = {}
+        summary[part_type][date_str][time] = quantity
+
+    summary["material"] = list(material_types)
+
+    return summary

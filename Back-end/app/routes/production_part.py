@@ -48,3 +48,7 @@ def get_total_quantity(
     if result["total_quantity"] == 0:
         raise HTTPException(status_code=404, detail="No parts found for this type")
     return result
+
+@router.get("/summary")
+def get_production_summary(db: Session = Depends(get_db)):
+    return production_part_repository.get_production_summary(db)
