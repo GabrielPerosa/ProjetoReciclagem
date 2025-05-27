@@ -100,7 +100,7 @@ Resources:
             - ContainerPort: !Ref ChatbotContainerPort
           Environment:
             - Name: API_URL
-              Value: !Ref ApiUrl
+              Value: !Sub ${ApiUrl}/production-parts/summary
           LogConfiguration:
             LogDriver: awslogs
             Options:

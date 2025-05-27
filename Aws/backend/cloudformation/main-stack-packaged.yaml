@@ -92,7 +92,7 @@ Resources:
     - ECSClusterStack
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/7f2463d192aeba651f7cb0cd6e767a9f.template
+      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/cc77ac16e751361282208d31e55370bd.template
       Parameters:
         APIServiceName:
           Ref: APIServiceName
