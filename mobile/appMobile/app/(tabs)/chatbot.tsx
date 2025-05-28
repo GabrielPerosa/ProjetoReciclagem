@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -10,53 +10,75 @@ import {
   Platform
 } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import api from '@/services/api';
+import { Message } from "@/interfaces/Message";
 
 export default function Chatbot() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
+  const scrollViewRef = useRef<ScrollView>(null);
 
-  const sendMessage = () => {
-    if (input.trim() !== '') {
-      setMessages(prev => [
-        ...prev,
-        { id: Date.now(), text: input, sender: 'user' }
-      ]);
-      setInput('');
+  const sendMessage = async () => {
+    if (!input.trim()) return; // evita enviar mensagens vazias
+
+    const userMessage: Message = { sender: 'user', text: input };
+    setMessages(prev => [...prev, userMessage]); // adiciona a mensagem do usuário imediatamente
+    setInput(''); // limpa o campo de entrada
+
+    try {
+      const response = await api.post("/chat/prompt", {
+        message: input
+      });
+
+      // adiciona a resposta do chatbot ao estado, concatenando com mensagens anteriores
+      setMessages(prev => [...prev, { sender: 'bot', text: response.data.response }]);
+    } catch (err) {
+      console.error("Erro ao enviar mensagem:", err);
     }
   };
+
+  // Auto-scroll para a última mensagem ao atualizar messages
+  useEffect(() => {
+    scrollViewRef.current?.scrollToEnd({ animated: true });
+  }, [messages]);
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? "padding" : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0} // Ajuste do offset para iOS
     >
       <View style={styles.modalView}>
         <Text style={styles.title}>Chatbot</Text>
-        <ScrollView 
+        <ScrollView
+          ref={scrollViewRef}
           style={styles.messagesContainer}
           contentContainerStyle={{ paddingVertical: 10 }}
+          keyboardShouldPersistTaps="handled"
         >
-          {messages.map(msg => (
+          {messages.map((msg, index) => (
             <View
-              key={msg.id}
+              key={index} // melhor gerar um id único em produção
               style={msg.sender === 'user' ? styles.userMessage : styles.botMessage}
             >
               <Text style={msg.sender === 'user' ? styles.userText : styles.botText}>{msg.text}</Text>
             </View>
           ))}
         </ScrollView>
-        <View style={styles.inputContainer}>
+        <View style={styles.inputRow}>
           <TextInput
             style={styles.input}
             value={input}
             onChangeText={setInput}
             placeholder="Digite sua mensagem..."
             placeholderTextColor="#555"
+            onSubmitEditing={sendMessage} // permite enviar com Enter no teclado
+            returnKeyType="send"
           />
+          <TouchableOpacity style={styles.actionButton} onPress={sendMessage}>
+            <MaterialIcons name="send" size={24} color="white" />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.actionButton} onPress={sendMessage}>
-            <MaterialIcons name="send" size={24} color="white" /> {/* Usando o ícone de envio do MaterialIcons */}
-        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
@@ -67,7 +89,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f0f0f5',
     padding: 20,
-    justifyContent: 'center', // Centraliza verticalmente o conteúdo
+    justifyContent: 'center',
     alignItems: 'center',
   },
   modalView: {
@@ -117,33 +139,26 @@ const styles = StyleSheet.create({
   botText: {
     color: 'black',
   },
-  inputContainer: {
-    flexDirection: 'column',
-    width: '100%',
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   input: {
-    width: '100%',
+    flex: 1,
     height: 50,
     borderWidth: 1,
     borderColor: '#4B8707',
     borderRadius: 8,
     paddingHorizontal: 10,
-    marginBottom: 10,
+    color: '#000',
   },
   actionButton: {
-    width: 40, // Tamanho do botão
-    height: 40, // Tamanho do botão
+    width: 50,
+    height: 50,
     backgroundColor: '#7FA653',
-    borderRadius: 30, // Tornando o botão redondo
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 15,
-    position: 'absolute', // Usando absolute para posicionar em relação ao container
-    right: 25, // Distância da borda direita
-    bottom: 20,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 30, // Tamanho do texto do botão
+    marginLeft: 10,
   },
 });
