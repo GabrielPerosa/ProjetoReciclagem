@@ -42,9 +42,6 @@ export default function Monitoring() {
 
   return (
     <ScrollView style={styles.container}>
-      {/* Cards */}
-      
-
       {/* Lista de Sensores */}
         <Card style={styles.listCard}>
           <View style={styles.sectionHeader}>
@@ -110,8 +107,9 @@ export default function Monitoring() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: 20,
     backgroundColor: "#f5f5f5",
+    marginTop: 30
   },
   cardsContainer: {
     marginBottom: 15,
@@ -142,10 +140,10 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   listCard: {
-    marginBottom: 20,
     backgroundColor: "#fff",
     elevation: 2,
     borderRadius: 8,
+    marginTop: 30
   },
   sectionHeader: {
     backgroundColor: "#7AA46B",
