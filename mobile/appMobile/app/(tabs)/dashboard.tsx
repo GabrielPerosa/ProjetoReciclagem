@@ -1,117 +1,96 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Dimensions,
-  StyleSheet,
-  Animated,
-  Easing,
-} from "react-native";
+import {View, Text, ScrollView, Dimensions, StyleSheet, Animated, Easing} from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import { Card, Avatar } from "react-native-paper";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import api from "@/services/api";
+import { format } from 'date-fns';
 
 export default function Dashboard() {
   const scrollX = useRef(new Animated.Value(0)).current;
   const dayProgressAnim = useRef(new Animated.Value(0)).current;
   const monthProgressAnim = useRef(new Animated.Value(0)).current;
+  const [dayPercentage, setDayPercentage] = useState(0);
+  const [monthPercentage, setMonthPercentage] = useState(0);
   const [activeChart, setActiveChart] = useState(0);
   const screenWidth = Dimensions.get("window").width;
+  const [dayData, setDayData] = useState({ metalicas: 0, plasticas: 0, descarte: 0 });
+  const [monthData, setMonthData] = useState({ metalicas: 0, plasticas: 0, descarte: 0 });
 
   useEffect(() => {
-    Animated.parallel([
-      Animated.timing(dayProgressAnim, {
-        toValue: 100,
-        duration: 3000,
-        easing: Easing.out(Easing.quad),
-        useNativeDriver: false,
-      }),
-      Animated.timing(monthProgressAnim, {
-        toValue: 93,
-        duration: 3000,
-        easing: Easing.out(Easing.quad),
-        useNativeDriver: false,
-      })
-    ]).start();
+  Animated.parallel([
+    Animated.timing(dayProgressAnim, {
+      toValue: dayPercentage,
+      duration: 3000,
+      easing: Easing.out(Easing.quad),
+      useNativeDriver: false,
+    }),
+    Animated.timing(monthProgressAnim, {
+      toValue: monthPercentage,
+      duration: 3000,
+      easing: Easing.out(Easing.quad),
+      useNativeDriver: false,
+    })
+  ]).start();
+}, [dayPercentage, monthPercentage]);
+
+
+
+useEffect(() => {
+    const fetchData = async () => {
+      const res = await api.get('/production-parts/summary');
+      const data = res.data;
+
+      const today = format(new Date(), 'dd/MM/yyyy');
+      const currentMonth = format(new Date(), 'MM/yyyy');
+
+      const materials: Array<keyof typeof todayTotals> = ['metalicas', 'plasticas', 'descarte'];
+
+      let todayTotals = { metalicas: 0, plasticas: 0, descarte: 0 };
+      let monthTotals = { metalicas: 0, plasticas: 0, descarte: 0 };
+
+      materials.forEach((type) => {
+        const entries = data[type] || {};
+        for (const date in entries) {
+          const [day, month, year] = date.split('/');
+          const monthStr = `${month}/${year}`;
+          const hourData = entries[date];
+          const totalOnDate = Object.values(hourData).reduce((sum: number, qty: any) => sum + Number(qty), 0);
+
+          if (date === today) {
+            todayTotals[type] += totalOnDate;
+          }
+
+          if (monthStr === currentMonth) {
+            monthTotals[type] += totalOnDate;
+          }
+        }
+      });
+
+      setDayData(todayTotals);
+      setMonthData(monthTotals);
+
+      const totalDay = todayTotals.metalicas + todayTotals.plasticas + todayTotals.descarte;
+      const totalMonth = monthTotals.metalicas + monthTotals.plasticas + monthTotals.descarte;
+
+    const dayPerc = totalDay > 0
+      ? ((todayTotals.metalicas + todayTotals.plasticas) / totalDay) * 100
+      : 0;
+    const monthPerc = totalMonth > 0
+      ? ((monthTotals.metalicas + monthTotals.plasticas) / totalMonth) * 100
+      : 0;
+
+    setDayPercentage(dayPerc);
+    setMonthPercentage(monthPerc);
+    };
+
+    fetchData();
   }, []);
 
   const charts = [
     {
       id: 1,
-      title: "Contador de peças nas rampas",
-      icon: "chart-line",
-      component: (
-        <View style={styles.chartContainer}>
-          <LineChart
-            data={{
-              labels: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab"],
-              datasets: [
-                {
-                  data: [16, 14, 12, 10, 8, 6],
-                  color: (opacity = 1) => `rgba(0, 100, 0, ${opacity})`,
-                  strokeWidth: 3,
-                },
-                {
-                  data: [14, 12, 10, 8, 6, 4],
-                  color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
-                  strokeWidth: 3,
-                },
-                {
-                  data: [2, 1, 0, 1, 2, 0],
-                  color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`,
-                  strokeWidth: 3,
-                },
-              ],
-            }}
-            width={screenWidth * 0.9}
-            height={220}
-            chartConfig={{
-              backgroundColor: "#ffffff",
-              backgroundGradientFrom: "#ffffff",
-              backgroundGradientTo: "#ffffff",
-              decimalPlaces: 0,
-              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              style: {
-                borderRadius: 16,
-              },
-              propsForLabels: {
-                fontSize: 12,
-              },
-              propsForDots: {
-                r: "4",
-                strokeWidth: "2",
-                stroke: "#ffffff",
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
-            fromZero
-          />
-          <View style={styles.legendContainer}>
-            <View style={styles.legendItem}>
-              <View style={[styles.legendColor, { backgroundColor: "#006400" }]} />
-              <Text style={styles.legendText}>Rampa 01</Text>
-            </View>
-            <View style={styles.legendItem}>
-              <View style={[styles.legendColor, { backgroundColor: "#0000FF" }]} />
-              <Text style={styles.legendText}>Rampa 02</Text>
-            </View>
-            <View style={styles.legendItem}>
-              <View style={[styles.legendColor, { backgroundColor: "#FF0000" }]} />
-              <Text style={styles.legendText}>Rejeitados</Text>
-            </View>
-          </View>
-        </View>
-      ),
-    },
-    {
-      id: 2,
       title: "Contador de peças",
       icon: "chart-line",
       component: (
@@ -160,15 +139,15 @@ export default function Dashboard() {
           <View style={styles.legendContainer}>
             <View style={styles.legendItem}>
               <View style={[styles.legendColor, { backgroundColor: "#0000FF" }]} />
-              <Text style={styles.legendText}>Metal</Text>
+              <Text style={styles.legendText}>Metalicas</Text>
             </View>
             <View style={styles.legendItem}>
               <View style={[styles.legendColor, { backgroundColor: "#FFA500" }]} />
-              <Text style={styles.legendText}>Plástico</Text>
+              <Text style={styles.legendText}>Plasticas</Text>
             </View>
             <View style={styles.legendItem}>
               <View style={[styles.legendColor, { backgroundColor: "#FF0000" }]} />
-              <Text style={styles.legendText}>Rejeitados</Text>
+              <Text style={styles.legendText}>Descartes</Text>
             </View>
           </View>
         </View>
@@ -195,20 +174,20 @@ export default function Dashboard() {
         <View style={styles.cardContent}>
           <View style={styles.row}>
             <View style={styles.column}>
-              <Text style={styles.boldText}>06</Text>
-              <Text style={styles.labelText}>Rampa 01</Text>
+              <Text style={styles.boldText}>{dayData.metalicas}</Text>
+              <Text style={styles.labelText}>Metalicas</Text>
             </View>
             <View style={styles.column}>
-              <Text style={styles.boldText}>04</Text>
-              <Text style={styles.labelText}>Rampa 02</Text>
+              <Text style={styles.boldText}>{dayData.plasticas}</Text>
+              <Text style={styles.labelText}>Plasticas</Text>
             </View>
             <View style={styles.column}>
-              <Text style={styles.boldText}>0</Text>
-              <Text style={styles.labelText}>Refugo</Text>
+              <Text style={styles.boldText}>{dayData.descarte}</Text>
+              <Text style={styles.labelText}>Descartes</Text>
             </View>
             <View style={styles.column}>
-              <Text style={styles.boldText}>12</Text>
-              <Text style={styles.labelText}>Peças</Text>
+              <Text style={styles.boldText}>{dayData.metalicas + dayData.plasticas + dayData.descarte}</Text>
+              <Text style={styles.labelText}>Total</Text>
             </View>
           </View>
         </View>
@@ -226,7 +205,7 @@ export default function Dashboard() {
         </View>
         <View style={styles.cardContent}>
           <View style={styles.progressWrapper}>
-            <Text style={[styles.percentageText, styles.percentageDay]}>100%</Text>
+            <Text style={[styles.percentageText, styles.percentageDay]}>{dayPercentage.toFixed(0)}%</Text>
             <View style={styles.progressContainer}>
               <View style={styles.progressBackground}>
                 <Animated.View
@@ -260,20 +239,20 @@ export default function Dashboard() {
         <View style={styles.cardContent}>
           <View style={styles.row}>
             <View style={styles.column}>
-              <Text style={styles.boldText}>100</Text>
-              <Text style={styles.labelText}>Rampa 01</Text>
+              <Text style={styles.boldText}>{monthData.metalicas}</Text>
+              <Text style={styles.labelText}>Metalicas</Text>
             </View>
             <View style={styles.column}>
-              <Text style={styles.boldText}>200</Text>
-              <Text style={styles.labelText}>Rampa 02</Text>
+              <Text style={styles.boldText}>{monthData.plasticas}</Text>
+              <Text style={styles.labelText}>Plasticas</Text>
             </View>
             <View style={styles.column}>
-              <Text style={styles.boldText}>20</Text>
-              <Text style={styles.labelText}>Refugo</Text>
+              <Text style={styles.boldText}>{monthData.descarte}</Text>
+              <Text style={styles.labelText}>Descartes</Text>
             </View>
             <View style={styles.column}>
-              <Text style={styles.boldText}>320</Text>
-              <Text style={styles.labelText}>Peças</Text>
+              <Text style={styles.boldText}>{monthData.metalicas + monthData.plasticas + monthData.descarte}</Text>
+              <Text style={styles.labelText}>Total</Text>
             </View>
           </View>
         </View>
@@ -291,7 +270,7 @@ export default function Dashboard() {
         </View>
         <View style={styles.cardContent}>
           <View style={styles.progressWrapper}>
-            <Text style={[styles.percentageText, styles.percentageMonth]}>93%</Text>
+            <Text style={[styles.percentageText, styles.percentageMonth]}>{monthPercentage.toFixed(0)}%</Text>
             <View style={styles.progressContainer}>
               <View style={styles.progressBackground}>
                 <Animated.View
