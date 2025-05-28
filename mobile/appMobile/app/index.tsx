@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated, Alert } from 'react-native';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useRouter } from 'expo-router';
+import api from '@/services/api';
 
 export default function LoginScreen() {
   // Estados para controlar qual tela mostrar
@@ -53,30 +54,25 @@ export default function LoginScreen() {
     setShowForgotPassword(false);
   };
 
-  const handleRegister = () => {
-    if (!name) {
-      setNameError('Por favor, insira seu nome completo');
-      return;
-    }
-    
-    if (!email) {
-      setEmailError('Por favor, insira seu e-mail');
-      return;
-    }
-    
-    if (!password || !confirmPassword) {
-      Alert.alert('Atenção', 'Por favor, preencha todos os campos obrigatórios');
-      return;
-    }
+  const handleRegister = async () => {
+  if (!name) return setNameError('Por favor, insira seu nome completo');
+  if (!email) return setEmailError('Por favor, insira seu e-mail');
+  if (!password || !confirmPassword) {
+    Alert.alert('Atenção', 'Preencha todos os campos obrigatórios');
+    return;
+  }
+  if (password !== confirmPassword) {
+    Alert.alert('Atenção', 'As senhas não coincidem');
+    return;
+  }
+  if (emailError || nameError) return;
 
-    if (password !== confirmPassword) {
-      Alert.alert('Atenção', 'As senhas não coincidem');
-      return;
-    }
-
-    if (emailError || nameError) {
-      return;
-    }
+  try {
+    const response = await api.post('/users/', {
+      name,
+      email,
+      password,
+    });
 
     Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
     setName('');
@@ -84,20 +80,35 @@ export default function LoginScreen() {
     setPassword('');
     setConfirmPassword('');
     setActiveTab('login');
-  };
+  } catch (error) {
+    Alert.alert('Erro', 'Erro ao cadastrar. Tente novamente.');
+    console.error(error);
+  }
+};
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      Alert.alert('Atenção', 'Por favor, preencha todos os campos');
-      return;
-    }
-    
-    if (emailError) {
-      return;
-    }
-    
-    Alert.alert('Login', 'Login realizado com sucesso!')
-  };
+
+  const handleLogin = async () => {
+  if (!email || !password) {
+    Alert.alert('Atenção', 'Por favor, preencha todos os campos');
+    return;
+  }
+
+  if (emailError) return;
+
+  try {
+    const response = await api.post('/login/', {
+      email,
+      password,
+    });
+
+    Alert.alert('Login', 'Login realizado com sucesso!');
+    router.push('/dashboard'); // redireciona para tela principal
+  } catch (error) {
+    Alert.alert('Erro', 'Login inválido. Verifique seus dados.');
+    console.error(error);
+  }
+};
+
 
   const handleAction = () => {
     if (activeTab === 'login') {
