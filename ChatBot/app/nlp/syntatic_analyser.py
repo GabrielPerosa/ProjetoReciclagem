@@ -17,7 +17,7 @@ class SyntaticAnalyzer:
     def pre_proc_message(self, message: str):
         message_normalized = self.parse_message(message)
         message_clean = re.sub(r'[^\w\s]', '', message_normalized)
-        return message_clean
+        return message_clean.strip().split()
     
     def _detect_intent(self, message: str) -> str:
             """Detecta a intenção com base em palavras-chave definidas."""
@@ -28,10 +28,17 @@ class SyntaticAnalyzer:
                 for kw in keywords:
                     kw = self.parse_message(kw)
                     tokens = kw.split()
-                    result += sum(1 for t in tokens if t in message_tokens)
-                    
+
+                    # Verifica se todos os tokens da palavra-chave estão na mensagem
+                    if len(message_tokens) == 1:
+                        if tokens[0] == message_tokens[0]:
+                            result += 1
+                    else:        
+                        result += sum(1 for t in tokens if t in message_tokens)
+
+                # Armazena a pontuação para cada intenção                        
                 scores[intent] = result
-                
+            
             if scores:
                 # Retorna a intent com mais correspondências
                 best_intent = max(scores, key=scores.get)

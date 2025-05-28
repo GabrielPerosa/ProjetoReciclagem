@@ -117,9 +117,7 @@ class NLPProcessor:
             intent = []
             entities_detected = []
             response = "Erro ao processar prompt {}".format(e)
-
+            
         return {
-            "intent": intent,
-            "entities": entities_detected,
             "response": response
         }

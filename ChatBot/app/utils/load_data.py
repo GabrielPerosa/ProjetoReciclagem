@@ -4,12 +4,13 @@ import json
 def load_data(path: str):
 
     if path.startswith("http://") or path.startswith("https://"):
-        response = requests.get(path)
-        if response.status_code == 200:
-            print(response.json())
+        try:
+            response = requests.get(path)
+            if response.status_code == 200:
+                print("Dados carregados com sucesso da URL")
             return response.json()
-        else:
-            return Exception("Erro ao obter dados da URL")    
+        except Exception as e:
+            return Exception("Erro ao obter dados da URL")        
     else:
         if path.endswith(".json"):
             with open(path, "r", encoding="utf-8") as f:
