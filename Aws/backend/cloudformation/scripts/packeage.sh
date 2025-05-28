@@ -1,8 +1,8 @@
 #!/bin/bash
 
 S3_BUCKET="infraestrutura-projeto-integrador"  # Altere conforme necessário
-TEMPLATE_SOURCE="main-stack.yaml"
-TEMPLATE_PACKAGED="main-stack-packaged.yaml"
+TEMPLATE_SOURCE="../main-stack.yaml"
+TEMPLATE_PACKAGED="../main-stack-packaged.yaml"
 REGION="us-east-1"
 
 echo "Fazendo package..."

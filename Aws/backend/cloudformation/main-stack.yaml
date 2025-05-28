@@ -44,6 +44,16 @@ Parameters:
   ECSTaskRole:
     Type: String
 
+  # openssl rand -base64 32
+  SecreyKey:
+    Type: String
+    Description: Chave secreta para assinatura de tokens JWT
+
+  AccessTokenExpireHours:
+    Type: Number
+    Default: 24
+ 
+
 Resources:
   SecurityGroupsStack:
     Type: AWS::CloudFormation::Stack
