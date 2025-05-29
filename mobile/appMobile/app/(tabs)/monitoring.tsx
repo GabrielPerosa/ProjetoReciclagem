@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, StyleSheet, Alert } from "react-native";
 import { Card, Divider } from "react-native-paper";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Device } from '@/interfaces/Device';
 import { PartError } from '@/interfaces/PartError';
 import api from "@/services/api";

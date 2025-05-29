@@ -1,4 +1,3 @@
-// AuthContext.tsx
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -27,6 +26,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     await AsyncStorage.removeItem('token');
     setToken(null);
+    console.log("deslogado!")
   };
 
   return (

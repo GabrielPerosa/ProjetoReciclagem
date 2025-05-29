@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated, Alert } from 'react-native';
 import { IconSymbol } from '@/components/ui/IconSymbol';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import api from '@/services/api';
 import { useAuth } from '@/services/AuthContext';
@@ -133,39 +132,6 @@ export default function LoginScreen() {
     else handleRegister();
   };
 
-  // Renderiza a tela de esqueci a senha
-  if (showForgotPassword) {
-    return (
-      <View style={styles.container}>
-        <Animated.View style={[styles.modalView, { transform: [{ translateY: slideAnim }] }]}>
-          <View style={styles.recycleContainer}>
-            <IconSymbol name="recycle" size={40} color="white" />
-          </View>
-          
-          <Text style={styles.title}>Recuperar senha</Text>
-          <Text style={styles.subtitle}>Digite seu e-mail para receber as instruções</Text>
-
-          <TextInput
-            style={[styles.input, emailError && styles.inputError]}
-            placeholder="Digite seu e-mail"
-            keyboardType="email-address"
-            value={email}
-            onChangeText={handleEmailChange}
-          />
-          {emailError && <Text style={styles.errorText}>{emailError}</Text>}
-
-          <TouchableOpacity style={styles.actionButton} onPress={handleForgotPassword}>
-            <Text style={styles.buttonText}>Enviar instruções</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => setShowForgotPassword(false)}>
-            <Text style={styles.backText}>Voltar para login</Text>
-          </TouchableOpacity>
-        </Animated.View>
-      </View>
-    );
-  }
-
   // Renderiza a tela normal de login/cadastro
   return (
     <View style={styles.container}>
@@ -237,12 +203,6 @@ export default function LoginScreen() {
 
         {loginError !== '' && (
           <Text style={styles.errorText}>{loginError}</Text>
-        )}
-
-        {activeTab === 'login' && (
-          <TouchableOpacity onPress={() => setShowForgotPassword(true)}>
-            <Text style={styles.linkText}>Esqueci minha senha</Text>
-          </TouchableOpacity>
         )}
       </Animated.View>
     </View>

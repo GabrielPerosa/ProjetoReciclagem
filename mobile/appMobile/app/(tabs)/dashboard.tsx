@@ -4,6 +4,8 @@ import { LineChart } from "react-native-chart-kit";
 import { Card, Avatar } from "react-native-paper";
 import api from "@/services/api";
 import { format } from "date-fns";
+import { useAuth } from "@/services/AuthContext"
+import { useRouter } from 'expo-router';
 
 import { MaterialIcons, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -15,6 +17,9 @@ export default function Dashboard() {
   const [dayPercentage, setDayPercentage] = useState(0);
   const [monthPercentage, setMonthPercentage] = useState(0);
   const [activeChart, setActiveChart] = useState(0);
+
+  const { logout, token, loading } = useAuth()
+  const router = useRouter();
 
   const screenWidth = Dimensions.get("window").width;
 
@@ -30,6 +35,14 @@ export default function Dashboard() {
       { data: Array(12).fill(0), color: () => "rgba(255,0,0,1)", strokeWidth: 2 },   // descarte
     ]
   });
+
+  useEffect(() => {
+    if (!loading) {
+      if (!token) {
+        router.replace('/'); // redireciona para login
+      }
+    }
+  }, [loading, token]);
 
   useEffect(() => {
     Animated.parallel([
@@ -171,7 +184,7 @@ export default function Dashboard() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
-      <TouchableOpacity onPress={'#'} style={styles.logout}>
+      <TouchableOpacity onPress={ logout } style={styles.logout}>
       <MaterialIcons name="logout" size={24} color="green" />
       <Text style={styles.Textlogout}>Logout</Text>
     </TouchableOpacity>
