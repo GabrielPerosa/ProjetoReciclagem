@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated, Alert } from 'react-native';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import api from '@/services/api';
+import { useAuth } from '@/services/AuthContext';
 
 export default function LoginScreen() {
   // Estados para controlar qual tela mostrar
@@ -17,10 +19,13 @@ export default function LoginScreen() {
   const [name, setName] = useState('');
   const [emailError, setEmailError] = useState('');
   const [nameError, setNameError] = useState('');
+  const [loginError, setLoginError] = useState('');
   
   // Animações
   const slideAnim = useRef(new Animated.Value(300)).current;
 
+  const { token, login, loading } = useAuth();
+  
   useEffect(() => {
     Animated.timing(slideAnim, {
       toValue: 0,
@@ -28,6 +33,13 @@ export default function LoginScreen() {
       useNativeDriver: true,
     }).start();
   }, [showForgotPassword]); // Executa quando alterna entre telas
+
+  useEffect(() => {
+    if (!loading && token) {
+      // Usuário já logado, redireciona para dashboard
+      router.replace('/dashboard');
+    }
+  }, [loading, token]);
 
   const handleNameChange = (text: string) => {
     const lettersOnly = text.replace(/[^a-zA-ZÀ-ÿ\s]/g, '');
@@ -86,7 +98,6 @@ export default function LoginScreen() {
   }
 };
 
-
   const handleLogin = async () => {
   if (!email || !password) {
     Alert.alert('Atenção', 'Por favor, preencha todos os campos');
@@ -101,19 +112,23 @@ export default function LoginScreen() {
       password,
     });
 
-    Alert.alert('Login', 'Login realizado com sucesso!');
+    console.log('Resposta do login:', response.data);
+
+    const token = response.data.access_token;
+
+    await login(token);
+
+    console.log('Login realizado com sucesso!');
     router.push('/dashboard'); // redireciona para tela principal
   } catch (error) {
-    Alert.alert('Erro', 'Login inválido. Verifique seus dados.');
+    setLoginError('Email ou senha inválidos.');
     console.error(error);
   }
 };
 
-
   const handleAction = () => {
     if (activeTab === 'login') {
       handleLogin();
-      router.push('/dashboard');
     }
     else handleRegister();
   };
@@ -219,6 +234,10 @@ export default function LoginScreen() {
         <TouchableOpacity style={styles.actionButton} onPress={handleAction}>
           <Text style={styles.buttonText}>{activeTab === 'login' ? 'Entrar' : 'Cadastrar'}</Text>
         </TouchableOpacity>
+
+        {loginError !== '' && (
+          <Text style={styles.errorText}>{loginError}</Text>
+        )}
 
         {activeTab === 'login' && (
           <TouchableOpacity onPress={() => setShowForgotPassword(true)}>

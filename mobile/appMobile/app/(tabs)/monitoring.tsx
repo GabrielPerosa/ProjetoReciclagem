@@ -6,11 +6,23 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { Device } from '@/interfaces/Device';
 import { PartError } from '@/interfaces/PartError';
 import api from "@/services/api";
+import { useRouter } from 'expo-router';
+import { useAuth } from '@/services/AuthContext';
 
 export default function Monitoring() {
   const [devices, setDevices] = useState<Device[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading2, setLoading] = useState(true);
   const [partsErrors, setPartsErrors] = useState<PartError | null>(null);
+  const { token, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading) {
+      if (!token) {
+        router.replace('/'); // redireciona para login
+      }
+    }
+  }, [loading, token]);
 
   useEffect(() => {
     const fetchDevices = async () => {

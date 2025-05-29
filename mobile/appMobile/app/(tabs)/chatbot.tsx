@@ -12,11 +12,24 @@ import {
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import api from '@/services/api';
 import { Message } from "@/interfaces/Message";
+import { useRouter } from 'expo-router';
+import { useAuth } from '@/services/AuthContext';
 
 export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const scrollViewRef = useRef<ScrollView>(null);
+  const { token, loading } = useAuth();
+  const router = useRouter();
+
+
+  useEffect(() => {
+    if (!loading) {
+      if (!token) {
+        router.replace('/'); // redireciona para login
+      }
+    }
+  }, [loading, token]);
 
   const sendMessage = async () => {
     if (!input.trim()) return; // evita enviar mensagens vazias
