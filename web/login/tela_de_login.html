@@ -1,44 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"
- <title></title>
- <link rel="stylesheet" href="tela_de_login.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"
+  <title></title>
+  <link rel="stylesheet" href="tela_de_login.css">
 
 </head>
+
 <body>
-<div class="container">
-  <div class="title">
-    <img src="https://cdn-icons-png.flaticon.com/512/5974/5974156.png"  alt= reciclagem "70" height="70">
+  <div class="container">
+    <div class="title">
+      <img src="https://cdn-icons-png.flaticon.com/512/5974/5974156.png" alt=reciclagem "70" height="70">
+    </div>
+    <div class="login-form">
+      <div class="tabs">
+
+        <a href="/web/login/tela_de_login.html" class="tabs">Login</a>
+        <a href="/web/cadastro/tela_de_cadastro.html" class="tabs">Cadastro</a>
+      </div>
+
+    
+
+      <form>
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="input-group">
+          <label for="password">Senha</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+
+        <button type="submit" class="login-button">Entrar</button>
+
+
+      </form>
+      <div class="forgot-password">
+        <a href="/web/recuperar_senha/tela_recupere_senha.html">Esqueceu a senha?</a>
+      </div>
+    </div>
   </div>
-<div class="login-form">
-  <div class="tabs">
-  
-    <button>Login </button>
-    <button>Cadastro</button>    
-  </div>
+</body>
 
- <h2>login</h2>
-
- <form>
-  <div class="input-group">
-  <label for="email">Email</label>
-  <input type="email" id="email" name="email" required>
- </div>
- <div class="input-group">
- <label for="password">Senha</label> 
- <input type="password" id="password" name="password" required>  
- </div>
-
- <button type="submit" class="login-button">Entrar</button>
-
-
- </form>
- <div class="forgot-password">
- <a href="/web/recuperar_senha/tela_recupere_senha.html">Esqueceu a senha?</a> 
- </div>
- </div>
- </div>
- </body>
 </html>
