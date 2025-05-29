@@ -1,43 +1,54 @@
 import React, { useState, useRef, useEffect } from "react";
-import {View, Text, ScrollView, Dimensions, StyleSheet, Animated, Easing} from "react-native";
+import { View, Text, ScrollView, Dimensions, StyleSheet, Animated, Easing, TouchableOpacity } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import { Card, Avatar } from "react-native-paper";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import api from "@/services/api";
-import { format } from 'date-fns';
+import { format } from "date-fns";
+
+import { MaterialIcons, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function Dashboard() {
   const scrollX = useRef(new Animated.Value(0)).current;
   const dayProgressAnim = useRef(new Animated.Value(0)).current;
   const monthProgressAnim = useRef(new Animated.Value(0)).current;
+
   const [dayPercentage, setDayPercentage] = useState(0);
   const [monthPercentage, setMonthPercentage] = useState(0);
   const [activeChart, setActiveChart] = useState(0);
+
   const screenWidth = Dimensions.get("window").width;
+
   const [dayData, setDayData] = useState({ metalicas: 0, plasticas: 0, descarte: 0 });
   const [monthData, setMonthData] = useState({ metalicas: 0, plasticas: 0, descarte: 0 });
 
+  const monthLabels = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+  const [monthlyChartData, setMonthlyChartData] = useState({
+    labels: monthLabels,
+    datasets: [
+      { data: Array(12).fill(0), color: () => "rgba(0,0,255,1)", strokeWidth: 2 },   // metalicas
+      { data: Array(12).fill(0), color: () => "rgba(255,165,0,1)", strokeWidth: 2 }, // plasticas
+      { data: Array(12).fill(0), color: () => "rgba(255,0,0,1)", strokeWidth: 2 },   // descarte
+    ]
+  });
+
   useEffect(() => {
-  Animated.parallel([
-    Animated.timing(dayProgressAnim, {
-      toValue: dayPercentage,
-      duration: 3000,
-      easing: Easing.out(Easing.quad),
-      useNativeDriver: false,
-    }),
-    Animated.timing(monthProgressAnim, {
-      toValue: monthPercentage,
-      duration: 3000,
-      easing: Easing.out(Easing.quad),
-      useNativeDriver: false,
-    })
-  ]).start();
-}, [dayPercentage, monthPercentage]);
+    Animated.parallel([
+      Animated.timing(dayProgressAnim, {
+        toValue: dayPercentage,
+        duration: 3000,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: false,
+      }),
+      Animated.timing(monthProgressAnim, {
+        toValue: monthPercentage,
+        duration: 3000,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: false,
+      })
+    ]).start();
+  }, [dayPercentage, monthPercentage]);
 
-
-
-useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       const res = await api.get('/production-parts/summary');
       const data = res.data;
@@ -45,24 +56,23 @@ useEffect(() => {
       const today = format(new Date(), 'dd/MM/yyyy');
       const currentMonth = format(new Date(), 'MM/yyyy');
 
-      const materials: Array<keyof typeof todayTotals> = ['metalicas', 'plasticas', 'descarte'];
+      const materials = ['metalicas', 'plasticas', 'descarte'] as const;
 
+      // Totais para dia e mês corrente
       let todayTotals = { metalicas: 0, plasticas: 0, descarte: 0 };
       let monthTotals = { metalicas: 0, plasticas: 0, descarte: 0 };
 
-      materials.forEach((type) => {
+      materials.forEach(type => {
         const entries = data[type] || {};
-        for (const date in entries) {
-          const [day, month, year] = date.split('/');
-          const monthStr = `${month}/${year}`;
-          const hourData = entries[date];
+        for (const dateKey in entries) {
+          const hourData = entries[dateKey];
           const totalOnDate = Object.values(hourData).reduce((sum: number, qty: any) => sum + Number(qty), 0);
 
-          if (date === today) {
+          if (dateKey === today) {
             todayTotals[type] += totalOnDate;
           }
-
-          if (monthStr === currentMonth) {
+          const [d, m, y] = dateKey.split('/');
+          if (`${m}/${y}` === currentMonth) {
             monthTotals[type] += totalOnDate;
           }
         }
@@ -74,15 +84,42 @@ useEffect(() => {
       const totalDay = todayTotals.metalicas + todayTotals.plasticas + todayTotals.descarte;
       const totalMonth = monthTotals.metalicas + monthTotals.plasticas + monthTotals.descarte;
 
-    const dayPerc = totalDay > 0
-      ? ((todayTotals.metalicas + todayTotals.plasticas) / totalDay) * 100
-      : 0;
-    const monthPerc = totalMonth > 0
-      ? ((monthTotals.metalicas + monthTotals.plasticas) / totalMonth) * 100
-      : 0;
+      setDayPercentage(totalDay > 0
+        ? ((todayTotals.metalicas + todayTotals.plasticas) / totalDay) * 100
+        : 0
+      );
+      setMonthPercentage(totalMonth > 0
+        ? ((monthTotals.metalicas + monthTotals.plasticas) / totalMonth) * 100
+        : 0
+      );
 
-    setDayPercentage(dayPerc);
-    setMonthPercentage(monthPerc);
+      // --- Lógica de agregação por mês para o gráfico ---
+      const monthlyBuckets = {
+        metalicas: Array(12).fill(0),
+        plasticas: Array(12).fill(0),
+        descarte: Array(12).fill(0),
+      };
+
+      materials.forEach(type => {
+        const entries = data[type] || {};
+        for (const dateKey in entries) {
+          // parse "dd/MM/yyyy" -> Date
+          const [day, month, year] = dateKey.split('/');
+          const dt = new Date(Number(year), Number(month) - 1, Number(day));
+          const monthIndex = dt.getMonth(); // 0 = Jan, ..., 11 = Dez
+          const dayTotal = Object.values(entries[dateKey]).reduce((sum: number, qty: any) => sum + Number(qty), 0);
+          monthlyBuckets[type][monthIndex] += dayTotal;
+        }
+      });
+
+      setMonthlyChartData({
+        labels: monthLabels,
+        datasets: [
+          { ...monthlyChartData.datasets[0], data: monthlyBuckets.metalicas },
+          { ...monthlyChartData.datasets[1], data: monthlyBuckets.plasticas },
+          { ...monthlyChartData.datasets[2], data: monthlyBuckets.descarte },
+        ]
+      });
     };
 
     fetchData();
@@ -91,31 +128,12 @@ useEffect(() => {
   const charts = [
     {
       id: 1,
-      title: "Contador de peças",
+      title: "Contador de Peças (Mensal)",
       icon: "chart-line",
       component: (
         <View style={styles.chartContainer}>
           <LineChart
-            data={{
-              labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
-              datasets: [
-                {
-                  data: [120, 140, 160, 180, 200, 220, 200, 180, 200, 220, 240, 260],
-                  color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
-                  strokeWidth: 2,
-                },
-                {
-                  data: [80, 100, 120, 140, 160, 180, 160, 140, 160, 180, 200, 220],
-                  color: (opacity = 1) => `rgba(255, 165, 0, ${opacity})`,
-                  strokeWidth: 2,
-                },
-                {
-                  data: [10, 12, 8, 15, 20, 18, 15, 12, 10, 8, 5, 3],
-                  color: (opacity = 1) => `rgba(255, 0, 0, ${opacity})`,
-                  strokeWidth: 2,
-                },
-              ],
-            }}
+            data={monthlyChartData}
             width={screenWidth * 0.9}
             height={220}
             chartConfig={{
@@ -125,15 +143,10 @@ useEffect(() => {
               decimalPlaces: 0,
               color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              propsForLabels: {
-                fontSize: 12,
-              },
+              propsForLabels: { fontSize: 12 },
             }}
             bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
+            style={{ marginVertical: 8, borderRadius: 16 }}
             fromZero
           />
           <View style={styles.legendContainer}>
@@ -156,39 +169,25 @@ useEffect(() => {
   ];
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+
+      <TouchableOpacity onPress={'#'} style={styles.logout}>
+      <MaterialIcons name="logout" size={24} color="green" />
+      <Text style={styles.Textlogout}>Logout</Text>
+    </TouchableOpacity>
+
       {/* Card - Dados do Dia */}
       <Card style={styles.card}>
         <View style={styles.cardHeader}>
-          <View style={styles.iconContainer}>
-            <MaterialCommunityIcons name="cylinder" size={24} color="#fff" />
-          </View>
-          <View style={styles.headerContent}>
-            <Text style={styles.cardTitle}>Dados do Dia</Text>
-          </View>
+          <View style={styles.iconContainer}><MaterialCommunityIcons name="cylinder" size={24} color="#fff" /></View>
+          <View style={styles.headerContent}><Text style={styles.cardTitle}>Dados do Dia</Text></View>
         </View>
         <View style={styles.cardContent}>
           <View style={styles.row}>
-            <View style={styles.column}>
-              <Text style={styles.boldText}>{dayData.metalicas}</Text>
-              <Text style={styles.labelText}>Metalicas</Text>
-            </View>
-            <View style={styles.column}>
-              <Text style={styles.boldText}>{dayData.plasticas}</Text>
-              <Text style={styles.labelText}>Plasticas</Text>
-            </View>
-            <View style={styles.column}>
-              <Text style={styles.boldText}>{dayData.descarte}</Text>
-              <Text style={styles.labelText}>Descartes</Text>
-            </View>
-            <View style={styles.column}>
-              <Text style={styles.boldText}>{dayData.metalicas + dayData.plasticas + dayData.descarte}</Text>
-              <Text style={styles.labelText}>Total</Text>
-            </View>
+            <View style={styles.column}><Text style={styles.boldText}>{dayData.metalicas}</Text><Text style={styles.labelText}>Metalicas</Text></View>
+            <View style={styles.column}><Text style={styles.boldText}>{dayData.plasticas}</Text><Text style={styles.labelText}>Plasticas</Text></View>
+            <View style={styles.column}><Text style={styles.boldText}>{dayData.descarte}</Text><Text style={styles.labelText}>Descartes</Text></View>
+            <View style={styles.column}><Text style={styles.boldText}>{dayData.metalicas + dayData.plasticas + dayData.descarte}</Text><Text style={styles.labelText}>Total</Text></View>
           </View>
         </View>
       </Card>
@@ -196,12 +195,8 @@ useEffect(() => {
       {/* Card - Aproveitamento do Dia */}
       <Card style={styles.card}>
         <View style={styles.cardHeader}>
-          <View style={styles.iconContainer}>
-            <FontAwesome5 name="percentage" size={24} color="#fff" />
-          </View>
-          <View style={styles.headerContent}>
-            <Text style={styles.cardTitle}>Aproveitamento do Dia</Text>
-          </View>
+          <View style={styles.iconContainer}><FontAwesome5 name="percentage" size={24} color="#fff" /></View>
+          <View style={styles.headerContent}><Text style={styles.cardTitle}>Aproveitamento do Dia</Text></View>
         </View>
         <View style={styles.cardContent}>
           <View style={styles.progressWrapper}>
@@ -212,10 +207,7 @@ useEffect(() => {
                   style={[
                     styles.progressFill,
                     {
-                      width: dayProgressAnim.interpolate({
-                        inputRange: [0, 100],
-                        outputRange: ["0%", "100%"],
-                      }),
+                      width: dayProgressAnim.interpolate({ inputRange: [0, 100], outputRange: ["0%", "100%"] }),
                       backgroundColor: "#2ecc71",
                     },
                   ]}
@@ -229,31 +221,15 @@ useEffect(() => {
       {/* Card - Dados por Mês */}
       <Card style={styles.card}>
         <View style={styles.cardHeader}>
-          <View style={styles.iconContainer}>
-            <MaterialCommunityIcons name="cylinder" size={24} color="#fff" />
-          </View>
-          <View style={styles.headerContent}>
-            <Text style={styles.cardTitle}>Dados por Mês</Text>
-          </View>
+          <View style={styles.iconContainer}><MaterialCommunityIcons name="cylinder" size={24} color="#fff" /></View>
+          <View style={styles.headerContent}><Text style={styles.cardTitle}>Dados por Mês</Text></View>
         </View>
         <View style={styles.cardContent}>
           <View style={styles.row}>
-            <View style={styles.column}>
-              <Text style={styles.boldText}>{monthData.metalicas}</Text>
-              <Text style={styles.labelText}>Metalicas</Text>
-            </View>
-            <View style={styles.column}>
-              <Text style={styles.boldText}>{monthData.plasticas}</Text>
-              <Text style={styles.labelText}>Plasticas</Text>
-            </View>
-            <View style={styles.column}>
-              <Text style={styles.boldText}>{monthData.descarte}</Text>
-              <Text style={styles.labelText}>Descartes</Text>
-            </View>
-            <View style={styles.column}>
-              <Text style={styles.boldText}>{monthData.metalicas + monthData.plasticas + monthData.descarte}</Text>
-              <Text style={styles.labelText}>Total</Text>
-            </View>
+            <View style={styles.column}><Text style={styles.boldText}>{monthData.metalicas}</Text><Text style={styles.labelText}>Metalicas</Text></View>
+            <View style={styles.column}><Text style={styles.boldText}>{monthData.plasticas}</Text><Text style={styles.labelText}>Plasticas</Text></View>
+            <View style={styles.column}><Text style={styles.boldText}>{monthData.descarte}</Text><Text style={styles.labelText}>Descartes</Text></View>
+            <View style={styles.column}><Text style={styles.boldText}>{monthData.metalicas + monthData.plasticas + monthData.descarte}</Text><Text style={styles.labelText}>Total</Text></View>
           </View>
         </View>
       </Card>
@@ -261,12 +237,8 @@ useEffect(() => {
       {/* Card - Aproveitamento do Mês */}
       <Card style={styles.card}>
         <View style={styles.cardHeader}>
-          <View style={styles.iconContainer}>
-            <FontAwesome5 name="percentage" size={24} color="#fff" />
-          </View>
-          <View style={styles.headerContent}>
-            <Text style={styles.cardTitle}>Aproveitamento do Mês</Text>
-          </View>
+          <View style={styles.iconContainer}><FontAwesome5 name="percentage" size={24} color="#fff" /></View>
+          <View style={styles.headerContent}><Text style={styles.cardTitle}>Aproveitamento do Mês</Text></View>
         </View>
         <View style={styles.cardContent}>
           <View style={styles.progressWrapper}>
@@ -277,10 +249,7 @@ useEffect(() => {
                   style={[
                     styles.progressFill,
                     {
-                      width: monthProgressAnim.interpolate({
-                        inputRange: [0, 100],
-                        outputRange: ["0%", "100%"],
-                      }),
+                      width: monthProgressAnim.interpolate({ inputRange: [0, 100], outputRange: ["0%", "100%"] }),
                       backgroundColor: "#f39c12",
                     },
                   ]}
@@ -292,38 +261,21 @@ useEffect(() => {
       </Card>
 
       {/* Container de gráficos */}
-      <View style={styles.chartsSection}>
-        <View style={styles.chartIndicatorContainer}>
-          {charts.map((_, i) => (
-            <View
-              key={i}
-              style={[
-                styles.chartIndicator,
-                activeChart === i && styles.activeChartIndicator,
-              ]}
-            />
-          ))}
-        </View>
+      <View>
         <ScrollView
-          horizontal
-          pagingEnabled
           showsHorizontalScrollIndicator={false}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { x: scrollX } } }],
             { useNativeDriver: false }
           )}
-          onMomentumScrollEnd={(e) => {
-            const index = Math.round(e.nativeEvent.contentOffset.x / screenWidth);
-            setActiveChart(index);
-          }}
-          style={styles.chartsScrollView}
+          onMomentumScrollEnd={e => setActiveChart(Math.round(e.nativeEvent.contentOffset.x / screenWidth))}
         >
-          {charts.map((chart) => (
-            <View key={chart.id} style={[styles.chartWrapper, { width: screenWidth }]}>
+          {charts.map(chart => (
+            <View key={chart.id}>
               <Card style={styles.chartCard}>
                 <Card.Title
                   title={chart.title}
-                  left={(props) => <Avatar.Icon {...props} icon={chart.icon} />}
+                  left={props => <Avatar.Icon {...props} icon={chart.icon} />}
                   titleStyle={styles.chartTitle}
                 />
                 <View style={styles.chartContent}>{chart.component}</View>
@@ -343,7 +295,24 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 10,
-    paddingTop: 50,
+    paddingTop: 90,
+  },
+  logout:{
+    position: "absolute",
+    top: 40,
+    right: 9,
+    zIndex: 1,
+    backgroundColor: "#f5f5f5",
+    padding: 10,
+    borderRadius: 50,
+    flexDirection: "row",
+  },
+  Textlogout:{
+    fontSize: 12,
+    color: "green",
+    marginLeft: 5,
+    fontWeight: "bold",
+    marginTop: 5
   },
   card: {
     marginBottom: 20,
@@ -409,35 +378,11 @@ const styles = StyleSheet.create({
   percentageMonth: {
     color: "#f39c12",
   },
-  chartsSection: {
-    marginBottom: 30,
-  },
-  chartIndicatorContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginBottom: 10,
-  },
-  chartIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "#ccc",
-    marginHorizontal: 4,
-  },
-  activeChartIndicator: {
-    backgroundColor: "#7AA46B",
-  },
-  chartsScrollView: {
-    marginHorizontal: -20,
-  },
-  chartWrapper: {
-    paddingHorizontal: 20,
-  },
+
   chartCard: {
     overflow: "hidden",
     backgroundColor: "#fff",
     borderRadius: 12,
-    elevation: 3,
     width: "100%",
   },
   chartTitle: {

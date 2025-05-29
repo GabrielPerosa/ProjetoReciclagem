@@ -30,7 +30,6 @@ export default function Monitoring() {
         const response = await api.get("/devices/");
         setDevices(response.data);
         setLoading(false);
-        Alert.alert("Sucesso", "Dados carregados com sucesso!");
       } catch (err) {
         setLoading(false);
         Alert.alert("Erro", "Falha ao carregar dados");
