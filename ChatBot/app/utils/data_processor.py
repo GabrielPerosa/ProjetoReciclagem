@@ -11,6 +11,24 @@ class DataProcessor:
             self.data = load_data("app/data/mock.json")
             self.environment = "mock"
 
+    def itemExists(self, material: str, date: str, hour: str):
+        """
+        Verifica se um material existe em uma data e hora específicas.
+        """
+
+        if material not in self.data:
+            # Verifica se o material existe
+            return False
+        if date != None and date not in self.data[material]:
+            # Verifica se a data existe para o material
+            return False
+        if hour != None:
+            # Verifica se a hora existe para a data
+            for h in self.data[material][date]:
+                if h.startswith(hour):
+                    return True
+            return False
+
     def update_data(self):
         """Atualiza os dados carregando novamente do arquivo ou API."""
         if self.environment == "production":
@@ -21,16 +39,20 @@ class DataProcessor:
         Retorna o total de um material em uma data e hora específica.
         """
         total = 0
+        if self.itemExists(material, date, hour) == False:
+            return 0
         for h in self.data[material][date]:
             if h.startswith(hour):
                 total += self.data[material][date][h]
-        return total
-    
+        return total 
+
     def get_material_per_date(self, material: str, date: str):
         """
         Retorna o total de um material em uma data específica.
         """
         total = 0
+        if self.itemExists(material, date, None) == False:
+            return 0
         for h in self.data[material][date]:
             total += self.get_material_per_hour(material, date, h)
         return total
@@ -44,22 +66,41 @@ class DataProcessor:
             total += self.get_material_per_date(material, date)
         return total
     
-    def get_total_each_material_per_hour(self, date: str, hour: str):
+    def get_total_per_date(self, date: str):
         """
-        Retorna o total de peças boas e refugadas em uma data e hora específicas.
+        Retorna o total de peças boas e refugadas em uma data.
         """
         total_good = 0 
         total_scrap = 0
     
         # Percorre todos os materiais e soma as quantidades
         for material in self.data["material"]:
+            if self.itemExists(material, date, None) == False:
+                continue
+
+            if material == "descarte":
+                total_scrap += self.get_material_per_date(material, date)
+                continue
+            
+            total_good += self.get_material_per_date(material, date)
+            
+        return total_good, total_scrap
+    def get_total_each_material_per_hour(self, date: str, hour: str):
+        """
+        Retorna o total de peças boas e refugadas em uma data e hora específicas.
+        """
+        total_good = 0 
+        total_scrap = 0
+
+        # Percorre todos os materiais e soma as quantidades
+        for material in self.data["material"]:
+            if self.itemExists(material, date, hour) == False:
+                continue
             if material == "descarte":
                 total_scrap += self.get_material_per_hour(material, date, hour)
                 continue
-            
-            total_good += self.get_material_per_hour(material, date, hour)
-            
-        return round(total_good, 2), round(total_scrap, 2)
+            total_good += self.get_material_per_hour(material, date, hour)            
+        return total_good, total_scrap
         
     def calc_percent_per_hour(self, date: str, hour: str):
         """
@@ -74,31 +115,50 @@ class DataProcessor:
             good_percent = total_good * 100 / total_processed
         except: 
             return None
-        return good_percent, scrap_percent, total_processed 
+        return round(good_percent, 2), round(scrap_percent, 2), total_processed 
 
-    def get_last_date(self):
+    def get_last_date_of_material(self, material):
         """
         Retorna a última data disponível nos dados.
         """   
         last_date = None
-        for m in self.data["material"]:
-            for string_date in self.data[m]:
-                date = datetime.strptime(string_date, "%d/%m/%Y")
-                if last_date is None or date > last_date:
-                    last_date = date
+        for string_date in self.data[material]:
+            date = datetime.strptime(string_date, "%d/%m/%Y")
+            if last_date is None or date > last_date:
+                last_date = date
         
         return last_date.strftime("%d/%m/%Y")
     
-    def get_last_hour(self):
+    def get_last_hour_of_material(self, material):
         """
         Retorna a última hora disponível na última data.
         """
         last_hour = None
-        for material in self.data["material"]:
-            for string_hour in self.data[material][self.get_last_date()]:
-                hour = datetime.strptime(string_hour, "%H:%M")
-                if last_hour is None or hour > last_hour:
+        last_date = self.get_last_date_of_material(material)
+        for string_hour in self.data[material][last_date]:
+            # Percorre as horas da última data
+            hour = datetime.strptime(string_hour, "%H:%M")
+            if last_hour is None or hour > last_hour:
                     last_hour = hour
-        
         return last_hour.strftime("%H:%M")
     
+    def get_last_log_of_material(self, material):
+        """
+        Retorna a última data e hora de um material específico.
+        """
+        last_date = self.get_last_date_of_material(material)
+        last_hour = self.get_last_hour_of_material(material)
+        return last_hour, last_date
+    
+    def get_last_log(self):
+        """
+        Retorna a última data e hora de todos os materiais.
+        """
+        last_date = None
+        last_hour = None
+        for material in self.data["material"]:
+            date, hour = self.get_last_log_of_material(material)
+            if last_hour is None or hour > last_hour or date > last_date:
+                last_date = date
+                last_hour = hour
+        return last_hour, last_date

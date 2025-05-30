@@ -64,7 +64,6 @@ class SyntaticAnalyzer:
                         elif entity_name == "hour" and value.endswith("h"):
                             value = value.replace("h", "") 
                         entities[entity_name].append(value.strip())
-            
             # Remover duplicatas
             for key in entities:
                 entities[key] = list(set(entities[key]))
