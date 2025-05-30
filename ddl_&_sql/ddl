@@ -1,0 +1,51 @@
+-- Tabela: Peça
+CREATE TABLE Peca (
+    id INT PRIMARY KEY,
+    tipo VARCHAR(20) NOT NULL
+);
+
+-- Tabela: Ciclo
+CREATE TABLE Ciclo (
+    id INT PRIMARY KEy
+);
+
+-- Tabela: Produção_Peca
+CREATE TABLE Producao_Peca (
+    Peca_armazenada INT PRIMARY KEY,
+    Peca_id INT,
+    Ciclo_id INT,
+    FOREIGN KEY (Peca_id) REFERENCES Peca(id),
+    FOREIGN KEY (Ciclo_id) REFERENCES Ciclo(id)
+);
+
+-- Tabela: Estação
+CREATE TABLE Estacao (
+    id INT PRIMARY KEY,
+    descricao VARCHAR(50) NOT NULL
+);
+
+-- Tabela: Estação_Estado
+CREATE TABLE Estacao_Estado (
+    id_estacao INT,
+    ciclo_id INT,
+    estado VARCHAR(20) NOT NULL,
+    timestamp DATETIME NOT NULL,
+    PRIMARY KEY (id_estacao, ciclo_id, timestamp),
+    FOREIGN KEY (id_estacao) REFERENCES Estacao(id),
+    FOREIGN KEY (ciclo_id) REFERENCES Ciclo(id)
+);
+
+-- Tabela: Dispositivo
+CREATE TABLE Dispositivo (
+    id INT PRIMARY KEY,
+    descricao VARCHAR(50) NOT NULL
+);
+
+-- Tabela: Dispositivo_Estado
+CREATE TABLE Dispositivo_Estado (
+    id_dispositivo INT,
+    estado BOOLEAN NOT NULL,
+    timestamp DATETIME NOT NULL,
+    PRIMARY KEY (id_dispositivo, timestamp),
+    FOREIGN KEY (id_dispositivo) REFERENCES Dispositivo(id)
+);

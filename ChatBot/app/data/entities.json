@@ -1,7 +1,7 @@
 { 
   "total": {
     "patterns": [
-      "\\b(total|desde o começo|desde o inicio)\\b"
+      "\\b(total|desde o começo|desde o inicio|ao todo|ate agora)\\b"
     ],
     "grupo": null
   },

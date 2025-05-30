@@ -12,7 +12,7 @@ async def chat(request: MessageRequest):
 @router.get("/health")
 async def health():
     async with httpx.AsyncClient(timeout=3.0) as client:
-        r = await client.get("http://{}".format(os.environ.get("API_URL")))
+        r = await client.get(os.getenv("API_URL"))
         if r.status_code == 200:
             return {"status": "healthy", "api_status": r.status_code}
         else:

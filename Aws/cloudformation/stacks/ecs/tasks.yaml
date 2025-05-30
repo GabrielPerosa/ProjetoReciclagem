@@ -33,6 +33,12 @@ Parameters:
     Type: String
   ApiUrl:
     Type: String
+  
+  SecretKey:
+    Type: String
+    
+  AccessTokenExpireHours:
+    Type: Number
 
 Resources:
   APILogGroup:
@@ -74,6 +80,12 @@ Resources:
               Value: iot
             - Name: DB_PORT
               Value: 5432
+            - Name: SECRET_KEY
+              Value: !Ref SecretKey
+            - Name: ACCESS_TOKEN_EXPIRE_HOURS
+              Value: !Ref AccessTokenExpireHours
+            - Name: ALGORITHM
+              Value: HS256
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -100,14 +112,13 @@ Resources:
             - ContainerPort: !Ref ChatbotContainerPort
           Environment:
             - Name: API_URL
-              Value: !Sub ${ApiUrl}/production-parts/summary
+              Value: !Sub http://${ApiUrl}/production-parts/summary
           LogConfiguration:
             LogDriver: awslogs
             Options:
               awslogs-group: !Sub /ecs/${ChatbotServiceName}
               awslogs-region: !Ref AWS::Region
-              awslogs-stream-prefix: ecs
-
+              awslogs-stream-prefix: ecs  
 Outputs:
   APITaskDefinitionArn:
     Value: !Ref APITaskDefinition

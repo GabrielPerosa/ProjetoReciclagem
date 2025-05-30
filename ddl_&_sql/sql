@@ -1,0 +1,71 @@
+
+/*insert - peça*/
+
+INSERT INTO Peca (id, tipo) VALUES
+(1, 'Plástico'),
+(2, 'Metal'),
+(3, 'Descarte');
+
+
+/*insert - ciclo*/
+
+INSERT INTO Ciclo (id) VALUES
+(1),
+(2),
+(3);
+
+/*insert - Producao_Peca*/
+
+INSERT INTO Producao_Peca (Peca_armazenada, Peca_id, Ciclo_id) VALUES
+(1, 1, 1),
+(2, 1, 1),
+(3, 2, 2),
+(4, 2, 2),
+(5, 2, 3);
+
+/*insert - Estacao*/
+
+INSERT INTO Estacao (id, descricao) VALUES
+(1, 'Estação');
+
+
+/*insert - Estacao_Estado*/
+
+INSERT INTO Estacao_Estado (id_estacao, ciclo_id, estado, timestamp) VALUES
+(1, 1, 'ligado',   '2025-05-09 12:00:00'),
+(1, 1, 'desligado','2025-05-09 12:10:00'),
+(1, 2, 'ligado',   '2025-05-09 12:11:00'),
+(1, 2, 'desligado','2025-05-09 12:30:00'),
+(1, 3, 'ligado',   '2025-05-09 12:40:00'),
+(1, 3, 'desligado','2025-05-09 12:41:00');
+
+
+/*insert - Dispositivos*/
+
+INSERT INTO Dispositivo (id, descricao) VALUES
+(0, 'sen. Ind.'),
+(1, 'sen. Cap.'),
+(2, 'sen. Ramp1'),
+(3, 'sen. Ramp2'),
+(4, 'sen. Final'),
+(5, 'sen. At. Rec. 1'),
+(6, 'sen. At. Rec. 2'),
+(7, 'sen. At. Ava. 1'),
+(8, 'sen. At. Ava. 2'),
+(9, 'esteira');
+
+/*insert - Dispositivo estado*/
+
+INSERT INTO Dispositivo_Estado (id_dispositivo, estado, timestamp) VALUES
+(1, 1, '2025-05-09 12:00:00'),
+(0, 0, '2025-05-09 12:00:00'),
+(3, 0, '2025-05-09 12:00:00'),
+(4, 0, '2025-05-09 12:00:00'),
+(5, 1, '2025-05-09 12:00:00'),
+(6, 0, '2025-05-09 12:00:00'),
+(7, 0, '2025-05-09 12:00:00'),
+(8, 0, '2025-05-09 12:00:00'),
+(9, 1, '2025-05-09 12:00:00');
+
+
+

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>homepage</title>
+    <title>Projeto Integrador - Separação Automatizada</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/web/stylecss/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -27,16 +27,22 @@
                         <a class="nav-link" href="#solucao">Solução</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#servicos">Serviços</a>
+                        <a class="nav-link" href="#equipe">Equipe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tecnologias">Tecnologias</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#servicos">Componentes</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#contato">Contato</a>
                     </li>
                     <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                        <a href="login.html" class="btn btn-outline-light">Login</a>
+                        <a href="/web/login/tela_de_login.html" class="btn btn-outline-light">Login</a>
                     </li>
                     <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
-                        <a href="cadastro.html" class="btn btn-light text-success">Cadastre-se</a>
+                        <a href="/web/cadastro/tela_de_cadastro.html" class="btn btn-light text-success">Cadastre-se</a>
                     </li>
                 </ul>
             </div>
@@ -46,53 +52,251 @@
     <section class="hero-section text-center">
         <div class="container">
             <h1 class="display-4 fw-bold">Projeto Integrador</h1>
-            <p class="lead">Soluções tecnológicas para otimizar a separação de materiais recicláveis</p>
+            <p class="lead">Porojeto Integrador</p>
             <div class="mt-4">
                 <a href="#solucao" class="btn btn-verde btn-lg me-2">Conheça o projeto</a>
-                <a href="#contato" class="btn btn-outline-light btn-lg">Fale conosco</a>
+                <a href="#tecnologias" class="btn btn-outline-light btn-lg">Tecnologias</a>
             </div>
         </div>
     </section>
-
-    <section class="container mb-5">
-        <div id="destaqueCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#destaqueCarousel" data-bs-slide-to="0" class="active"></button>
-                <button type="button" data-bs-target="#destaqueCarousel" data-bs-slide-to="1"></button>
-                <button type="button" data-bs-target="#destaqueCarousel" data-bs-slide-to="2"></button>
-            </div>
-            <div class="carousel-inner rounded">
-                <div class="carousel-item active">
-                    <img src="/web/imagens/linhadereciclagem.jpg" class="d-block w-100" alt="Linha de reciclagem">
-                    <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
-                        <h5>Separação Automatizada</h5>
-                        <p>Tecnologia avançada para classificação de materiais</p>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="/web/imagens/processoindustrial.jpg" class="d-block w-100" alt="Processo industrial">
-                    <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
-                        <h5>Controle de Eficiência</h5>
-                        <p>Monitoramento em tempo real dos processos</p>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="/web/imagens/analisededados.jpg" class="d-block w-100" alt="Dados analíticos">
-                    <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
-                        <h5>Análise de Dados</h5>
-                        <p>Tomada de decisão baseada em informações precisas</p>
-                    </div>
+    <section id="sobre" class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="fw-bold text-success mb-4">Sobre o Projeto</h2>
+                <p class="lead">O Projeto Integrador desenvolve uma solução completa para automação da separação de materiais recicláveis.</p>
+                <p>Nosso sistema combina hardware industrial e software avançado para criar uma linha de separação inteligente que aumenta a eficiência em até 70% e reduz custos operacionais.</p>
+                <div class="mt-4">
+                    <a href="#solucao" class="btn btn-outline-success me-2">Detalhes da Solução</a>
+                    <a href="#tecnologias" class="btn btn-success">Tecnologias Utilizadas</a>
                 </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#destaqueCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#destaqueCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button>
+            <div class="col-lg-6 mt-4 mt-lg-0">
+                <img src="/web/imagens/linhadereciclagem.jpg" alt="Linha de reciclagem automatizada" class="img-fluid rounded shadow">
+            </div>
         </div>
     </section>
-
+    <section id="equipe" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-5 text-success">Nossa Equipe</h2>
+            <p class="text-center lead mb-5">Equipe multidisciplinar com especialistas em automação industrial, desenvolvimento de software e análise de dados</p>
+            
+            <div class="row g-4">
+                <div class="col-md-4 col-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <img src="/web/imagens/joao.jpeg" class="rounded-circle mb-3" width="100" alt="João Victor">
+                            <h5>João Victor</h5>
+                            <p class="text-muted">Full-Stack</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 col-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <img src="/web/imagens/andre.jpeg" class="rounded-circle mb-3" width="100" alt="André Fernandes">
+                            <h5>André Fernandes</h5>
+                            <p class="text-muted">Full-Stack</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 col-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <img src="/web/imagens/rayan.jpeg" class="rounded-circle mb-3" width="100" alt="Rayan Lucan">
+                            <h5>Rayan Luca</h5>
+                            <p class="text-muted">Full-Stack</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 col-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <img src="/web/imagens/hebert.jpeg" class="rounded-circle mb-3" width="100" alt="Hebert Santos">
+                            <h5>Hebert Santos</h5>
+                            <p class="text-muted">Full-Stack</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 col-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <img src="/web/imagens/leticia.jpeg" class="rounded-circle mb-3" width="100" alt="Leticia Anhaia">
+                            <h5>Leticia Anhaia</h5>
+                            <p class="text-muted">Full-Stack</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 col-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <img src="/web/imagens/perosa.jpeg" class="rounded-circle mb-3" width="100" alt="Gabriel Perosa">
+                            <h5>Gabriel Perosa</h5>
+                            <p class="text-muted">Full-Stack</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 col-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <img src="/web/imagens/henrique.jpeg" class="rounded-circle mb-3" width="100" alt="Henrique Fernandes">
+                            <h5>Henrique Fernandes</h5>
+                            <p class="text-muted">Full-Stack</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 col-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <img src="/web/imagens/brizola.jpeg" class="rounded-circle mb-3" width="100" alt="Gabriel Brizola">
+                            <h5>Gabriel Brizola</h5>
+                            <p class="text-muted">Full-Stack</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 col-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <img src="/web/imagens/giovani.jpeg" class="rounded-circle mb-3" width="100" alt="Giovani Rodrigues">
+                            <h5>Giovani Rodrigues</h5>
+                            <p class="text-muted">Full-Stack</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="tecnologias" class="container py-5">
+        <h2 class="text-center fw-bold mb-5 text-success">Tecnologias Utilizadas</h2>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-success">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0 text-center">Automação Industrial</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Siemens S7-1200 (LCP)</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Factory I/O</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Sensores Industriais</li>
+                            <li><i class="fas fa-check-circle text-success me-2"></i> Atuadores e Robótica</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-success">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0 text-center">Backend & Cloud</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Python FastAPI</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> AWS</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Node-RED</li>
+                            <li><i class="fas fa-check-circle text-success me-2"></i> JWT Authentication</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-success">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0 text-center">Frontend</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> HTML5/CSS3/JS</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Bootstrap 5</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> React Native</li>
+                            <li><i class="fas fa-check-circle text-success me-2"></i> Chart.js</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-success">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0 text-center">Ferramentas</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Figma</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Git/GitHub</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Docker</li>
+                            <li><i class="fas fa-check-circle text-success me-2"></i> Postman</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-5 text-success">Fluxo do Sistema</h2>
+            
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="card h-100 border-0 text-center">
+                        <div class="card-body">
+                            <div class="bg-success text-white rounded-circle mx-auto mb-3" style="width: 60px; height: 60px; line-height: 60px;">
+                                <i class="fas fa-box-open fa-lg"></i>
+                            </div>
+                            <h5>1. Entrada de Materiais</h5>
+                            <p>Os resíduos chegam à esteira de transporte</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card h-100 border-0 text-center">
+                        <div class="card-body">
+                            <div class="bg-success text-white rounded-circle mx-auto mb-3" style="width: 60px; height: 60px; line-height: 60px;">
+                                <i class="fas fa-search fa-lg"></i>
+                            </div>
+                            <h5>2. Identificação</h5>
+                            <p>Sensores detectam o tipo de material</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card h-100 border-0 text-center">
+                        <div class="card-body">
+                            <div class="bg-success text-white rounded-circle mx-auto mb-3" style="width: 60px; height: 60px; line-height: 60px;">
+                                <i class="fas fa-tags fa-lg"></i>
+                            </div>
+                            <h5>3. Classificação</h5>
+                            <p>Sistema decide a categoria do material</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card h-100 border-0 text-center">
+                        <div class="card-body">
+                            <div class="bg-success text-white rounded-circle mx-auto mb-3" style="width: 60px; height: 60px; line-height: 60px;">
+                                <i class="fas fa-robot fa-lg"></i>
+                            </div>
+                            <h5>4. Separação</h5>
+                            <p>Atuadores direcionam o material para o local correto</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <section id="solucao" class="container mb-5">
         <div class="row">
             <div class="col-lg-6">
@@ -149,7 +353,6 @@
             </div>
         </div>
     </section>
-
     <section id="servicos" class="container mb-5">
         <h2 class="text-center fw-bold mb-5 text-success">Componentes do Projeto</h2>
         
@@ -206,7 +409,6 @@
             </div>
         </div>
     </section>
-
     <section id="contato" class="container mb-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -245,6 +447,7 @@
             </div>
         </div>
     </section>
+
     <footer class="mt-5">
         <div class="container">
             <div class="row">
@@ -263,7 +466,8 @@
                     <ul class="list-unstyled">
                         <li><a href="#" class="text-white">Home</a></li>
                         <li><a href="#solucao" class="text-white">Solução</a></li>
-                        <li><a href="#servicos" class="text-white">Componentes</a></li>
+                        <li><a href="#equipe" class="text-white">Equipe</a></li>
+                        <li><a href="#tecnologias" class="text-white">Tecnologias</a></li>
                         <li><a href="#contato" class="text-white">Contato</a></li>
                     </ul>
                 </div>
@@ -278,8 +482,8 @@
                 <div class="col-md-3">
                     <h5>Acesso Rápido</h5>
                     <div class="d-grid gap-2">
-                        <a href="login.html" class="btn btn-outline-light">Área do Cliente</a>
-                        <a href="cadastro.html" class="btn btn-light text-success">Cadastre-se</a>
+                        <a href="/web/login/tela_de_login.html" class="btn btn-outline-light">Área do Cliente</a>
+                        <a href="/web/cadastro/tela_de_cadastro.html" class="btn btn-light text-success">Cadastre-se</a>
                     </div>
                 </div>
             </div>

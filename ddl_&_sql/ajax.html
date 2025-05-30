@@ -1,0 +1,50 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  // Carregar a lista de peças produzidas com tipo
+  $('#carregarPecas').click(function () {
+    $.ajax({
+      url: 'http://localhost:3000/api/producao', // sua rota de listagem
+      method: 'GET',
+      success: function (dados) {
+        $('#tabelaPecas').empty();
+        dados.forEach(function (item) {
+          $('#tabelaPecas').append(`
+            <tr>
+              <td>${item.Peca_armazenada}</td>
+              <td>${item.tipo}</td>
+              <td>${item.Ciclo_id}</td>
+            </tr>
+          `);
+        });
+      },
+      error: function () {
+        alert('Erro ao carregar produção de peças');
+      }
+    });
+  });
+
+  // Salvar nova produção de peça
+  $('#salvarPeca').click(function () {
+    const pecaId = $('#pecaId').val();
+    const cicloId = $('#cicloId').val();
+
+    $.ajax({
+      url: 'http://localhost:3000/api/producao', // sua rota de inserção
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        Peca_id: pecaId,
+        Ciclo_id: cicloId
+      }),
+      success: function () {
+        alert('Peça registrada com sucesso!');
+        $('#carregarPecas').click(); // Atualiza lista
+        $('#pecaId').val('');
+        $('#cicloId').val('');
+      },
+      error: function () {
+        alert('Erro ao registrar peça');
+      }
+    });
+  });
+</script>

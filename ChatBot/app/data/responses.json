@@ -35,11 +35,16 @@
         "O sistema está operando normalmente.", 
         "Tudo em ordem com o sistema no momento!"
     ],
+    "ausencia_de_dados": [
+        "Sinto muito, mas não há dados disponíveis para o período solicitado ou para a peça especificada.",
+        "Infelizmente, não temos dados para o período ou material solicitado.",
+        "Desculpe, não há informações disponíveis para o material ou data que você mencionou."
+    ],
     "default": [
         "Desculpe, não entendi. Pode reformular a pergunta?",
         "Sinto muito, mas não entendi exatamente o que você quis dizer",
         "Perdão, não entendi. Por favor, tente explicar brevemente para eu conseguir entender",
         "Desculpe, não entendi. Aqui estão alguns exemplos do que posso responder: 'Qual é a taxa de refugo?' ou 'Quantas peças foram processadas hoje?'",
-        "Não consegui entender sua dúvida."
+        "Não consegui entender sua dúvida."       
     ]
 }

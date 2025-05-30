@@ -1,0 +1,78 @@
+/*pcas por ciclo*/
+
+CREATE VIEW pecas_por_ciclo AS
+SELECT 
+    pp.Ciclo_id,
+    p.id AS Peca_id,
+    p.tipo AS Tipo_Peca
+FROM Producao_Peca pp
+JOIN Peca p ON pp.Peca_id = p.id;
+
+/*estacao_estado por ciclos*/
+
+CREATE VIEW estacao_estado_por_ciclo AS
+SELECT 
+    ee.id_estacao,
+    e.descricao AS estacao,
+    ee.ciclo_id,
+    ee.estado,
+    ee.timestamp
+FROM Estacao_Estado ee
+JOIN Estacao e ON ee.id_estacao = e.id;
+
+/*estado atual dispositivos*/
+
+CREATE VIEW estado_atual_dispositivos AS
+SELECT de.id_dispositivo, d.descricao, de.estado, de.timestamp
+FROM Dispositivo_Estado de
+JOIN Dispositivo d ON de.id_dispositivo = d.id
+WHERE (de.id_dispositivo, de.timestamp) IN (
+    SELECT id_dispositivo, MAX(timestamp)
+    FROM Dispositivo_Estado
+    GROUP BY id_dispositivo
+);
+
+
+/*historico de dos dispositivos*/
+
+CREATE VIEW historico_dispositivos AS
+SELECT 
+    d.id AS id_dispositivo,
+    d.descricao,
+    de.estado,
+    de.timestamp
+FROM Dispositivo_Estado de
+JOIN Dispositivo d ON de.id_dispositivo = d.id
+ORDER BY de.timestamp;
+
+/*producao detalhada*/
+
+CREATE VIEW producao_detalhada AS
+SELECT 
+    pp.Peca_armazenada,
+    p.tipo AS tipo_peca,
+    pp.Ciclo_id
+FROM Producao_Peca pp
+JOIN Peca p ON pp.Peca_id = p.id;
+
+/* quantidade pecas por tipo*/
+
+CREATE VIEW quantidade_pecas_por_tipo AS
+SELECT 
+    p.tipo AS tipo_peca,
+    COUNT(*) AS quantidade
+FROM Producao_Peca pp
+JOIN Peca p ON pp.Peca_id = p.id
+GROUP BY p.tipo;
+
+/*taxa de descarte*/
+
+CREATE VIEW taxa_descarte AS
+SELECT 
+    ROUND(
+        (SUM(CASE WHEN p.tipo = 'Descarte' THEN 1 ELSE 0 END) * 100.0) / COUNT(*),
+        2
+    ) AS taxa_descarte_percentual
+FROM Producao_Peca pp
+JOIN Peca p ON pp.Peca_id = p.id;
+
