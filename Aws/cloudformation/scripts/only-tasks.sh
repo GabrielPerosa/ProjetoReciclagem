@@ -18,7 +18,7 @@ SECRET_KEY=`openssl rand -base64 32`
 
 echo Carregando Variáveis de ambiente...
 
-aws cloudformation create-stack \
+aws cloudformation update-stack \
   --stack-name tasks-stack \
   --template-body file://../stacks/ecs/tasks.yaml \
   --parameters \

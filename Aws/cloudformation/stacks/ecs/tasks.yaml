@@ -118,31 +118,7 @@ Resources:
             Options:
               awslogs-group: !Sub /ecs/${ChatbotServiceName}
               awslogs-region: !Ref AWS::Region
-              awslogs-stream-prefix: ecs
-  
-  NodeRedTaskDefinition:
-    Type: AWS::ECS::TaskDefinition
-    Properties:
-      Family: !Sub nodered
-      Cpu: !Ref ContainerCpu
-      Memory: !Ref ContainerMemory
-      NetworkMode: awsvpc
-      RequiresCompatibilities:
-        - FARGATE
-      ExecutionRoleArn: !Ref ECSTaskExecutionRole
-      TaskRoleArn: !Ref ECSTaskRole
-      ContainerDefinitions:
-        - Name: nodered-container
-          Image: nodered/node-red:latest
-          Essential: true
-          PortMappings:
-            - ContainerPort: 1880
-          LogConfiguration:
-          LogDriver: awslogs
-          Options:
-              awslogs-group: !Sub /ecs/${ChatbotServiceName}
-              awslogs-region: !Ref AWS::Region
-              awslogs-stream-prefix: ecs
+              awslogs-stream-prefix: ecs  
 Outputs:
   APITaskDefinitionArn:
     Value: !Ref APITaskDefinition
