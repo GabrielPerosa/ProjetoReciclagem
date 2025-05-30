@@ -64,12 +64,4 @@ Localizados em `app/utils`, fornecem funções para:
 
 * Carregamento de dados de arquivos JSON
 * Tratamento e limpeza de texto vindo da API
-* Processamento de dados e transformação delesExplicação dos Componentes
-
-    app/controllers: Lógica de controle que conecta rotas aos serviços.
-    app/data: Armazena dados estáticos, como respostas pré-definidas (em JSON).
-    app/nlp: Processamento de linguagem natural (ex.: correspondência de intenções).
-    app/routes: Define os endpoints da API com FastAPI.
-    app/services: Lógica de negócio do chatbot (ex.: gerar respostas).
-    main.py: Ponto de entrada da aplicação.
-    requirements.txt: Dependências do projeto.
+* Processamento de dados e transformação deles Explicação dos Componentes
