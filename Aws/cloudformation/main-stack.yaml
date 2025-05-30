@@ -45,7 +45,7 @@ Parameters:
     Type: String
 
   # openssl rand -base64 32
-  SecreyKey:
+  SecretKey:
     Type: String
     Description: Chave secreta para assinatura de tokens JWT
 
@@ -91,52 +91,6 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: ./stacks/ecs/cluster.yaml
-  
-  ECSTasksStack:
-    DependsOn: [ECSClusterStack]
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: ./stacks/ecs/tasks.yaml
-      Parameters:
-        APIServiceName: !Ref APIServiceName
-        ChatbotServiceName: !Ref ChatbotServiceName
-        
-        APIContainerImage: !Ref APIContainerImage
-        ChatbotContainerImage: !Ref ChatbotContainerImage
-        
-        APIContainerPort: !Ref APIContainerPort
-        ChatbotContainerPort: !Ref ChatbotContainerPort
-
-        ContainerCpu: !Ref ContainerCpu
-        ContainerMemory: !Ref ContainerMemory
-
-        ECSTaskRole: !Ref ECSTaskRole
-        ECSTaskExecutionRole: !Ref ECSTaskExecutionRole
-        DBHost: !GetAtt DatabaseStack.Outputs.DBHost
-        ApiUrl: !GetAtt ALBStack.Outputs.LoadBalancerDNS
-
-  ECSServicesStack:
-    DependsOn: [ECSTasksStack]
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: ./stacks/ecs/services.yaml
-      Parameters:
-        APITaskDefinition: !GetAtt ECSTasksStack.Outputs.APITaskDefinitionArn
-        ChatbotTaskDefinition: !GetAtt ECSTasksStack.Outputs.ChatbotTaskDefinitionArn
-        PrivateSubnet1: !Ref PrivateSubnet1
-        PrivateSubnet2: !Ref PrivateSubnet2 
-        APIServiceName: !Ref APIServiceName
-        ChatbotServiceName: !Ref ChatbotServiceName
-        ECSCluster: !GetAtt ECSClusterStack.Outputs.ECSCluster
-        APITargetGroup: !GetAtt ALBStack.Outputs.APITargetGroup
-        ChatbotTargetGroup: !GetAtt ALBStack.Outputs.ChatbotTargetGroup
-        DesiredCount: !Ref DesiredCount
-        ChatbotContainerPort: !Ref ChatbotContainerPort
-        APIContainerPort: !Ref APIContainerPort
-        APIContainerImage: !Ref APIContainerImage
-        ChatbotContainerImage: !Ref ChatbotContainerImage
-        APISecurityGroup: !GetAtt SecurityGroupsStack.Outputs.APISecurityGroup
-        ChatbotSecurityGroup: !GetAtt SecurityGroupsStack.Outputs.ChatbotSecurityGroup
 Outputs:
   LoadBalancerDNS:
     Value: !GetAtt ALBStack.Outputs.LoadBalancerDNS

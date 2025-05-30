@@ -4,7 +4,9 @@
 
 echo Carregando Variáveis de ambiente...
 source ../.env
+
 SECRET_KEY=`openssl rand -base64 32`
+echo $SECRET_KEY
 
 aws cloudformation create-stack \
   --stack-name main-stack \

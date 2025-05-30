@@ -1,4 +1,4 @@
-#!/bin/bash
+	#!/bin/bash
 
 S3_BUCKET="infraestrutura-projeto-integrador"  # Altere conforme necessário
 TEMPLATE_SOURCE="../main-stack.yaml"

@@ -36,6 +36,12 @@ Parameters:
     Type: String
   ECSTaskRole:
     Type: String
+  SecretKey:
+    Type: String
+    Description: Chave secreta para assinatura de tokens JWT
+  AccessTokenExpireHours:
+    Type: Number
+    Default: 24
 Resources:
   SecurityGroupsStack:
     Type: AWS::CloudFormation::Stack
@@ -92,7 +98,7 @@ Resources:
     - ECSClusterStack
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/cc77ac16e751361282208d31e55370bd.template
+      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/f3ace8b93d81ea4c123908f5dfce9b87.template
       Parameters:
         APIServiceName:
           Ref: APIServiceName
@@ -127,7 +133,7 @@ Resources:
     - ECSTasksStack
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/b03c8b296107d5b656546ed81fde0951.template
+      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/22f67c2cc196ac774dba98ca4663cc40.template
       Parameters:
         APITaskDefinition:
           Fn::GetAtt:
