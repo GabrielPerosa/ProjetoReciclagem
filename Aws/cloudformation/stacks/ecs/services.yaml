@@ -10,29 +10,24 @@ Parameters:
     Type: AWS::EC2::Subnet::Id
   APIServiceName:
     Type: String  
-  APIContainerPort:
-    Type: Number  
-  APIContainerImage:
-    Type: String
+  
   ChatbotServiceName:
     Type: String  
-  ChatbotContainerPort:
-    Type: Number  
-  ChatbotContainerImage:
-    Type: String
+
   APITaskDefinition:
     Type: String
   ChatbotTaskDefinition:
     Type: String
+
   APISecurityGroup:
     Type: AWS::EC2::SecurityGroup::Id
   ChatbotSecurityGroup:
     Type: AWS::EC2::SecurityGroup::Id
-  DesiredCount:
-    Type: Number
   APITargetGroup:
     Type: String
   ChatbotTargetGroup:
+    Type: String
+  ECSServiceRole:
     Type: String
 
 Resources:
@@ -42,7 +37,7 @@ Resources:
       Cluster: !Ref ECSCluster
       TaskDefinition: !Ref APITaskDefinition
       ServiceName: !Sub ${APIServiceName}-service
-      DesiredCount: !Ref DesiredCount
+      DesiredCount: 1
       LaunchType: FARGATE
       DeploymentConfiguration:
         MaximumPercent: 200
@@ -58,7 +53,33 @@ Resources:
       LoadBalancers:
         - TargetGroupArn: !Ref APITargetGroup
           ContainerName: api-container
-          ContainerPort: !Ref APIContainerPort
+          ContainerPort: 8000
+
+
+  APIScalableTarget:
+    DependsOn: APIService
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: 3  # ou outro valor máximo desejado
+      MinCapacity: 0  # ou outro valor mínimo desejado
+      ResourceId: !Sub service/${ECSCluster}/${APIServiceName}-service
+      RoleARN: !Ref ECSServiceRole
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+
+  APIScalingPolicy:
+    DependsOn: APIScalableTarget
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: CpuScalingPolicy
+      PolicyType: TargetTrackingScaling
+      ScalingTargetId: !Ref APIScalableTarget
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ECSServiceAverageCPUUtilization
+        TargetValue: 50.0  # Alvo de utilização de CPU em %
+        ScaleInCooldown: 60
+        ScaleOutCooldown: 60
 
   ChatbotService:
     DependsOn: APIService
@@ -67,7 +88,7 @@ Resources:
       Cluster: !Ref ECSCluster
       TaskDefinition: !Ref ChatbotTaskDefinition
       ServiceName: !Sub ${ChatbotServiceName}-service
-      DesiredCount: !Ref DesiredCount
+      DesiredCount: 1
       LaunchType: FARGATE
       DeploymentConfiguration:
         MaximumPercent: 200
@@ -83,4 +104,4 @@ Resources:
       LoadBalancers:
         - TargetGroupArn: !Ref ChatbotTargetGroup
           ContainerName: chatbot-container
-          ContainerPort: !Ref ChatbotContainerPort
+          ContainerPort: 8001

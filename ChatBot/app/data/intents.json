@@ -17,7 +17,11 @@
         "produção",
         "número de",
         "produzidas",
-        "unidades"
+        "unidades",
+        "metal",
+        "plástico",
+        "total"
+
     ],
     "consultar_etapas": [
         "etapas",
