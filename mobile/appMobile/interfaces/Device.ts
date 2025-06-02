@@ -1,4 +1,4 @@
-import { State } from './state';
+import { State } from './State';
 
 export interface Device {
   id: string;

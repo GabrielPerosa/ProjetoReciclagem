@@ -118,7 +118,7 @@ export default function LoginScreen() {
     await login(token);
 
     console.log('Login realizado com sucesso!');
-    router.push('/dashboard'); // redireciona para tela principal
+    router.push('/dashboard');
   } catch (error) {
     setLoginError('Email ou senha inválidos.');
     console.error(error);
@@ -132,7 +132,7 @@ export default function LoginScreen() {
     else handleRegister();
   };
 
-  // Renderiza a tela normal de login/cadastro
+  // Renderiza a tela de login/cadastro
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.modalView, { transform: [{ translateY: slideAnim }] }]}>
@@ -209,7 +209,7 @@ export default function LoginScreen() {
   );
 }
 
-// Estilos (adicione esses novos estilos)
+// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,
