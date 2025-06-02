@@ -6,7 +6,7 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Projeto integrador que visa simular um sistema de reciclagem de materiais, com foco em uma aplicação que irá monitorar a planta e mostrará as informações de entrada e saída de materiais, além de calcular a quantidade de materiais reciclados e a quantidade de materiais descartados.
 
-![Imagem Projeto Geral](docs/images/Geral.png)
+![Imagem Projeto Geral](docs/geral.png)
 
 ## Ferramentas
 A aplicação contém:  
