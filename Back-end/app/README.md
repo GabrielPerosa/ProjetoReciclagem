@@ -1,3 +1,5 @@
+<div style="text-align: justify;">
+
 ## 1. Visão Geral do Backend
 
 Este serviço backend é responsável por:
@@ -126,3 +128,4 @@ Back-end/
 
 A API ficará disponível em http://localhost:8000.
 
+[<- Retornar para README geral](../../README.md)
