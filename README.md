@@ -17,7 +17,7 @@ A aplicação contém:
 [Documentação CLP](CLP/README.md)
 
 🧹 **Limpeza de dados**
-- O retorno das informações via OPC-UA vme de forma mais enxuta com informações que não serão totalmente aproveitadas, por esse motivo será usado o Node-Red para a limpeza dos dados e fazer a "ponte" com a comunicação com os serviços da AWS.
+- O retorno das informações via OPC-UA vem de forma mais enxuta com informações que não serão totalmente aproveitadas, por esse motivo será usado o Node-Red para a limpeza dos dados e fazer a "ponte" com a comunicação com os serviços da AWS.
 
 [Documentação Node-red](node-red/)
 
