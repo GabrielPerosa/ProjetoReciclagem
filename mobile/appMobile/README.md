@@ -1,8 +1,10 @@
+<div style="text-align: justify;">
+
 # 📱 App Mobile com Expo & React Native
 
 ## 🧾 Visão Geral
 
-Este aplicativo mobile foi desenvolvido utilizando **React Native**, **Expo** e **TypeScript**, com o objetivo de fornecer ao usuário uma plataforma para cadastro, monitoramento de sensores em tempo real, visualização de dashboards com gráficos, e acesso a dados por meio de um chatbot.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Este aplicativo mobile foi desenvolvido utilizando **React Native**, **Expo** e **TypeScript**, com o objetivo de fornecer ao usuário uma plataforma para cadastro, monitoramento de sensores em tempo real, visualização de dashboards com gráficos, e acesso a dados por meio de um chatbot.
 
 ---
 
@@ -98,6 +100,6 @@ npx expo start
 - Para rodar no celular:
   - Abra o app **Expo Go** no seu dispositivo.
   - Clique em **Scan QR Code** e escaneie o código QR que aparece no terminal do VSCode.
-
 ---
 
+[<- Retornar para README geral](../../README.md)
