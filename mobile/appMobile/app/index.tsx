@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated, Alert } from 'react-native';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useRouter } from 'expo-router';
+import api from '@/services/api';
+import { useAuth } from '@/services/AuthContext';
 
 export default function LoginScreen() {
   // Estados para controlar qual tela mostrar
@@ -16,10 +18,13 @@ export default function LoginScreen() {
   const [name, setName] = useState('');
   const [emailError, setEmailError] = useState('');
   const [nameError, setNameError] = useState('');
+  const [loginError, setLoginError] = useState('');
   
   // Animações
   const slideAnim = useRef(new Animated.Value(300)).current;
 
+  const { token, login, loading } = useAuth();
+  
   useEffect(() => {
     Animated.timing(slideAnim, {
       toValue: 0,
@@ -27,6 +32,13 @@ export default function LoginScreen() {
       useNativeDriver: true,
     }).start();
   }, [showForgotPassword]); // Executa quando alterna entre telas
+
+  useEffect(() => {
+    if (!loading && token) {
+      // Usuário já logado, redireciona para dashboard
+      router.replace('/dashboard');
+    }
+  }, [loading, token]);
 
   const handleNameChange = (text: string) => {
     const lettersOnly = text.replace(/[^a-zA-ZÀ-ÿ\s]/g, '');
@@ -53,30 +65,25 @@ export default function LoginScreen() {
     setShowForgotPassword(false);
   };
 
-  const handleRegister = () => {
-    if (!name) {
-      setNameError('Por favor, insira seu nome completo');
-      return;
-    }
-    
-    if (!email) {
-      setEmailError('Por favor, insira seu e-mail');
-      return;
-    }
-    
-    if (!password || !confirmPassword) {
-      Alert.alert('Atenção', 'Por favor, preencha todos os campos obrigatórios');
-      return;
-    }
+  const handleRegister = async () => {
+  if (!name) return setNameError('Por favor, insira seu nome completo');
+  if (!email) return setEmailError('Por favor, insira seu e-mail');
+  if (!password || !confirmPassword) {
+    Alert.alert('Atenção', 'Preencha todos os campos obrigatórios');
+    return;
+  }
+  if (password !== confirmPassword) {
+    Alert.alert('Atenção', 'As senhas não coincidem');
+    return;
+  }
+  if (emailError || nameError) return;
 
-    if (password !== confirmPassword) {
-      Alert.alert('Atenção', 'As senhas não coincidem');
-      return;
-    }
-
-    if (emailError || nameError) {
-      return;
-    }
+  try {
+    const response = await api.post('/users/', {
+      name,
+      email,
+      password,
+    });
 
     Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
     setName('');
@@ -84,63 +91,48 @@ export default function LoginScreen() {
     setPassword('');
     setConfirmPassword('');
     setActiveTab('login');
-  };
+  } catch (error) {
+    Alert.alert('Erro', 'Erro ao cadastrar. Tente novamente.');
+    console.error(error);
+  }
+};
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      Alert.alert('Atenção', 'Por favor, preencha todos os campos');
-      return;
-    }
-    
-    if (emailError) {
-      return;
-    }
-    
-    Alert.alert('Login', 'Login realizado com sucesso!')
-  };
+  const handleLogin = async () => {
+  if (!email || !password) {
+    Alert.alert('Atenção', 'Por favor, preencha todos os campos');
+    return;
+  }
+
+  if (emailError) return;
+
+  try {
+    const response = await api.post('/login/', {
+      email,
+      password,
+    });
+
+    console.log('Resposta do login:', response.data);
+
+    const token = response.data.access_token;
+
+    await login(token);
+
+    console.log('Login realizado com sucesso!');
+    router.push('/dashboard');
+  } catch (error) {
+    setLoginError('Email ou senha inválidos.');
+    console.error(error);
+  }
+};
 
   const handleAction = () => {
     if (activeTab === 'login') {
       handleLogin();
-      router.push('/dashboard');
     }
     else handleRegister();
   };
 
-  // Renderiza a tela de esqueci a senha
-  if (showForgotPassword) {
-    return (
-      <View style={styles.container}>
-        <Animated.View style={[styles.modalView, { transform: [{ translateY: slideAnim }] }]}>
-          <View style={styles.recycleContainer}>
-            <IconSymbol name="recycle" size={40} color="white" />
-          </View>
-          
-          <Text style={styles.title}>Recuperar senha</Text>
-          <Text style={styles.subtitle}>Digite seu e-mail para receber as instruções</Text>
-
-          <TextInput
-            style={[styles.input, emailError && styles.inputError]}
-            placeholder="Digite seu e-mail"
-            keyboardType="email-address"
-            value={email}
-            onChangeText={handleEmailChange}
-          />
-          {emailError && <Text style={styles.errorText}>{emailError}</Text>}
-
-          <TouchableOpacity style={styles.actionButton} onPress={handleForgotPassword}>
-            <Text style={styles.buttonText}>Enviar instruções</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => setShowForgotPassword(false)}>
-            <Text style={styles.backText}>Voltar para login</Text>
-          </TouchableOpacity>
-        </Animated.View>
-      </View>
-    );
-  }
-
-  // Renderiza a tela normal de login/cadastro
+  // Renderiza a tela de login/cadastro
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.modalView, { transform: [{ translateY: slideAnim }] }]}>
@@ -209,17 +201,15 @@ export default function LoginScreen() {
           <Text style={styles.buttonText}>{activeTab === 'login' ? 'Entrar' : 'Cadastrar'}</Text>
         </TouchableOpacity>
 
-        {activeTab === 'login' && (
-          <TouchableOpacity onPress={() => setShowForgotPassword(true)}>
-            <Text style={styles.linkText}>Esqueci minha senha</Text>
-          </TouchableOpacity>
+        {loginError !== '' && (
+          <Text style={styles.errorText}>{loginError}</Text>
         )}
       </Animated.View>
     </View>
   );
 }
 
-// Estilos (adicione esses novos estilos)
+// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,
