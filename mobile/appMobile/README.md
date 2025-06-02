@@ -1,50 +1,93 @@
-# Welcome to your Expo app 👋
+# 📱 App Mobile com Expo & React Native
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## 🧾 Visão Geral
 
-## Get started
+Este aplicativo mobile foi desenvolvido utilizando **React Native**, **Expo** e **TypeScript**, com o objetivo de fornecer ao usuário uma plataforma para cadastro, monitoramento de sensores em tempo real, visualização de dashboards com gráficos, e acesso a dados por meio de um chatbot.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## 🚀 Funcionalidades
 
-2. Start the app
+- **Cadastro e Login de Usuário**
+  - Tela inicial para criação de conta ou acesso à aplicação.
 
-   ```bash
-    npx expo start
-   ```
+- **Dashboard**
+  - Visualização de dados diários e mensais.
+  - Barras de aproveitamento.
+  - Gráfico representando os dados do mês.
 
-In the output, you'll find options to open the app in a
+- **Monitoramento**
+  - Exibição de informações dos sensores.
+  - Leituras de entradas e saídas com data e hora atualizadas em tempo real.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- **Chatbot**
+  - Interface onde usuários podem buscar por qualquer dado da aplicação de forma interativa.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## 📁 Estrutura de Pastas
 
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+app/
+│
+├── (tabs)/
+│   ├── _layout.tsx         # Componente de layout para navegação entre abas
+│   ├── chatbot.tsx         # Tela do Chatbot
+│   ├── dashboard.tsx       # Tela de Dashboard
+│   └── monitoring.tsx      # Tela de Monitoramento
+│
+├── _layout.tsx             # Layout principal da aplicação
+├── +not-found.tsx          # Tela padrão para rotas inexistentes
+└── index.tsx               # Tela principal (login e cadastro)
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## 🧰 Tecnologias Utilizadas
 
-To learn more about developing your project with Expo, look at the following resources:
+- [React Native](https://reactnative.dev/)
+- [Expo](https://expo.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Axios](https://axios-http.com/)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## 💻 Requisitos
 
-Join our community of developers creating universal apps.
+Antes de iniciar, certifique-se de ter:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- [Node.js](https://nodejs.org/pt/download) instalado
+- Conta no [Expo](https://expo.dev/)
+- App **Expo Go** instalado no seu celular (Android/iOS)
+- [Visual Studio Code](https://code.visualstudio.com/) ou outro editor de código
+
+---
+
+## 🛠️ Como Instalar e Rodar o Projeto
+
+### 1. Clone o repositório
+
+```bash
+git clone <https://github.com/GabrielPerosa/ProjetoReciclagem.git>
+cd mobile/appMobile
+```
+
+### 2. Instale as dependências
+
+```bash
+npm install
+```
+
+### 3. Execute o projeto
+
+```bash
+npx expo start
+```
+
+- Pressione a tecla **W** para abrir no navegador.
+- Para rodar no celular:
+  - Abra o app **Expo Go** no seu dispositivo.
+  - Clique em **Scan QR Code** e escaneie o código QR que aparece no terminal do VSCode.
+
+---
+
