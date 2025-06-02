@@ -1,1 +1,0 @@
-![Planta da aplicação](../docs/planta_iot.png)
