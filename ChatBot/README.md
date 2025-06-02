@@ -1,8 +1,10 @@
+<div style="text-align: justify;">
+
 # Chatbot
 
 ## Overview
 
-Este projeto é um chatbot simples com processamento de linguagem natural (NLP), construído em Python. Usamos o framework FastAPI para premitir expor o serviço na Web. Ele identifica intenções e entidades em mensagens do usuário e responde com base em uma base de dados vinda de uma API devidamente configurada.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Este projeto é um chatbot simples com processamento de linguagem natural (NLP), construído em Python. Usamos o framework FastAPI para premitir expor o serviço na Web. Ele identifica intenções e entidades em mensagens do usuário e responde com base em uma base de dados vinda de uma API devidamente configurada.
 
 ##  Estrutura do Projeto
 
@@ -65,3 +67,5 @@ Localizados em `app/utils`, fornecem funções para:
 * Carregamento de dados de arquivos JSON
 * Tratamento e limpeza de texto vindo da API
 * Processamento de dados e transformação deles Explicação dos Componentes
+
+[<- Retornar para README geral](../README.md)
