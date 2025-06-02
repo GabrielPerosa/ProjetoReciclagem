@@ -39,6 +39,16 @@ app/
 ├── _layout.tsx             # Layout principal da aplicação
 ├── +not-found.tsx          # Tela padrão para rotas inexistentes
 └── index.tsx               # Tela principal (login e cadastro)
+
+├── interfaces/
+│   ├── device.ts           # Interface para dispositivos
+│   ├── Message.ts          # Interface para mensagens
+│   ├── PartError.ts        # Interface para erros de peças
+│   └── State.ts            # Interface para a estação
+
+├── services/
+│   ├── api.ts              # Configuração do Axios para chamadas HTTP
+│   └── AuthContext.tsx     # Serviço de autenticação
 ```
 
 ---
