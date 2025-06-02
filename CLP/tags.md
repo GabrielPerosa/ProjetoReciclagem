@@ -1,0 +1,21 @@
+| Dispositivos Físicos         | Tabela              | Tipo | Endereço | Valor Inicial  | Leit. | Escr. | Vis. |
+|:-----------------------------|:--------------------|:----:|:--------:|:--------------:|:-----:|:-----:|:----:|
+| Capacitivo                   | Default tag table   | Bool | %I0.0    | False          | True  | True  | True |
+| Indutivo                     | Default tag table   | Bool | %I0.1    | False          | True  | True  | True |
+| Tag_1                        | Default tag table   | Bool | %I0.2    | False          | True  | True  | True |
+| Tag_2                        | Default tag table   | Bool | %I0.3    | False          | True  | True  | True |
+| Optico_Altura                | Default tag table   | Bool | %I0.4    | False          | True  | True  | True |
+| Magnetico_Recuado_Atuador1   | Default tag table   | Bool | %I0.5    | False          | True  | True  | True |
+| Magnetico_Avançado_Atuador1  | Default tag table   | Bool | %I0.6    | False          | True  | True  | True |
+| Magnetico_Recuado_Atuador2   | Default tag table   | Bool | %I0.7    | False          | True  | True  | True |
+| Magnetico_Avançado_Atuador2  | Default tag table   | Bool | %I1.0    | False          | True  | True  | True |
+| Optico_Rampa1                | Default tag table   | Bool | %I1.3    | False          | True  | True  | True |
+| Optico_Rampa2                | Default tag table   | Bool | %I1.4    | False          | True  | True  | True |
+| Optico_Esteira_Final         | Default tag table   | Bool | %I1.6    | False          | True  | True  | True |
+| Atuador1                     | Default tag table   | Bool | %Q0.0    | False          | True  | True  | True |
+| Atuador2                     | Default tag table   | Bool | %Q0.1    | False          | True  | True  | True |
+| Tag_3                        | Default tag table   | Bool | %Q0.2    | False          | True  | True  | True |
+| Tag_4                        | Default tag table   | Bool | %Q0.3    | False          | True  | True  | True |
+| Esteira_Horario              | Default tag table   | Bool | %Q0.4    | False          | True  | True  | True |
+| Esteira_Antihorario          | Default tag table   | Bool | %Q0.5    | False          | True  | True  | True |    
+| Tag_5                        | Default tag table   | Bool | %Q0.6    | False          | True  | True  | True |
