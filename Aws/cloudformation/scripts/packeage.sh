@@ -1,6 +1,6 @@
 	#!/bin/bash
 
-S3_BUCKET="infraestrutura-projeto-integrador"  # Altere conforme necessário
+S3_BUCKET="infraestrutura-projeto-integrador-perosa"  # Altere conforme necessário
 TEMPLATE_SOURCE="../main-stack.yaml"
 TEMPLATE_PACKAGED="../main-stack-packaged.yaml"
 REGION="us-east-1"

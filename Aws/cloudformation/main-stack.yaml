@@ -98,10 +98,7 @@ Outputs:
     Value: !GetAtt DatabaseStack.Outputs.DBHost
   ECSCluster:
     Value: !GetAtt ECSClusterStack.Outputs.ECSCluster
-  APITaskDefinitionArn:
-    Value: !GetAtt ECSTasksStack.Outputs.APITaskDefinitionArn
-  ChatbotTaskDefinitionArn:
-    Value: !GetAtt ECSTasksStack.Outputs.ChatbotTaskDefinitionArn
+ 
   ChatbotSecurityGroup:
     Value: !GetAtt SecurityGroupsStack.Outputs.ChatbotSecurityGroup  
   APISecurityGroup:
