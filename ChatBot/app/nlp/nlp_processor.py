@@ -109,7 +109,7 @@ class NLPProcessor:
             elif date:
                 result = self.data_proc.calc_percent_per_date(date)
             else:
-                r sult = self.data_proc.calc_percent_per_hour(d,h)
+                result = self.data_proc.calc_percent_per_hour(d,h)
             
             if result == None:
                 return self.select_response("ausencia_de_dados") 

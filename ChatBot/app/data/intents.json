@@ -1,61 +1,50 @@
 {
     "saudacao": [
-        "Oi, tudo bem?",
-        "Olá, pode me ajudar com algo da produção?",
-        "Como vai? Preciso tirar uma dúvida.",
-        "Você pode me ajudar agora?",
-        "Estou com dúvidas, pode fazer por mim?",
-        "Preciso de ajuda com os dados da fábrica."
+        "ajudar produção",
+        "preciso tirar dúvida",
+        "ajudar",
+        "dúvidas fazer",
+        "preciso ajuda dados fábrica"
     ],
     "consultar_quantidade": [
-        "Quantas unidades de plástico foram processadas hoje?",
-        "Qual a quantidade total de metal reciclado até agora?",
-        "Desde o começo do mês, quantas peças já foram feitas?",
-        "Quantas peças já passaram pela produção hoje?",
-        "Me informe o número de plásticos produzidos.",
-        "Quantas unidades foram processadas no turno da tarde?",
-        "Qual o total de produção acumulada esta semana?",
-        "Quantos materiais já passaram pela linha de produção?"
+        "começo peças feitas",
+        "peças passaram produção",
+        "peças processadas",
+        "quantidade peças processadas",
+        "total produção acumulada semana",
+        "materiais passaram linha produção"
     ],
     "consultar_etapas": [
-        "Quais são as etapas do processo de separação de materiais?",
-        "Como funciona o fluxo de produção de recicláveis?",
-        "Me mostre os estágios do processamento de metais.",
-        "Qual é a sequência de procedimentos na triagem?",
-        "O que acontece na fase de entrada dos materiais?",
-        "Quais são os processos envolvidos na reciclagem de plástico?",
-        "Tem como mostrar as fases da produção?",
-        "Como é a classificação dos resíduos durante a produção?"
+        "etapas processo separação materiais",
+        "sequência procedimentos triagem",
+        "acontece fase entrada materiais",
+        "processos envolvidos reciclagem",
+        "mostrar fases produção",
+        "classificação resíduos produção"
     ],
     "consultar_controle_qualidade": [
-        "Como é feita a verificação de qualidade dos materiais?",
-        "Existe inspeção após a separação dos plásticos?",
-        "Qual o processo de garantia de qualidade no final da linha?",
-        "Os metais passam por avaliação antes de serem aprovados?",
-        "Como é a checagem feita no controle de qualidade?",
-        "Teve alguma falha detectada no último lote?",
-        "Qual o resultado da última revisão de qualidade?",
-        "Foi feita alguma inspeção posterior nos refugos?"
+        "feita verificação qualidade materiais",
+        "controle qualidade peças",  
+        "inspeção separação plásticos",  
+        "processo garantia qualidade final linha",  
+        "checagem feita controle qualidade",  
+        "falha detectada último lote"
     ],
     "consultar_taxa_refugo": [
-        "Quantas peças foram rejeitadas hoje?",
-        "Qual é a taxa de refugo atual da produção?",
-        "Teve muito descarte de plástico essa semana?",
-        "Quantos materiais não conformes foram segregados?",
-        "Qual o percentual de perda no processo de metal?",
-        "Quais foram os critérios para classificar como refugo?",
-        "Quantas unidades foram refugadas no turno da noite?",
-        "Está alta a taxa de rejeição de peças processadas?"
-
+        "peças rejeitadas",  
+        "taxa refugo atual produção",  
+        "materiais conformes segregados",  
+        "porcentagem descartadas",  
+        "consideradas defeituosas",  
+        "taxa rejeição processadas"
     ],
     "verificar_status": [
-        "Como está a produção agora?",
-        "O sistema está funcionando normalmente?",
-        "Me diga o status da linha de separação de plástico.",
-        "A produção está operando sem falhas?",
-        "Qual o status atual do sistema de triagem?",
-        "A máquina de metais está ativa?",
-        "O processo de reciclagem está rodando bem?",
-        "O sistema de controle está online?"
+        "produção agora",
+        "status sistema",  
+        "sistema funcionando normalmente",  
+        "produção operando falhas",  
+        "status atual sistema triagem",  
+        "máquina metais ativa",  
+        "processo reciclagem rodando"
     ]
 }

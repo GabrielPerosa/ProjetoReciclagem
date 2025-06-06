@@ -1,7 +1,7 @@
 {
     "saudacao": [
-        "Olá! Como posso ajudar você hoje?",
-        "Oi! O que você gostaria de saber?",
+        "Olá! Como posso ajudar você hoje? Você gostaria de saber sobre a taxa de descarte?",
+        "Oi! O que você gostaria de saber? Talvez queira perguntar sobre a classificação de peças?",
         "Olá! Estou aqui para responder suas perguntas sobre a classificação de peças.",
         "Saudações! O que posso fazer por você",
         "Olá, Quais suas dúvidas sobre a classificação de peças?",
@@ -41,9 +41,9 @@
         "Desculpe, não há informações disponíveis para o material ou data que você mencionou."
     ],
     "default": [
-        "Desculpe, não entendi. Pode reformular a pergunta?",
+        "Desculpe, não entendi. Pode reformular a pergunta? Tente perguntar sobre a taxa de refugo ou a quantidade de peças processadas.",
         "Sinto muito, mas não entendi exatamente o que você quis dizer",
-        "Perdão, não entendi. Por favor, tente explicar brevemente para eu conseguir entender",
+        "Perdão, não entendi. Por favor, tente explicar brevemente para eu conseguir entender. Como \"Quantas peças foram processadas ?\"",
         "Desculpe, não entendi. Aqui estão alguns exemplos do que posso responder: 'Qual é a taxa de refugo?' ou 'Quantas peças foram processadas hoje?'",
         "Não consegui entender sua dúvida."       
     ]
