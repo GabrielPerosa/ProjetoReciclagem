@@ -23,7 +23,6 @@ class SyntaticAnalyzer:
             """Detecta a intenção com base em palavras-chave definidas."""
             message_tokens = self.pre_proc_message(message)
             
-            print(f"Mensagem normalizada: {message_tokens}")
             scores = {}
             for intent, keywords in self.intents.items():
                 result = 0
@@ -69,7 +68,5 @@ class SyntaticAnalyzer:
             # Remover duplicatas
             for key in entities:
                 entities[key] = list(set(entities[key]))
-            print(entities)
-            
             return entities
     
