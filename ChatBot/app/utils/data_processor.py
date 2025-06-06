@@ -65,7 +65,15 @@ class DataProcessor:
         for date in self.data[material]:
             total += self.get_material_per_date(material, date)
         return total
-    
+    def get_total_of_production(self):
+        """
+        Obtem o total da produção
+        """
+        total = 0
+        for material in self.data["material"]:
+            if material != "descarte":
+                total += self.get_all_of_material(material)
+        return total
     def get_total_per_date(self, date: str):
         """
         Retorna o total de peças boas e refugadas em uma data.
@@ -116,10 +124,38 @@ class DataProcessor:
         except: 
             return None
         return round(good_percent, 2), round(scrap_percent, 2), total_processed 
-
+    def calc_percent_per_date(self, date):
+        """
+        Calcula a porcentagem por data.
+        """
+        total_good, total_scrap = self.get_total_per_date(date)
+        total_processed = total_good + total_scrap
+        # Calculando percentuais
+        try:
+            scrap_percent = total_scrap * 100 / total_processed
+            good_percent = total_good * 100 / total_processed
+        except: 
+            return None
+        return round(good_percent, 2), round(scrap_percent, 2), total_processed 
+        
+    def calc_percent_total (self):
+        """
+        Calcula a porcentagem total da produção.
+        """
+        total_good = self.get_total_of_production()
+        total_scrap = self.get_all_of_material("descarte")
+        total_processed = total_good + total_scrap
+        # Calculando percentuais
+        try:
+            scrap_percent = total_scrap * 100 / total_processed
+            good_percent = total_good * 100 / total_processed
+        except: 
+            return None
+        return round(good_percent, 2), round(scrap_percent, 2), total_processed 
+        
     def get_last_date_of_material(self, material):
         """
-        Retorna a última data disponível nos dados.
+        Retorna a última data disponível para o material.
         """   
         last_date = None
         for string_date in self.data[material]:
@@ -131,7 +167,7 @@ class DataProcessor:
     
     def get_last_hour_of_material(self, material):
         """
-        Retorna a última hora disponível na última data.
+        Retorna a última hora disponível na última data do material.
         """
         last_hour = None
         last_date = self.get_last_date_of_material(material)
@@ -156,8 +192,9 @@ class DataProcessor:
         """
         last_date = None
         last_hour = None
-        for material in self.data["material"]:
-            date, hour = self.get_last_log_of_material(material)
+        for material in self.data["material"]: 
+            
+            hour, date=self.get_last_log_of_material(material)
             if last_hour is None or hour > last_hour or date > last_date:
                 last_date = date
                 last_hour = hour

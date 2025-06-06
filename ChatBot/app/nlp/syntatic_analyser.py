@@ -43,7 +43,6 @@ class SyntaticAnalyzer:
                 # Retorna a intent com mais correspondências
                 best_intent = max(scores, key=scores.get)
                 return best_intent
-
             return "default"
 
     def _extract_entities(self, message: str) -> Dict[str, List[str]]:
@@ -67,5 +66,7 @@ class SyntaticAnalyzer:
             # Remover duplicatas
             for key in entities:
                 entities[key] = list(set(entities[key]))
+            print(entities)
+            
             return entities
     

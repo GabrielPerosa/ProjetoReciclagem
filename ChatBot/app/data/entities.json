@@ -20,7 +20,7 @@
   },
   "material": {
     "patterns": [
-      "\\b(metalicas|plasticas|refugos|refugo|metal|plastico)\\b"
+      "\\b(metalicas|plasticas|metais|plasticos)\\b"
     ],
     "grupo": null
   }

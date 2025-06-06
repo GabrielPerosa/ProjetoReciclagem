@@ -32,7 +32,7 @@ class NLPProcessor:
         date = (entities.get("date") or [None])[0]
         hour = (entities.get("hour") or [None])[0]
         total = (entities.get("total") or [None])[0]
-
+        qty = 0
         # Formatar quantidade e detalhes com base na combinação de entidades
         if "{quantidade}" in response:
             if material:
@@ -84,15 +84,13 @@ class NLPProcessor:
                 hour_info = f" no período de {hour} horas"
             
             # Total requisitado
-            else:
-                goods, scrap = self.data_proc.get_total_each_material_per_hour(self.last_date, self.last_hour)
-                qty = goods + scrap
-                material = ""  # Não menciona o tipo de material
+            elif total:
+                qty = self.data_proc.get_total_of_production()
+                material = "" 
                 data_info = f" do dia {self.last_date} (último registro)"
                 hour_info = f" no intervalo de {self.last_hour} horas"
 
-            # Verifica se a quantidade é zero e seleciona a resposta apropriada
-            if qty == 0:
+            if qty == 0 and intent == "consultar_quantidade":
                 return self.select_response("ausencia_de_dados")
             else:
                 # Substituir quantidade, material, data e hora na resposta
@@ -106,8 +104,13 @@ class NLPProcessor:
             
             d = (date or self.last_date)
             h = (hour or self.last_hour)
+            if total:
+                result = self.data_proc.calc_percent_total() 
+            elif date:
+                result = self.data_proc.calc_percent_per_date(date)
+            else:
+                r sult = self.data_proc.calc_percent_per_hour(d,h)
             
-            result = self.data_proc.calc_percent_per_hour(d, h)
             if result == None:
                 return self.select_response("ausencia_de_dados") 
             else:
