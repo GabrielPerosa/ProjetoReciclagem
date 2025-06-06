@@ -46,7 +46,7 @@ Resources:
   SecurityGroupsStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/91277fc83a88dfb9ad5bbdefc82f6d10.template
+      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador-perosa/91277fc83a88dfb9ad5bbdefc82f6d10.template
       Parameters:
         VpcId:
           Ref: VpcId
@@ -57,7 +57,7 @@ Resources:
   DatabaseStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/d41ce52c3da78cf28fe13bf7078e69a3.template
+      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador-perosa/d41ce52c3da78cf28fe13bf7078e69a3.template
       Parameters:
         VpcId:
           Ref: VpcId
@@ -73,7 +73,7 @@ Resources:
   ALBStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/1669e172507f06036fe93f26383e01f4.template
+      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador-perosa/1669e172507f06036fe93f26383e01f4.template
       Parameters:
         VpcId:
           Ref: VpcId
@@ -92,95 +92,7 @@ Resources:
   ECSClusterStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/70db3b247284654104f742f656c3b4f3.template
-  ECSTasksStack:
-    DependsOn:
-    - ECSClusterStack
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/f3ace8b93d81ea4c123908f5dfce9b87.template
-      Parameters:
-        APIServiceName:
-          Ref: APIServiceName
-        ChatbotServiceName:
-          Ref: ChatbotServiceName
-        APIContainerImage:
-          Ref: APIContainerImage
-        ChatbotContainerImage:
-          Ref: ChatbotContainerImage
-        APIContainerPort:
-          Ref: APIContainerPort
-        ChatbotContainerPort:
-          Ref: ChatbotContainerPort
-        ContainerCpu:
-          Ref: ContainerCpu
-        ContainerMemory:
-          Ref: ContainerMemory
-        ECSTaskRole:
-          Ref: ECSTaskRole
-        ECSTaskExecutionRole:
-          Ref: ECSTaskExecutionRole
-        DBHost:
-          Fn::GetAtt:
-          - DatabaseStack
-          - Outputs.DBHost
-        ApiUrl:
-          Fn::GetAtt:
-          - ALBStack
-          - Outputs.LoadBalancerDNS
-  ECSServicesStack:
-    DependsOn:
-    - ECSTasksStack
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador/22f67c2cc196ac774dba98ca4663cc40.template
-      Parameters:
-        APITaskDefinition:
-          Fn::GetAtt:
-          - ECSTasksStack
-          - Outputs.APITaskDefinitionArn
-        ChatbotTaskDefinition:
-          Fn::GetAtt:
-          - ECSTasksStack
-          - Outputs.ChatbotTaskDefinitionArn
-        PrivateSubnet1:
-          Ref: PrivateSubnet1
-        PrivateSubnet2:
-          Ref: PrivateSubnet2
-        APIServiceName:
-          Ref: APIServiceName
-        ChatbotServiceName:
-          Ref: ChatbotServiceName
-        ECSCluster:
-          Fn::GetAtt:
-          - ECSClusterStack
-          - Outputs.ECSCluster
-        APITargetGroup:
-          Fn::GetAtt:
-          - ALBStack
-          - Outputs.APITargetGroup
-        ChatbotTargetGroup:
-          Fn::GetAtt:
-          - ALBStack
-          - Outputs.ChatbotTargetGroup
-        DesiredCount:
-          Ref: DesiredCount
-        ChatbotContainerPort:
-          Ref: ChatbotContainerPort
-        APIContainerPort:
-          Ref: APIContainerPort
-        APIContainerImage:
-          Ref: APIContainerImage
-        ChatbotContainerImage:
-          Ref: ChatbotContainerImage
-        APISecurityGroup:
-          Fn::GetAtt:
-          - SecurityGroupsStack
-          - Outputs.APISecurityGroup
-        ChatbotSecurityGroup:
-          Fn::GetAtt:
-          - SecurityGroupsStack
-          - Outputs.ChatbotSecurityGroup
+      TemplateURL: https://s3.us-east-1.amazonaws.com/infraestrutura-projeto-integrador-perosa/70db3b247284654104f742f656c3b4f3.template
 Outputs:
   LoadBalancerDNS:
     Value:
@@ -197,16 +109,6 @@ Outputs:
       Fn::GetAtt:
       - ECSClusterStack
       - Outputs.ECSCluster
-  APITaskDefinitionArn:
-    Value:
-      Fn::GetAtt:
-      - ECSTasksStack
-      - Outputs.APITaskDefinitionArn
-  ChatbotTaskDefinitionArn:
-    Value:
-      Fn::GetAtt:
-      - ECSTasksStack
-      - Outputs.ChatbotTaskDefinitionArn
   ChatbotSecurityGroup:
     Value:
       Fn::GetAtt:
