@@ -1,10 +1,19 @@
 {
     "saudacao": [
+        "ola",
+        "oi",
+        "salve",
+        "saudações",
+        "poderia ajudar"
+    ],
+    "consultar_perguntas": [
+        "dúvidas fazer",
+        "questionar",
+        "posso perguntar",
+        "pode fazer mim",
         "ajudar produção",
         "preciso tirar dúvida",
-        "ajudar",
-        "dúvidas fazer",
-        "preciso ajuda dados fábrica"
+        "ajudar"
     ],
     "consultar_quantidade": [
         "começo peças feitas",
@@ -20,6 +29,7 @@
         "acontece fase entrada materiais",
         "processos envolvidos reciclagem",
         "mostrar fases produção",
+        "fases processo",
         "classificação resíduos produção"
     ],
     "consultar_controle_qualidade": [

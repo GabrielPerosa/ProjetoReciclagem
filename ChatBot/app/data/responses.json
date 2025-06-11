@@ -1,11 +1,14 @@
 {
     "saudacao": [
-        "Olá! Como posso ajudar você hoje? Você gostaria de saber sobre a taxa de descarte?",
-        "Oi! O que você gostaria de saber? Talvez queira perguntar sobre a classificação de peças?",
-        "Olá! Estou aqui para responder suas perguntas sobre a classificação de peças.",
+        "Olá! Como posso ajudar você hoje?",
+        "Oi! O que você gostaria de saber?",
         "Saudações! O que posso fazer por você",
-        "Olá, Quais suas dúvidas sobre a classificação de peças?",
-        "Olá! Vamos conversar sobre a classificação de peças? O que você quer saber?"
+        "Olá, Quais suas dúvidas sobre a classificação de peças?"
+    ],
+    "consultar_perguntas": [
+        "Você pode perguntar sobre: quantidade de peças processadas, etapas do sistema, controle de qualidade, taxa de descarte e status do sistema.",
+        "Pergunte sobre: peças processadas, etapas do sistema, qualidade, descarte e status.",
+        "Tópicos disponíveis: processamento de peças, fases, qualidade, descarte, e status do sistema"
     ],
     "consultar_quantidade": [
         "Processamos {quantidade}peças {material}{hora}{data}. Quer saber mais sobre algum material?",
