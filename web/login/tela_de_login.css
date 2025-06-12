@@ -116,14 +116,31 @@ border-color: #7fA653;
     }
     
     
-   .forgot-password {
-     text-align: center;
-     margin-top: 10px;
-     font-size: 12px;
-   }
-   
-   .forgot-password a {
-     color: #4CAF50;
-     text-decoration: none;
-   }
-  
+   .back-home {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.home-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #7fA653;
+  color: white;
+  text-decoration: none;
+  border-radius: 20px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  margin-top: 30px;
+}
+
+.home-button i {
+  margin-right: 10px;
+}
+
+.home-button:hover {
+  background-color: #bbb;
+}
+
+.entrar{
+background-color: #7fA653;
+}
