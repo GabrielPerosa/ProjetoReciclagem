@@ -36,9 +36,9 @@
     <a href="/web/dashboard/index.html" class="menu-btn"><i class="fas fa-chart-bar"></i> Dashboard</a>
     <a href="/web/monitoramento/index.html" class="menu-btn"><i class="fas fa-file-alt"></i> Monitoram.</a>
 
-    <div class="logout">
-      <i class="fas fa-sign-out-alt"></i> Logout
-    </div>
+  
+     <a href="/web/login/tela_de_login.html" class="logout"><i class="fas fa-sign-out-alt"></i>Logout</a>  
+    
   </div>
 
   <div class="main">
@@ -49,10 +49,10 @@
           <span class="card-title">Dados de Hoje</span>
         </div>
         <div class="dados">
-          <div class="dados-item"><span class="no-bar">06</span><span>Rampa 01</span></div>
-          <div class="dados-item"><span class="no-bar">04</span><span>Rampa 02</span></div>
-          <div class="dados-item"><span class="no-bar">0</span><span>Refugo</span></div>
-          <div class="dados-item"><span class="no-bar">12</span><span>Peças</span></div>
+          <div class="dados-item"><span class="no-bar" id="rampa1hoje"></span><span>Metalica</span></div>
+          <div class="dados-item"><span class="no-bar" id="rampa2hoje"></span><span>Plastica</span></div>
+          <div class="dados-item"><span class="no-bar" id="descartehoje"></span><span>Descarte</span></div>
+          <div class="dados-item"><span class="no-bar" id="pecas_totalhoje"></span><span>Total</span></div>
         </div>
       </div>
 
@@ -62,10 +62,10 @@
           <span class="card-title">Dados por Mês</span>
         </div>
         <div class="dados">
-          <div class="dados-item"><span class="no-bar">100</span><span>Rampa 01</span></div>
-          <div class="dados-item"><span class="no-bar">200</span><span>Rampa 02</span></div>
-          <div class="dados-item"><span class="no-bar">20</span><span>Refugo</span></div>
-          <div class="dados-item"><span class="no-bar">320</span><span>Peças</span></div>
+          <div class="dados-item"><span class="no-bar" id="rampa1"></span><span>Metalica</span></div>
+          <div class="dados-item"><span class="no-bar" id="rampa2"></span><span>Plastica</span></div>
+          <div class="dados-item"><span class="no-bar" id="descarte"></span><span>Descarte</span></div>
+          <div class="dados-item"><span class="no-bar" id="pecas_total"></span><span>Total</div>
         </div>
       </div>
 
@@ -76,9 +76,9 @@
         </div>
         <div class="gauge-wrapper">
           <div class="progress-bar">
-            <div class="progress-fill" style="width: 90%;"></div>
+            <div class="progress-fill" id="aprove-diario"></div>
           </div>
-          <div class="gauge-label">90%</div>
+          <div class="gauge-label" id="aprov-diario"></div>
         </div>
       </div>
 
@@ -89,9 +89,9 @@
         </div>
         <div class="gauge-wrapper">
           <div class="progress-bar">
-            <div class="progress-fill" style="width: 85%;"></div>
+            <div class="progress-fill" id="aprove-mensal"></div>
           </div>
-          <div class="gauge-label">85%</div>
+          <div class="gauge-label" id="aprov-mensal">85%</div>
         </div>
       </div>
     </div>
