@@ -19,7 +19,7 @@ A aplicação contém:
 🧹 **Limpeza de dados**
 - O retorno das informações via OPC-UA vem de forma mais enxuta com informações que não serão totalmente aproveitadas, por esse motivo será usado o Node-Red para a limpeza dos dados e fazer a "ponte" com a comunicação com os serviços da AWS.
 
-[Documentação Node-red](node-red/)
+[Documentação Node-red](node-red/README.md)
 
 ☁️ **AWS**
 - Usado como banco de dados para armazenar as informações de entrada e saída de materiais, além servir como servidor web, mobile e do backend da aplicação, ficando fora dela somente o Node-Red e o CLP.
