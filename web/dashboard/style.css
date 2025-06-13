@@ -157,6 +157,7 @@ body {
   font-weight: bold;
   color: black;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
 }
 
 .menu-btn i {
@@ -179,6 +180,7 @@ body {
   padding: 50px;
   border-bottom: 80px;
   transition: 0.3s;
+  text-decoration: none;
 }
 
 .logout:hover {
