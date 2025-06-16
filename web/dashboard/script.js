@@ -17,9 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const dados = await Promise.all(responses.map(res => res.json()));
 
-      // Processar dados para totais mensais
       const monthlyData = {
-        metalicas: Array(12).fill(0), // Inicializa 12 meses com 0
+        metalicas: Array(12).fill(0), 
         plasticas: Array(12).fill(0),
         descarte: Array(12).fill(0)
       };
@@ -29,13 +28,12 @@ document.addEventListener('DOMContentLoaded', function () {
       let hojeDescarte = 0;
       const hoje = new Date().toISOString().slice(0, 10);
 
-      // Processar os dados de cada tipo de peça
       dados.forEach((data, index) => {
         const partType = pecas[index];
         if (Array.isArray(data)) {
           data.forEach(item => {
             const date = new Date(item.timestamp);
-            const month = date.getMonth(); // 0 = Jan, 1 = Fev, ..., 11 = Dez
+            const month = date.getMonth(); 
             monthlyData[partType][month] += item.stored_quantity;
             const dataItem = item.timestamp.slice(0, 10);
             if (dataItem === hoje) {
@@ -47,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });
 
-      // Calcular totais gerais para exibição nos elementos HTML
       const quantidadeMetal = monthlyData.metalicas.reduce((sum, val) => sum + val, 0);
       const quantidadePlastico = monthlyData.plasticas.reduce((sum, val) => sum + val, 0);
       const quantidadeDescarte = monthlyData.descarte.reduce((sum, val) => sum + val, 0);
@@ -78,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function () {
       document.getElementById("aprov-diario").textContent = aproveitamento_diario.toFixed(2) + "%"
       document.getElementById("aprove-diario").style.width = `${aproveitamento_diario.toFixed(2)}%`;
 
-      // ---------------- Gráfico ----------------
       const ctxPecas = document.getElementById('pecasChart')?.getContext('2d');
       if (ctxPecas) {
         new Chart(ctxPecas, {
@@ -150,48 +146,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   PuxarDados();
 
-  // ---------------- Chatbot ----------------
-  const chat = document.getElementById("chatbot");
-  const input = document.getElementById("chat-input");
-  const chatBody = document.getElementById("chatbot-body");
-
-  function toggleChat() {
-    chat.style.display = chat.style.display === "flex" ? "none" : "flex";
-  }
-
-  function sendMessage() {
-    const message = input.value.trim();
-    if (!message) return;
-
-    const userMsg = document.createElement("div");
-    userMsg.className = "chatbot-message user";
-    userMsg.textContent = message;
-    chatBody.appendChild(userMsg);
-
-    input.value = "";
-
-    // Simula resposta do bot
-    setTimeout(() => {
-      const botMsg = document.createElement("div");
-      botMsg.className = "chatbot-message";
-      botMsg.textContent = "Estou analisando sua mensagem...";
-      chatBody.appendChild(botMsg);
-      chatBody.scrollTop = chatBody.scrollHeight;
-    }, 500);
-  }
-
   input.addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
       sendMessage();
     }
   });
-
-  const chatButton = document.querySelector(".chatbot-button");
-  if (chatButton) {
-    chatButton.addEventListener("click", toggleChat);
-  }
-
-  // ---------------- Sidebar e Overlay ----------------
+  
   const btnHamburger = document.getElementById('hamburger-btn');
   const sidebar = document.querySelector('.sidebar');
   const overlay = document.querySelector('.overlay');
