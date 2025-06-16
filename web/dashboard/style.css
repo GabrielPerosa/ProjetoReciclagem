@@ -1,4 +1,4 @@
-/* Reset e configurações globais */
+
 * {
   margin: 0;
   padding: 0;
@@ -19,89 +19,7 @@ body {
   flex-direction: column;
 }
 
-/* Botão flutuante do chatbot */
-.chatbot-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 30px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  z-index: 1000;
-}
 
-/* Janela do chatbot */
-.chatbot-popup {
-  position: fixed;
-  bottom: 90px;
-  right: 20px;
-  width: 320px;
-  max-height: 400px;
-  background-color: #b2f19c;
-  border-radius: 10px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-  display: none;
-  flex-direction: column;
-  overflow: hidden;
-  z-index: 999;
-}
-
-.chatbot-header {
-  text-align: center;
-  background-color: #384B31;
-  color: white;
-  padding: 15px;
-  font-weight: bold;
-}
-
-.chatbot-body {
-  padding: 10px;
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.chatbot-message {
-  background-color: #f1f1f1;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  max-width: 80%;
-}
-
-.chatbot-message.user {
-  align-self: flex-end;
-  background-color: #DCF8C6;
-}
-
-.chatbot-input {
-  display: flex;
-  border-top: 1px solid #ddd;
-}
-
-.chatbot-input input {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  outline: none;
-}
-
-.chatbot-input button {
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  padding: 10px 15px;
-  cursor: pointer;
-}
-
-/* Sidebar */
 .sidebar {
   width: 200px;
   height: 100vh;
@@ -198,7 +116,7 @@ body {
   justify-content: center;
 }
 
-/* Conteúdo principal */
+
 .main {
   flex-grow: 1;
   padding: 10px;
@@ -273,7 +191,7 @@ body {
 .green { background: #91E48B; }
 .gray { background: #ccc; }
 
-/* Dados */
+
 .dados {
   display: flex;
   justify-content: space-evenly;
@@ -336,30 +254,6 @@ canvas {
   display: inline-block;
 }
 
-/* Ícone de chat */
-.chat-icon {
-  position: fixed;
-  bottom: 10px;
-  right: 40px;
-  z-index: 100;
-}
-
-.chat-icon button {
-  background-color: #9BC78B;
-  border: none;
-  padding: 15px;
-  border-radius: 50%;
-  color: white;
-  font-size: 40px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.chat-icon button:hover {
-  background-color: #45a049;
-}
-
-/* Overlay */
 .overlay {
   position: fixed;
   top: 0;
@@ -378,7 +272,7 @@ canvas {
   opacity: 1;
 }
 
-/* Botão Hamburger */
+
 .hamburger {
   display: none;
   position: fixed;
@@ -404,7 +298,7 @@ canvas {
   transform: scale(1.05);
 }
 
-/* Responsividade */
+
 @media (max-width: 768px) {
   .sidebar {
     left: -200px;
@@ -488,7 +382,6 @@ canvas {
   }
 }
 
-/* Estilos para Desktop */
 @media (min-width: 769px) {
   .sidebar {
     left: 0;
