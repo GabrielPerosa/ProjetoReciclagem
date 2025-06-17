@@ -35,15 +35,15 @@ export default function Monitoring() {
     };
 
     const fetchPartsErrors = async () => {
-      try{
-        const response = await api.get("/production-parts/parts/descarte/total")
+      try {
+        const response = await api.get("/production-parts/parts/descarte/total");
         setPartsErrors(response.data);
         setLoading(false);
-      }catch (err) {
+      } catch (err) {
         setLoading(false);
         Alert.alert("Erro", "Falha ao carregar dados");
       }
-    }
+    };
 
     fetchDevices();
     fetchPartsErrors();
@@ -52,63 +52,74 @@ export default function Monitoring() {
   return (
     <ScrollView style={styles.container}>
       {/* Lista de Sensores */}
-        <Card style={styles.listCard}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Sensores</Text>
-          </View>
-          {devices.filter(device => device.description.toLowerCase().includes("sensor")).flatMap((device) =>
-            device.states.map((state) => (
-              <View key={`${device.id}-${state.id}`}>
-                <View style={styles.listItem}>
-                  <View style={styles.listItemContent}>
-                    <Text style={styles.listItemName}>{device.description}</Text>
-                    <Text style={styles.listItemDateTime}>
-                      {new Date(state.timestamp).toLocaleString()}
+      <Card style={styles.listCard}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Sensores</Text>
+        </View>
+        {devices
+          .filter(device => device.description.toLowerCase().includes("sensor"))
+          .flatMap((device) =>
+            [...device.states]
+              .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+              .slice(0, 1)
+              .map((state) => (
+                <View key={`${device.id}-${state.id}`}>
+                  <View style={styles.listItem}>
+                    <View style={styles.listItemContent}>
+                      <Text style={styles.listItemName}>{device.description}</Text>
+                      <Text style={styles.listItemDateTime}>
+                        {new Date(state.timestamp).toLocaleString()}
+                      </Text>
+                    </View>
+                    <Text
+                      style={[
+                        styles.listItemStatus,
+                        state.state ? styles.statusActive : styles.statusInactive,
+                      ]}
+                    >
+                      {state.state ? "Ativo" : "Inativo"}
                     </Text>
                   </View>
-                  <Text
-                    style={[
-                      styles.listItemStatus,
-                      state.state ? styles.statusActive : styles.statusInactive,
-                    ]}
-                  >
-                    {state.state ? "Ativo" : "Inativo"}
-                  </Text>
+                  <Divider style={styles.divider} />
                 </View>
-                <Divider style={styles.divider} />
-              </View>
-            ))
+              ))
           )}
-        </Card>
+      </Card>
 
-        <Card style={styles.listCard}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Saídas</Text>
-          </View>
-          {devices.filter(device => !device.description.toLowerCase().includes("sensor")).flatMap((device) =>
-            device.states.map((state) => (
-              <View key={`${device.id}-${state.id}`}>
-                <View style={styles.listItem}>
-                  <View style={styles.listItemContent}>
-                    <Text style={styles.listItemName}>{device.description}</Text>
-                    <Text style={styles.listItemDateTime}>
-                      {new Date(state.timestamp).toLocaleString()}
+      {/* Lista de Saídas */}
+      <Card style={styles.listCard}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Saídas</Text>
+        </View>
+        {devices
+          .filter(device => !device.description.toLowerCase().includes("sensor"))
+          .flatMap((device) =>
+            [...device.states]
+              .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+              .slice(0, 1)
+              .map((state) => (
+                <View key={`${device.id}-${state.id}`}>
+                  <View style={styles.listItem}>
+                    <View style={styles.listItemContent}>
+                      <Text style={styles.listItemName}>{device.description}</Text>
+                      <Text style={styles.listItemDateTime}>
+                        {new Date(state.timestamp).toLocaleString()}
+                      </Text>
+                    </View>
+                    <Text
+                      style={[
+                        styles.listItemStatus,
+                        state.state ? styles.statusActive : styles.statusInactive,
+                      ]}
+                    >
+                      {state.state ? "Ativo" : "Inativo"}
                     </Text>
                   </View>
-                  <Text
-                    style={[
-                      styles.listItemStatus,
-                      state.state ? styles.statusActive : styles.statusInactive,
-                    ]}
-                  >
-                    {state.state ? "Ativo" : "Inativo"}
-                  </Text>
+                  <Divider style={styles.divider} />
                 </View>
-                <Divider style={styles.divider} />
-              </View>
-            ))
+              ))
           )}
-        </Card>
+      </Card>
     </ScrollView>
   );
 }
