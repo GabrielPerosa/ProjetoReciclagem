@@ -18,7 +18,7 @@
 
 ### Function / Função
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bloco que permite a execução de uma função personalizada.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bloco de códigos personalizados usando Java Script puro. 
 
 ### Request HTTP / Requisição HTTP
 
@@ -30,10 +30,9 @@
 
 ## Scritps
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Temos dois scripts nessa pasta:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Temos um script nessa pasta:
 
-* **Device-state.js:** Esse script é responsável por atualizar o estado do dispositivo aleatoriamente para dias aleatórios também.
+* **Device-state.js:** Esse script permite a execução de uma função personalizada, onde foi feito mapeamento de uuid dos dispositivos e adicionados como parametro para a API.
 
-* **Production-parts.js:** Esse script é responsável por gerar peças aleatórias.
 
 [<- Retornar para README geral](../README.md)
